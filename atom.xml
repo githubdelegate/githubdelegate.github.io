@@ -4,7 +4,7 @@
   <title><![CDATA[CLouds Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-07-24T00:41:16+08:00</updated>
+  <updated>2015-07-24T00:54:00+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[yun]]></name>
@@ -14,11 +14,22 @@
 
   
   <entry>
-    <title type="html"><![CDATA[blog]]></title>
+    <title type="html"><![CDATA[gem 安装失败解决]]></title>
     <link href="http://githubdelegate.github.io/blog/2015/07/24/blog/"/>
     <updated>2015-07-24T00:15:17+08:00</updated>
     <id>http://githubdelegate.github.io/blog/2015/07/24/blog</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<h3>gem install 失败解决办法</h3>
+
+<ul>
+<li><p>修改gem source
+<code>gem source</code> 查看sources
+<code>gem sources -a https://ruby.taobao.org/</code> 添加
+<code>gem sources -r https://rubygems.org/</code> 删除原来的</p></li>
+<li><p>如何使用<code>bundle install</code> 的时候，安装失败，需要修改Gemfile
+<code>cd 到bundle 目录</code>
+<code>修改Gemfile  source 为上面的一样即可</code></p></li>
+</ul>
+
 ]]></content>
   </entry>
   
