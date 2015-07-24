@@ -4,7 +4,7 @@
   <title><![CDATA[CLouds Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-07-24T08:37:15+08:00</updated>
+  <updated>2015-07-24T08:38:37+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[yun]]></name>
@@ -18,9 +18,7 @@
     <link href="http://githubdelegate.github.io/blog/2015/07/24/blog/"/>
     <updated>2015-07-24T00:15:17+08:00</updated>
     <id>http://githubdelegate.github.io/blog/2015/07/24/blog</id>
-    <content type="html"><![CDATA[<h3>Octopress 搭建博客中遇到的问题</h3>
-
-<ul>
+    <content type="html"><![CDATA[<ul>
 <li><p><code>gem install **</code> 提示安装失败</p>
 
 <ul>
