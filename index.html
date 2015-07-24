@@ -7,8 +7,7 @@
 	<meta name="author" content="yun">
 
 	
-	<meta name="description" content="gem install 失败解决办法 修改gem source
-gem source 查看sources
+	<meta name="description" content="Octopress 搭建博客中遇到的问题 gem install ** 提示安装失败 修改gem source
 gem sources -a https://ruby.taobao.org/ 添加
 gem sources -r https://rubygems.org/ 删除原来的 &hellip;">
 	
@@ -87,17 +86,36 @@ gem sources -r https://rubygems.org/ 删除原来的 &hellip;">
 			Gem 安装失败解决</a>
 	</h2>
 	<div class="entry-content">
-		<h3>gem install 失败解决办法</h3>
+		<h3>Octopress 搭建博客中遇到的问题</h3>
 
 <ul>
-<li><p>修改gem source
-<code>gem source</code> 查看sources
+<li><p><code>gem install **</code> 提示安装失败</p>
+
+<ul>
+<li><p>修改gem source<br/>
 <code>gem sources -a https://ruby.taobao.org/</code> 添加
 <code>gem sources -r https://rubygems.org/</code> 删除原来的</p></li>
-<li><p>如何使用<code>bundle install</code> 的时候，安装失败，需要修改Gemfile
-<code>cd 到bundle 目录</code>
-<code>修改Gemfile  source 为上面的一样即可</code></p></li>
+<li><p>如果使用<code>bundle install</code> 的时候，安装失败，需要修Gemfile
+<code>修改Gemfile 中 source 为https://ruby.taobao.org/</code></p></li>
 </ul>
+</li>
+<li><p>使用<code>zsh</code> 遇到 <code>rake new_post[“title”]</code>  提示 <code>zsh: no matches found: new_post[...]</code></p>
+
+<ul>
+<li>修改~/.zshrc文件 添加 <code>alias rake="noglob rake"</code></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+
+<p>相关blog</p>
+
+<ol>
+<li><a href="http://www.tuicool.com/articles/Av6fqu">http://www.tuicool.com/articles/Av6fqu</a></li>
+<li><a href="http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/">http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/</a></li>
+</ol>
 
 
 		
