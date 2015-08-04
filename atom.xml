@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-08-04T23:14:36+08:00</updated>
+  <updated>2015-08-04T23:21:00+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -14,15 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Ios Nei Cun]]></title>
+    <title type="html"><![CDATA[iOS使用AudioQueue录音遇到的内存泄露问题]]></title>
     <link href="http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun/"/>
-    <updated>2015-08-04T00:00:00+08:00</updated>
+    <updated>2015-08-04T00:15:17+08:00</updated>
     <id>http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun</id>
-    <content type="html"><![CDATA[<h2>iOS 使用<code>AudioQueue</code>录音遇到的内存泄露问题</h2>
-
-<hr />
-
-<h3>AudioQueue 录音</h3>
+    <content type="html"><![CDATA[<h3>AudioQueue 录音</h3>
 
 <p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
 

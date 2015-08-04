@@ -7,7 +7,7 @@
 	<meta name="author" content="Your Name">
 
 	
-	<meta name="description" content="iOS 使用AudioQueue录音遇到的内存泄露问题 AudioQueue 录音 AudioQueue 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码： 1
+	<meta name="description" content="AudioQueue 录音 AudioQueue 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码： 1
 2
 3
 4
@@ -19,7 +19,15 @@
 10
 11
 12
-13 &hellip;">
+13
+14
+15
+16
+17
+18
+19
+20
+// 回调函数 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -93,14 +101,10 @@
 		
 		<a href="/blog/2015/08/04/ios-nei-cun/">
 		
-			Ios Nei Cun</a>
+			iOS使用AudioQueue录音遇到的内存泄露问题</a>
 	</h2>
 	<div class="entry-content">
-		<h2>iOS 使用<code>AudioQueue</code>录音遇到的内存泄露问题</h2>
-
-<hr />
-
-<h3>AudioQueue 录音</h3>
+		<h3>AudioQueue 录音</h3>
 
 <p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
 
