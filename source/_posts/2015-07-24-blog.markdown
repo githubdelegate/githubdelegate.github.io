@@ -1,0 +1,33 @@
+---
+layout: post
+title: "Octopress搭建博客中遇到的问题"
+date: 2015-07-24 00:15:17 +0800
+comments: true
+categories: 
+keywords: Octopress github 搭建博客 添加统计 SEO 录入搜索引擎
+description: 为Octopress博客录入搜索引擎，并添加流量统计信息，进行SEO。
+---
+
+* ```gem install **``` 提示安装失败
+	* 修改gem source  
+	 ```gem sources -a https://ruby.taobao.org/ ``` 添加
+ 	 ```gem sources -r https://rubygems.org/ ``` 删除原来的
+
+	* 如果使用``` bundle install ``` 的时候，安装失败，需要修Gemfile
+  	 ``` 修改Gemfile 中 source 为https://ruby.taobao.org/```
+
+*  使用```zsh``` 遇到 ```rake new_post[“title”]```  提示 ``` zsh: no matches found: new_post[...] ```
+	* 修改~/.zshrc文件 添加 ``` alias rake="noglob rake" ```
+
+
+---
+
+相关blog
+
+ 1. <http://www.tuicool.com/articles/Av6fqu>
+ 2. <http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/>
+ 
+
+
+
+

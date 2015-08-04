@@ -1,0 +1,16 @@
+---
+layout: post
+title: "blog"
+date: 2015-07-24 00:15:17 +0800
+comments: true
+categories: 
+keywords: Octopress github 搭建博客 添加统计 SEO 录入搜索引擎
+description: 为Octopress博客录入搜索引擎，并添加流量统计信息，进行SEO。
+---
+
+
+### gem install 失败解决办法
+
+* 修改gem source 
+```gem source ``` 查看
+
