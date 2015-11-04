@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-09-08T14:46:34+08:00</updated>
+  <updated>2015-11-05T00:16:47+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[iOS8创建framework动态库遇到的问题]]></title>
+    <title type="html"><![CDATA[iOS8 framework动态库遇到的问题]]></title>
     <link href="http://githubdelegate.github.io/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/"/>
     <updated>2015-09-08T14:32:29+08:00</updated>
     <id>http://githubdelegate.github.io/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti</id>
@@ -24,7 +24,7 @@
 <p>  修改<code>Build Setting</code> 中<code>Allow Non-modular Include InFramework Modules</code> 为YES.</p></li>
 <li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
 
-<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Pulic中.</p></li>
+<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
 </ol>
 
 ]]></content>
