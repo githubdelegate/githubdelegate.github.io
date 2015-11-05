@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ios | My Octopress Blog]]></title>
+  <link href="http://yoursite.com/blog/categories/ios/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2015-11-05T15:30:57+08:00</updated>
+  <id>http://yoursite.com/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iOS8 framework动态库遇到的问题]]></title>
+    <link href="http://yoursite.com/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/"/>
+    <updated>2015-09-08T14:32:29+08:00</updated>
+    <id>http://yoursite.com/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti</id>
+    <content type="html"><![CDATA[<ol>
+<li><p>编译显示<code>Include of non-modular header inside framework module</code> 错误</p>
+
+<p>  修改<code>Build Setting</code> 中<code>Allow Non-modular Include InFramework Modules</code> 为YES.</p></li>
+<li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
+
+<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

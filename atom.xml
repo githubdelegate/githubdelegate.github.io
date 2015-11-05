@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Alpine Blog]]></title>
-  <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
-  <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-11-05T01:51:35+08:00</updated>
-  <id>http://githubdelegate.github.io/</id>
+  <title><![CDATA[My Octopress Blog]]></title>
+  <link href="http://yoursite.com/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2015-11-05T15:30:57+08:00</updated>
+  <id>http://yoursite.com/</id>
   <author>
-    <name><![CDATA[zy]]></name>
+    <name><![CDATA[Your Name]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS8 framework动态库遇到的问题]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/"/>
+    <link href="http://yoursite.com/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/"/>
     <updated>2015-09-08T14:32:29+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti</id>
+    <id>http://yoursite.com/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti</id>
     <content type="html"><![CDATA[<ol>
 <li><p>编译显示<code>Include of non-modular header inside framework module</code> 错误</p>
 
@@ -32,9 +32,9 @@
   
   <entry>
     <title type="html"><![CDATA[错误记录]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/08/12/cuo-wu-ji-lu/"/>
+    <link href="http://yoursite.com/blog/2015/08/12/cuo-wu-ji-lu/"/>
     <updated>2015-08-12T11:21:31+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/08/12/cuo-wu-ji-lu</id>
+    <id>http://yoursite.com/blog/2015/08/12/cuo-wu-ji-lu</id>
     <content type="html"><![CDATA[<h4>错误记录</h4>
 
 <ol>
@@ -51,9 +51,9 @@
   
   <entry>
     <title type="html"><![CDATA[iOS使用AudioQueue录音遇到的内存泄露问题]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun/"/>
+    <link href="http://yoursite.com/blog/2015/08/04/ios-nei-cun/"/>
     <updated>2015-08-04T00:15:17+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun</id>
+    <id>http://yoursite.com/blog/2015/08/04/ios-nei-cun</id>
     <content type="html"><![CDATA[<h3>AudioQueue 录音</h3>
 
 <p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
@@ -114,9 +114,9 @@
   
   <entry>
     <title type="html"><![CDATA[Octopress搭建博客中遇到的问题]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/07/24/blog/"/>
+    <link href="http://yoursite.com/blog/2015/07/24/blog/"/>
     <updated>2015-07-24T00:15:17+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/07/24/blog</id>
+    <id>http://yoursite.com/blog/2015/07/24/blog</id>
     <content type="html"><![CDATA[<ul>
 <li><p><code>gem install **</code> 提示安装失败</p>
 
