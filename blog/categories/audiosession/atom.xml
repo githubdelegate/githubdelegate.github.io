@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: audiosession | Alpine Blog]]></title>
+  <link href="http://githubdelegate.github.io/blog/categories/audiosession/atom.xml" rel="self"/>
+  <link href="http://githubdelegate.github.io/"/>
+  <updated>2015-11-05T15:59:01+08:00</updated>
+  <id>http://githubdelegate.github.io/</id>
+  <author>
+    <name><![CDATA[zy]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[iOS使用AudioQueue录音遇到的内存泄露问题]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun/"/>
+    <updated>2015-08-04T00:15:17+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun</id>
+    <content type="html"><![CDATA[<h3>AudioQueue 录音</h3>
+
+<p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
+
+<pre><code>// 回调函数
+void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer, const AudioTimeStamp *inStartTime,
+                        UInt32 inNumPackets, const AudioStreamPacketDescription *inPacketDesc)
+{
+    Recorder *recorder = (__bridge Recorder *)inUserData;
+    if (recorder == nil){
+        return;
+    }
+
+    if ((inNumPackets &gt; 0) &amp;&amp; (recorder.isRecording))
+    {
+         // 获取录音数据
+        int _pcmSize = inBuffer-&gt;mAudioDataByteSize;
+        char *_pcmData = (char *)inBuffer-&gt;mAudioData;
+
+        NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];
+        // 把录音数据传递出去
+        [recorder writeRecordingData:data];
+    }
+}
+</code></pre>
+
+<hr />
+
+<p>上面这段代码有问题，如果一直不停的录音，会发现内存一直不停的增加，而且每次增加的大小会和每次返回的录音数据大小相等。
+那导致这段代码内存泄露的原因，就是<code>NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];</code> 这段代码中<code>data</code> 没有释放导致的。虽然是在ARC环境下，但是这是个C函数，要自己管理内存，所以加上<code>@autorelease</code> 就能解决。</p>
+
+<hr />
+
+<blockquote><p>引用
+<a href="http://memo.tv/archive/memory_management_with_objective_c_cocoa_iphone">Memory Management with Objective C / Cocoa / iPhone </a></p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>
