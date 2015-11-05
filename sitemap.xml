@@ -16,13 +16,16 @@
     <loc>http://githubdelegate.github.io/archives/</loc>
   </url>
   <url>
-    <loc>http://githubdelegate.github.io/blog/archives/</loc>
-  </url>
-  <url>
     <loc>http://githubdelegate.github.io/blog/</loc>
   </url>
   <url>
     <loc>http://githubdelegate.github.io/</loc>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/archives/</loc>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/categories/</loc>
   </url>
   <url>
     <loc>http://githubdelegate.github.io/blog/categories/ios/</loc>
