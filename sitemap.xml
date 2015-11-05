@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://githubdelegate.github.io/blog/2015/11/05/audiosesion-category/</loc>
+    <lastmod>2015-11-05T16:01:38+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun/</loc>
     <lastmod>2015-08-04T00:15:17+08:00</lastmod>
   </url>
@@ -22,5 +26,8 @@
   </url>
   <url>
     <loc>http://githubdelegate.github.io/blog/categories/audiosession/</loc>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/categories/ios/</loc>
   </url>
 </urlset>

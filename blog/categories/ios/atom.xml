@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ios | Alpine Blog]]></title>
+  <link href="http://githubdelegate.github.io/blog/categories/ios/atom.xml" rel="self"/>
+  <link href="http://githubdelegate.github.io/"/>
+  <updated>2015-11-05T16:02:37+08:00</updated>
+  <id>http://githubdelegate.github.io/</id>
+  <author>
+    <name><![CDATA[zy]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[audiosesion category]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/11/05/audiosesion-category/"/>
+    <updated>2015-11-05T16:01:38+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/11/05/audiosesion-category</id>
+    <content type="html"><![CDATA[<p>1.AudioSession 的设置问题</p>
+]]></content>
+  </entry>
+  
+</feed>

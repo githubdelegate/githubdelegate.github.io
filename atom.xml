@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-11-05T15:59:01+08:00</updated>
+  <updated>2015-11-05T16:02:37+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[audiosesion category]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/11/05/audiosesion-category/"/>
+    <updated>2015-11-05T16:01:38+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/11/05/audiosesion-category</id>
+    <content type="html"><![CDATA[<p>1.AudioSession 的设置问题</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS使用AudioQueue录音遇到的内存泄露问题]]></title>
