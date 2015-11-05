@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "AudioSession Category"
+title: "AudioSession Category 设置扬声器播放"
 date: 2015-11-05 10:13:15 +0800
 comments: true
-categories: "Audio"
+categories: "AudioSession"
 - AudioSession
 published: false
 ---
