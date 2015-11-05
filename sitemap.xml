@@ -1,37 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://yoursite.com/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/</loc>
-    <lastmod>2015-09-08T14:32:29+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://yoursite.com/blog/2015/08/12/cuo-wu-ji-lu/</loc>
-    <lastmod>2015-08-12T11:21:31+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://yoursite.com/blog/2015/08/04/ios-nei-cun/</loc>
+    <loc>http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun/</loc>
     <lastmod>2015-08-04T00:15:17+08:00</lastmod>
   </url>
   <url>
-    <loc>http://yoursite.com/blog/2015/07/24/blog/</loc>
+    <loc>http://githubdelegate.github.io/blog/2015/07/24/blog/</loc>
     <lastmod>2015-07-24T00:15:17+08:00</lastmod>
   </url>
   <url>
-    <loc>http://yoursite.com/archives/</loc>
+    <loc>http://githubdelegate.github.io/archives/</loc>
   </url>
   <url>
-    <loc>http://yoursite.com/blog/</loc>
+    <loc>http://githubdelegate.github.io/blog/archives/</loc>
   </url>
   <url>
-    <loc>http://yoursite.com/</loc>
+    <loc>http://githubdelegate.github.io/blog/</loc>
   </url>
   <url>
-    <loc>http://yoursite.com/blog/archives/</loc>
-  </url>
-  <url>
-    <loc>http://yoursite.com/blog/categories/</loc>
-  </url>
-  <url>
-    <loc>http://yoursite.com/blog/categories/ios/</loc>
+    <loc>http://githubdelegate.github.io/</loc>
   </url>
 </urlset>

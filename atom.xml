@@ -1,59 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://yoursite.com/atom.xml" rel="self"/>
-  <link href="http://yoursite.com/"/>
-  <updated>2015-11-05T15:30:57+08:00</updated>
-  <id>http://yoursite.com/</id>
+  <title><![CDATA[Alpine Blog]]></title>
+  <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
+  <link href="http://githubdelegate.github.io/"/>
+  <updated>2015-11-05T15:57:03+08:00</updated>
+  <id>http://githubdelegate.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[zy]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
-    <title type="html"><![CDATA[iOS8 framework动态库遇到的问题]]></title>
-    <link href="http://yoursite.com/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/"/>
-    <updated>2015-09-08T14:32:29+08:00</updated>
-    <id>http://yoursite.com/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti</id>
-    <content type="html"><![CDATA[<ol>
-<li><p>编译显示<code>Include of non-modular header inside framework module</code> 错误</p>
-
-<p>  修改<code>Build Setting</code> 中<code>Allow Non-modular Include InFramework Modules</code> 为YES.</p></li>
-<li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
-
-<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[错误记录]]></title>
-    <link href="http://yoursite.com/blog/2015/08/12/cuo-wu-ji-lu/"/>
-    <updated>2015-08-12T11:21:31+08:00</updated>
-    <id>http://yoursite.com/blog/2015/08/12/cuo-wu-ji-lu</id>
-    <content type="html"><![CDATA[<h4>错误记录</h4>
-
-<ol>
-<li><p>错误：
- ```
- /Users/zhangyun/iOSWorkSpace/Shout/Shout/Images.xcassets: The app icon set named &ldquo;AppIcon&rdquo; did not have any applicable content.c</p>
-
-<p>```
-原因是提供AppIcon 的尺寸不对。提供正确尺寸的退片。用这个<a href="http://makeappicon.com/">MakeAppIcon</a>.</p></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[iOS使用AudioQueue录音遇到的内存泄露问题]]></title>
-    <link href="http://yoursite.com/blog/2015/08/04/ios-nei-cun/"/>
+    <link href="http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun/"/>
     <updated>2015-08-04T00:15:17+08:00</updated>
-    <id>http://yoursite.com/blog/2015/08/04/ios-nei-cun</id>
+    <id>http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun</id>
     <content type="html"><![CDATA[<h3>AudioQueue 录音</h3>
 
 <p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
@@ -114,9 +78,9 @@
   
   <entry>
     <title type="html"><![CDATA[Octopress搭建博客中遇到的问题]]></title>
-    <link href="http://yoursite.com/blog/2015/07/24/blog/"/>
+    <link href="http://githubdelegate.github.io/blog/2015/07/24/blog/"/>
     <updated>2015-07-24T00:15:17+08:00</updated>
-    <id>http://yoursite.com/blog/2015/07/24/blog</id>
+    <id>http://githubdelegate.github.io/blog/2015/07/24/blog</id>
     <content type="html"><![CDATA[<ul>
 <li><p><code>gem install **</code> 提示安装失败</p>
 
