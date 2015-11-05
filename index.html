@@ -1,0 +1,363 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Alpine Blog</title>
+	<meta name="author" content="zy">
+
+	
+	<meta name="description" content="Comments Audiosession Category Qie Huan 在项目中遇到的问题是，使用AudioQueue 录音，进行语音识别，识别结束后，播报识别结果，但是录音还要继续，遇到的问题是播放的时候声音很小。原因是由于录音的时候设置了 [[AVAudioSession &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Alpine Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://githubdelegate.github.io/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='http://www.gravatar.com/avatar/" + MD5("") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">Alpine Blog</a></h1>
+<p class="subtitle">keep learning</p>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Blog</a></li>
+    <li><a href="http://about.me/shashankmehta">About</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+</ul></nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		<a class="github" href="https://github.com/githubdelegate" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-05T00:00:00+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+</div>
+		
+			<span class="comments"><a href="/blog/2015/11/05/audiosession-category-qie-huan/#disqus_thread">Comments</a></span>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/11/05/audiosession-category-qie-huan/" itemprop="url">Audiosession Category Qie Huan</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>在项目中遇到的问题是，使用<code>AudioQueue</code> 录音，进行语音识别，识别结束后，播报识别结果，但是录音还要继续，遇到的问题是播放的时候声音很小。原因是由于录音的时候设置了</p>
+
+<pre><code>[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+</code></pre>
+
+<p>这样设置之后，默认播放rout是听筒，而不是扬声器，声音就小了。
+修改方法如下
+方法一：</p>
+
+<pre><code>[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth error:nil];
+</code></pre>
+
+<p>方法二：</p>
+
+<pre><code>[session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&amp;error];
+</code></pre>
+
+<p>这两个方法的区别可以看这里<a href="https://developer.apple.com/library/ios/qa/qa1754/_index.html">AVAudioSessionCategoryOptionDefaultToSpeaker和AVAudioSessionPortOverrideSpeaker区别</a>，大概意思就是设置<code>AVAudioSessionPortOverrideSpeaker</code> 是临时性的，如果rout改变和audioSession被中断的话，这个设置就失效了，会返回到默认的设置。设置<code>AVAudioSessionCategoryOptionDefaultToSpeaker</code> 后，会一直生效。</p>
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-08T14:32:29+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ios/'>ios</a>
+
+
+</div>
+		
+			<span class="comments"><a href="/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/#disqus_thread">Comments</a></span>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/" itemprop="url">iOS8 Framework动态库遇到的问题</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<ol>
+<li><p>编译显示<code>Include of non-modular header inside framework module</code> 错误</p>
+
+<p>  修改<code>Build Setting</code> 中<code>Allow Non-modular Include InFramework Modules</code> 为YES.</p></li>
+<li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
+
+<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
+</ol>
+
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-08-04T00:15:17+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+</div>
+		
+			<span class="comments"><a href="/blog/2015/08/04/ios-nei-cun/#disqus_thread">Comments</a></span>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/08/04/ios-nei-cun/" itemprop="url">iOS使用AudioQueue录音遇到的内存泄露问题</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3>AudioQueue 录音</h3>
+
+<p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 回调函数
+</span><span class='line'>void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer, const AudioTimeStamp *inStartTime,
+</span><span class='line'>                        UInt32 inNumPackets, const AudioStreamPacketDescription *inPacketDesc)
+</span><span class='line'>{
+</span><span class='line'>    Recorder *recorder = (__bridge Recorder *)inUserData;
+</span><span class='line'>    if (recorder == nil){
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    if ((inNumPackets &gt; 0) && (recorder.isRecording))
+</span><span class='line'>    {
+</span><span class='line'>         // 获取录音数据
+</span><span class='line'>        int _pcmSize = inBuffer-&gt;mAudioDataByteSize;
+</span><span class='line'>        char *_pcmData = (char *)inBuffer-&gt;mAudioData;
+</span><span class='line'>      
+</span><span class='line'>        NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];
+</span><span class='line'>        // 把录音数据传递出去
+</span><span class='line'>        [recorder writeRecordingData:data];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>上面这段代码有问题，如果一直不停的录音，会发现内存一直不停的增加，而且每次增加的大小会和每次返回的录音数据大小相等。
+那导致这段代码内存泄露的原因，就是<code>NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];</code> 这段代码中<code>data</code> 没有释放导致的。虽然是在ARC环境下，但是这是个C函数，要自己管理内存，所以加上<code>@autorelease</code> 就能解决。</p>
+
+<hr />
+
+<blockquote><p>引用
+<a href="http://memo.tv/archive/memory_management_with_objective_c_cocoa_iphone">Memory Management with Objective C / Cocoa / iPhone </a></p></blockquote>
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-24T00:15:17+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+</div>
+		
+			<span class="comments"><a href="/blog/2015/07/24/blog/#disqus_thread">Comments</a></span>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/07/24/blog/" itemprop="url">Octopress搭建博客中遇到的问题</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<ul>
+<li><p><code>gem install **</code> 提示安装失败</p>
+
+<ul>
+<li><p>修改gem source<br/>
+<code>gem sources -a https://ruby.taobao.org/</code> 添加
+<code>gem sources -r https://rubygems.org/</code> 删除原来的</p></li>
+<li><p>如果使用<code>bundle install</code> 的时候，安装失败，需要修Gemfile
+<code>修改Gemfile 中 source 为https://ruby.taobao.org/</code></p></li>
+</ul>
+</li>
+<li><p>使用<code>zsh</code> 遇到 <code>rake new_post[“title”]</code>  提示 <code>zsh: no matches found: new_post[...]</code></p>
+
+<ul>
+<li>修改~/.zshrc文件 添加 <code>alias rake="noglob rake"</code></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+
+<p>相关blog</p>
+
+<ol>
+<li><a href="http://www.tuicool.com/articles/Av6fqu">http://www.tuicool.com/articles/Av6fqu</a></li>
+<li><a href="http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/">http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/</a></li>
+</ol>
+
+
+		
+		
+	</div>
+
+</article>
+
+</div>
+<nav id="pagenavi">
+    
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav></div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    zy
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'alpinezy';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>
