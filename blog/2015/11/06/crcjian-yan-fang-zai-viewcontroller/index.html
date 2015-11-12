@@ -3,12 +3,12 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>crc的c函数放在ViewController.mm中编译失败问题分析 - Alpine Blog</title>
+	<title>C函数放在.mm文件中编译失败问题分析 - Alpine Blog</title>
 	<meta name="author" content="zy">
 
 	
-	<meta name="description" content="crc的c函数放在ViewController.mm中编译失败问题分析 在项目中使用crc进行校验，在网上找到一份c的源码，但是放到项目当中一直编译失败，提示找不到对应的函数
-一开始是认为是传递的参数不对，发现不是这个问题,viewController.mm中是用OC++编译的，导致编译不过， &hellip;">
+	<meta name="description" content="C函数放在.mm文件中编译失败问题分析 在项目中使用crc进行校验，在网上找到一份c的源码，但是放到项目当中一直编译失败，提示找不到对应的函数
+一开始是认为是传递的参数不对，发现不是这个问题,viewController.mm中是用OC++编译的，导致编译不过，但是不明白原因， &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,9 +74,16 @@
 			
 			<div class="mid-col-container">
 				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-	<h1 class="title" itemprop="name">crc的c函数放在ViewController.mm中编译失败问题分析</h1>
+	<h1 class="title" itemprop="name">C函数放在.mm文件中编译失败问题分析</h1>
 	<div class="entry-content" itemprop="articleBody"><p>在项目中使用crc进行校验，在网上找到一份c的源码，但是放到项目当中一直编译失败，提示找不到对应的函数
 一开始是认为是传递的参数不对，发现不是这个问题,<code>viewController.mm</code>中是用OC++编译的，导致编译不过，但是不明白原因，现在的解决办法是把这c函数放到<code>.m</code>的文件中编译就可以了。</p>
+
+<hr />
+
+<p>原因分析：原因是由于<code>ViewController.mm</code>是<code>.mm</code>后缀的，所以会按照OC++编译，但是crc的源码是c的，而且没有头文件，所以我就自己创建了一个头文件，但是头文件中并没有添加，<code>extern "C"</code> （extern &ldquo;C"的主要作用就是为了能够正确实现C++代码调用其他C语言代码。加上extern "C"后，会指示编译器这部分代码按C语言的进行编译，而不是C++的。由于C++支持函数重载，因此编译器编译函数的过程中会将函数的参数类型也加到编译后的代码中，而不仅仅是函数名；而C语言并不支持函数重载，因此编译C语言代码的函数时不会带上函数的参数类型，一般之包括函数名）</p>
+
+<blockquote><p><a href="http://www.cnblogs.com/skynet/archive/2010/07/10/1774964.html">http://www.cnblogs.com/skynet/archive/2010/07/10/1774964.html</a>
+<a href="http://www.jianshu.com/p/5d2eeeb93590">http://www.jianshu.com/p/5d2eeeb93590</a></p></blockquote>
 </div>
 
 </article>
