@@ -4,7 +4,7 @@
   <title><![CDATA[Category: c++ | Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-11-13T00:43:42+08:00</updated>
+  <updated>2015-11-13T01:17:17+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -23,7 +23,7 @@
 
 <hr />
 
-<p>原因分析：原因是由于<code>ViewController.mm</code>是<code>.mm</code>后缀的，会按照OC++编译,所以在<code>ViewController.mm</code> 调用<code>int add(int a,int b)</code>函数，在链接阶段,就会去目标文件中去找<code>_add_int_int</code>这样的符号,不同的编译器可能会不同，但是C函数编译后生成的符号是<code>_int</code>，这就导致找不到对应的函数，编译失败！</p>
+<p>原因分析：原因是由于<code>ViewController.mm</code>是<code>.mm</code>后缀的，会按照OC++编译,所以在<code>ViewController.mm</code> 调用<code>int add(int a,int b)</code>函数，在链接阶段,就会去目标文件中去找<code>_add_int_int</code>这样的符号,不同的编译器可能会不同，但是C函数编译后生成的符号是<code>_int</code>，这就导致找不到对应的函数，编译失败,解决办法在C头文件中添加<code>extern "C"</code>，即可。详细解释，开下面的连接博客。</p>
 
 <blockquote><p><a href="http://www.cnblogs.com/skynet/archive/2010/07/10/1774964.html">http://www.cnblogs.com/skynet/archive/2010/07/10/1774964.html</a>
 <a href="http://www.jianshu.com/p/5d2eeeb93590">http://www.jianshu.com/p/5d2eeeb93590</a></p></blockquote>
