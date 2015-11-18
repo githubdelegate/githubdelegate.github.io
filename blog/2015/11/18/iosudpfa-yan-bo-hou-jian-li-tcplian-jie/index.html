@@ -1,0 +1,324 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>iOS UDP发广播,接收,TCP监听 - Alpine Blog</title>
+	<meta name="author" content="zy">
+
+	
+	<meta name="description" content="iOS UDP发广播,接收,TCP监听 iOS 手机端先发送UDP广播，硬件设备端收到后，建立TCP连接，然后手机端读取硬件设备发送的信息。 1.UDP广播 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26 &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Alpine Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://githubdelegate.github.io/blog/2015/11/18/iosudpfa-yan-bo-hou-jian-li-tcplian-jie/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='http://www.gravatar.com/avatar/" + MD5("") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">Alpine Blog</a></h1>
+<p class="subtitle">keep learning</p>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Blog</a></li>
+    <li><a href="http://about.me/shashankmehta">About</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+</ul></nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		<a class="github" href="https://github.com/githubdelegate" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">iOS UDP发广播,接收,TCP监听</h1>
+	<div class="entry-content" itemprop="articleBody"><p>iOS 手机端先发送UDP广播，硬件设备端收到后，建立TCP连接，然后手机端读取硬件设备发送的信息。</p>
+
+<hr />
+
+<p>1.UDP广播</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>- (void)viewDidAppear:(BOOL)animated
+</span><span class='line'>{
+</span><span class='line'>    [super viewDidAppear:animated];
+</span><span class='line'>    
+</span><span class='line'>     // 1.开始发送udp
+</span><span class='line'>    [self setupUdpClient];
+</span><span class='line'>    
+</span><span class='line'>    // 2.开启定时器，每个一秒发送一次
+</span><span class='line'>    self.sendTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(p_sendUdp) userInfo:nil repeats:YES];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)setupUdpClient
+</span><span class='line'>{
+</span><span class='line'>    NSError *error;
+</span><span class='line'>    _sendUdp = [[AsyncUdpSocket alloc] initWithDelegate:self];
+</span><span class='line'>    [_sendUdp enableBroadcast:YES error:&error]; // 开启广播
+</span><span class='line'>    if (![self checkError:error]) {
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    [_sendUdp bindToPort:9997 error:&error]; // 绑定端口
+</span><span class='line'>    if (![self checkError:error]) {
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (BOOL)p_sendUdp
+</span><span class='line'>{
+</span><span class='line'>    NSString *sendStr = [NSString stringWithFormat:@"{\"ip\":\"\%@\"}",[Helper getIPAddress]]; // 发送本机IP地址
+</span><span class='line'>    NSData *sendData = [sendStr dataUsingEncoding:NSUTF8StringEncoding];
+</span><span class='line'>   return [_sendUdp sendData:sendData toHost:USCSoundBoxSendHost port:9998 withTimeout:-1 tag:0];
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>2.UDP接收</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)beginReceive
+</span><span class='line'>{
+</span><span class='line'>    NSError *error;
+</span><span class='line'>    _receiveUdp = [[AsyncUdpSocket alloc] initWithDelegate:self];
+</span><span class='line'>    [_receiveUdp enableBroadcast:YES error:&error];
+</span><span class='line'>    [_receiveUdp bindToPort:9997 error:&error];
+</span><span class='line'>    // 开始接受udp数据
+</span><span class='line'>    [_receiveUdp receiveWithTimeout:-1 tag:0];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>// 当收到udp数据包时就会调用，但是你经常会收到不是自己想要的数据包，这些数据包可能来着其他主机，你需要忽略掉这些，这个代理方法返回bool类型，如果返回NO,当收到其他数据包，就会继续调用这个代理方法。
+</span><span class='line'>- (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:(UInt16)port
+</span><span class='line'>{
+</span><span class='line'>    return NO;
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2.TCP 监听连接请求</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> // 开始监听 
+</span><span class='line'> self.asyServer = [[AsyncSocket alloc]initWithDelegate:self];
+</span><span class='line'> if([self.asyServer acceptOnPort:9997 error:&error]){
+</span><span class='line'>       NSLog(@"开始监听端口。。。%d",USCSoundBoxClientPort);
+</span><span class='line'> }else{
+</span><span class='line'>     NSLog(@"errr=%@",error);
+</span><span class='line'> }
+</span><span class='line'>    
+</span><span class='line'>
+</span><span class='line'>// 建立连接，读取数据   
+</span><span class='line'>- (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket
+</span><span class='line'>{
+</span><span class='line'>    NSLog(@"%@",[NSString stringWithFormat:@"建立与%@的连接",newSocket.connectedHost]);
+</span><span class='line'>    self.acceptedSocket = newSocket;
+</span><span class='line'>    [newSocket readDataWithTimeout:-1 tag:0];
+</span><span class='line'>    newSocket.delegate = self;
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>注意</h3>
+
+<p>1.如果同时开启udp接收和tcp监听的话，tcp监听会失效。</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style addthis_16x16_style">
+	
+	
+	
+	<a class="addthis_button_twitter"></a>
+	
+	
+	
+	<a class="addthis_button_compact"></a>
+	<a class="addthis_counter addthis_bubble_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    zy
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'alpinezy';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://githubdelegate.github.io/blog/2015/11/18/iosudpfa-yan-bo-hou-jian-li-tcplian-jie/';
+        var disqus_url = 'http://githubdelegate.github.io/blog/2015/11/18/iosudpfa-yan-bo-hou-jian-li-tcplian-jie/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

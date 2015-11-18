@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-11-13T09:38:58+08:00</updated>
+  <updated>2015-11-18T14:44:45+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -12,6 +12,181 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS UDP发广播,接收,TCP监听]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/11/18/iosudpfa-yan-bo-hou-jian-li-tcplian-jie/"/>
+    <updated>2015-11-18T11:30:45+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/11/18/iosudpfa-yan-bo-hou-jian-li-tcplian-jie</id>
+    <content type="html"><![CDATA[<p>iOS 手机端先发送UDP广播，硬件设备端收到后，建立TCP连接，然后手机端读取硬件设备发送的信息。</p>
+
+<hr />
+
+<p>1.UDP广播</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>- (void)viewDidAppear:(BOOL)animated
+</span><span class='line'>{
+</span><span class='line'>    [super viewDidAppear:animated];
+</span><span class='line'>    
+</span><span class='line'>     // 1.开始发送udp
+</span><span class='line'>    [self setupUdpClient];
+</span><span class='line'>    
+</span><span class='line'>    // 2.开启定时器，每个一秒发送一次
+</span><span class='line'>    self.sendTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(p_sendUdp) userInfo:nil repeats:YES];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)setupUdpClient
+</span><span class='line'>{
+</span><span class='line'>    NSError *error;
+</span><span class='line'>    _sendUdp = [[AsyncUdpSocket alloc] initWithDelegate:self];
+</span><span class='line'>    [_sendUdp enableBroadcast:YES error:&error]; // 开启广播
+</span><span class='line'>    if (![self checkError:error]) {
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    [_sendUdp bindToPort:9997 error:&error]; // 绑定端口
+</span><span class='line'>    if (![self checkError:error]) {
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (BOOL)p_sendUdp
+</span><span class='line'>{
+</span><span class='line'>    NSString *sendStr = [NSString stringWithFormat:@"{\"ip\":\"\%@\"}",[Helper getIPAddress]]; // 发送本机IP地址
+</span><span class='line'>    NSData *sendData = [sendStr dataUsingEncoding:NSUTF8StringEncoding];
+</span><span class='line'>   return [_sendUdp sendData:sendData toHost:USCSoundBoxSendHost port:9998 withTimeout:-1 tag:0];
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>2.UDP接收</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)beginReceive
+</span><span class='line'>{
+</span><span class='line'>    NSError *error;
+</span><span class='line'>    _receiveUdp = [[AsyncUdpSocket alloc] initWithDelegate:self];
+</span><span class='line'>    [_receiveUdp enableBroadcast:YES error:&error];
+</span><span class='line'>    [_receiveUdp bindToPort:9997 error:&error];
+</span><span class='line'>    // 开始接受udp数据
+</span><span class='line'>    [_receiveUdp receiveWithTimeout:-1 tag:0];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>// 当收到udp数据包时就会调用，但是你经常会收到不是自己想要的数据包，这些数据包可能来着其他主机，你需要忽略掉这些，这个代理方法返回bool类型，如果返回NO,当收到其他数据包，就会继续调用这个代理方法。
+</span><span class='line'>- (BOOL)onUdpSocket:(AsyncUdpSocket *)sock didReceiveData:(NSData *)data withTag:(long)tag fromHost:(NSString *)host port:(UInt16)port
+</span><span class='line'>{
+</span><span class='line'>    return NO;
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2.TCP 监听连接请求</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> // 开始监听 
+</span><span class='line'> self.asyServer = [[AsyncSocket alloc]initWithDelegate:self];
+</span><span class='line'> if([self.asyServer acceptOnPort:9997 error:&error]){
+</span><span class='line'>       NSLog(@"开始监听端口。。。%d",USCSoundBoxClientPort);
+</span><span class='line'> }else{
+</span><span class='line'>     NSLog(@"errr=%@",error);
+</span><span class='line'> }
+</span><span class='line'>    
+</span><span class='line'>
+</span><span class='line'>// 建立连接，读取数据   
+</span><span class='line'>- (void)onSocket:(AsyncSocket *)sock didAcceptNewSocket:(AsyncSocket *)newSocket
+</span><span class='line'>{
+</span><span class='line'>    NSLog(@"%@",[NSString stringWithFormat:@"建立与%@的连接",newSocket.connectedHost]);
+</span><span class='line'>    self.acceptedSocket = newSocket;
+</span><span class='line'>    [newSocket readDataWithTimeout:-1 tag:0];
+</span><span class='line'>    newSocket.delegate = self;
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>注意</h3>
+
+<p>1.如果同时开启udp接收和tcp监听的话，tcp监听会失效。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[c++ oc 混编遇到的编译提示NSObjcRuntime error]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/11/13/c-plus-plus-oc-hun-bian-yu-dao-de-bian-yi-ti-shi-nsobjcruntime-error/"/>
+    <updated>2015-11-13T13:46:33+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/11/13/c-plus-plus-oc-hun-bian-yu-dao-de-bian-yi-ti-shi-nsobjcruntime-error</id>
+    <content type="html"><![CDATA[<p> OC 和C++混编时遇到编译错误会提示</p>
+
+<blockquote><p><a href="http://blog.csdn.net/xuchaovip/article/details/22046115"> C++、Objective-c混编陷阱之–错误的头文件引用</a></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CoreBluetooth 相关]]></title>
