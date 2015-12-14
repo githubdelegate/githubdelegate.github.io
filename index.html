@@ -7,7 +7,7 @@
 	<meta name="author" content="zy">
 
 	
-	<meta name="description" content="Comments 转：iOS中的正则表达式 转自lady-奕奕：正则表达式在iOS中的运用 一、什么是正则表达式 正则表达式，又称正规表示法，是对字符串操作的一种逻辑公式。正则表达式可以检测给定的字符串是否符合我们定义的逻辑，也可以从字符串中获取我们想要的特定部分。 &hellip;">
+	<meta name="description" content="swift Comments Swift 中单例的实现 Swift单例 Use the class constant approach if you are using Swift 1.2 or above and the nested struct approach if you need &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +74,138 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-14T18:54:44+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/swift/'>swift</a>
+
+
+</div>
+		
+			<span class="comments"><a href="/blog/2015/12/14/swift-zhong-dan-li-de-shi-xian/#disqus_thread">Comments</a></span>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/12/14/swift-zhong-dan-li-de-shi-xian/" itemprop="url">Swift 中单例的实现</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h1>Swift单例</h1>
+
+<p>Use the <strong>class constant</strong> approach if you are using Swift 1.2 or above and the <strong>nested struct</strong> approach if you need to support earlier versions._</p>
+
+<p>An exploration of the Singleton pattern in Swift. All approaches below support lazy initialization and thread safety.</p>
+
+<p>Issues and pull requests welcome.</p>
+
+<h3>Approach A: Class constant</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class SingletonA {
+</span><span class='line'>    
+</span><span class='line'>    static let sharedInstance = SingletonA()
+</span><span class='line'>    
+</span><span class='line'>    init() {
+</span><span class='line'>        println("AAA");
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This approach supports lazy initialization because Swift lazily initializes class constants (and variables), and is thread safe by the definition of <code>let</code>.</p>
+
+<p>Class constants were introduced in Swift 1.2. If you need to support an earlier version of Swift, use the nested struct approach below or a global constant.</p>
+
+<h3>Approach B: Nested struct</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class SingletonB {
+</span><span class='line'>    
+</span><span class='line'>    class var sharedInstance: SingletonB {
+</span><span class='line'>        struct Static {
+</span><span class='line'>            static let instance: SingletonB = SingletonB()
+</span><span class='line'>        }
+</span><span class='line'>        return Static.instance
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在类变量里嵌套一个 <code>Static</code> 结构体。
+<code>Static</code> 封装了一个静态的常量，通过 static 定义意味着这个属性只存在一个，注意 Swift 中 static 的变量是延时加载的，意味着 Instance 直到需要的时候才会被创建。同时再注意一下，因为它是一个常量，所以一旦创建之后不会再创建第二次。这些就是单例模式的核心所在：一旦初始化完成，当前类存在一个实例对象，初始化方法就不会再被调用。</p>
+
+<p>Here we are using the static constant of a nested struct as a class constant. This is a workaround for the lack of static class constants in Swift 1.1 and earlier, and still works as a workaround for the lack of static constants and variables in functions.</p>
+
+<h3>Approach C: dispatch_once</h3>
+
+<p>The traditional Objective-C approach ported to Swift.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class SingletonC {
+</span><span class='line'>    
+</span><span class='line'>    class var sharedInstance: SingletonC {
+</span><span class='line'>        struct Static {
+</span><span class='line'>            static var onceToken: dispatch_once_t = 0
+</span><span class='line'>            static var instance: SingletonC? = nil
+</span><span class='line'>        }
+</span><span class='line'>        dispatch_once(&Static.onceToken) {
+</span><span class='line'>            Static.instance = SingletonC()
+</span><span class='line'>        }
+</span><span class='line'>        return Static.instance!
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;m fairly certain there&rsquo;s no advantage over the nested struct approach but I&rsquo;m including it anyway as I find the differences in syntax interesting.</p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -855,70 +987,11 @@ eg：021-68686868  0511-6868686；
 
 </article>
 
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-07-24T00:15:17+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-</div>
-		
-			<span class="comments"><a href="/blog/2015/07/24/blog/#disqus_thread">Comments</a></span>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2015/07/24/blog/" itemprop="url">Octopress搭建博客中遇到的问题</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<ul>
-<li><p><code>gem install **</code> 提示安装失败</p>
-
-<ul>
-<li><p>修改gem source<br/>
-<code>gem sources -a https://ruby.taobao.org/</code> 添加
-<code>gem sources -r https://rubygems.org/</code> 删除原来的</p></li>
-<li><p>如果使用<code>bundle install</code> 的时候，安装失败，需要修Gemfile
-<code>修改Gemfile 中 source 为https://ruby.taobao.org/</code></p></li>
-</ul>
-</li>
-<li><p>使用<code>zsh</code> 遇到 <code>rake new_post[“title”]</code>  提示 <code>zsh: no matches found: new_post[...]</code></p>
-
-<ul>
-<li>修改~/.zshrc文件 添加 <code>alias rake="noglob rake"</code></li>
-</ul>
-</li>
-</ul>
-
-
-<hr />
-
-<p>相关blog</p>
-
-<ol>
-<li><a href="http://www.tuicool.com/articles/Av6fqu">http://www.tuicool.com/articles/Av6fqu</a></li>
-<li><a href="http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/">http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/</a></li>
-</ol>
-
-
-		
-		
-	</div>
-
-</article>
-
 </div>
 <nav id="pagenavi">
     
+    
+        <a href="2" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>

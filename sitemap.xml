@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://githubdelegate.github.io/blog/2015/12/14/swift-zhong-dan-li-de-shi-xian/</loc>
+    <lastmod>2015-12-14T18:54:44+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://githubdelegate.github.io/blog/2015/12/03/zhuan-:ioszhong-de-zheng-ze-biao-da-shi/</loc>
     <lastmod>2015-12-03T10:15:22+08:00</lastmod>
   </url>
@@ -63,5 +67,8 @@
   </url>
   <url>
     <loc>http://githubdelegate.github.io/blog/categories/bluetooth/</loc>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/categories/swift/</loc>
   </url>
 </urlset>

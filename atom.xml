@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-12-03T10:47:26+08:00</updated>
+  <updated>2015-12-14T20:37:53+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[swift 中单例的实现]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/12/14/swift-zhong-dan-li-de-shi-xian/"/>
+    <updated>2015-12-14T18:54:44+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/12/14/swift-zhong-dan-li-de-shi-xian</id>
+    <content type="html"><![CDATA[<h1>Swift单例</h1>
+
+<p>Use the <strong>class constant</strong> approach if you are using Swift 1.2 or above and the <strong>nested struct</strong> approach if you need to support earlier versions._</p>
+
+<p>An exploration of the Singleton pattern in Swift. All approaches below support lazy initialization and thread safety.</p>
+
+<p>Issues and pull requests welcome.</p>
+
+<h3>Approach A: Class constant</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class SingletonA {
+</span><span class='line'>    
+</span><span class='line'>    static let sharedInstance = SingletonA()
+</span><span class='line'>    
+</span><span class='line'>    init() {
+</span><span class='line'>        println("AAA");
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This approach supports lazy initialization because Swift lazily initializes class constants (and variables), and is thread safe by the definition of <code>let</code>.</p>
+
+<p>Class constants were introduced in Swift 1.2. If you need to support an earlier version of Swift, use the nested struct approach below or a global constant.</p>
+
+<h3>Approach B: Nested struct</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class SingletonB {
+</span><span class='line'>    
+</span><span class='line'>    class var sharedInstance: SingletonB {
+</span><span class='line'>        struct Static {
+</span><span class='line'>            static let instance: SingletonB = SingletonB()
+</span><span class='line'>        }
+</span><span class='line'>        return Static.instance
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在类变量里嵌套一个 <code>Static</code> 结构体。
+<code>Static</code> 封装了一个静态的常量，通过 static 定义意味着这个属性只存在一个，注意 Swift 中 static 的变量是延时加载的，意味着 Instance 直到需要的时候才会被创建。同时再注意一下，因为它是一个常量，所以一旦创建之后不会再创建第二次。这些就是单例模式的核心所在：一旦初始化完成，当前类存在一个实例对象，初始化方法就不会再被调用。</p>
+
+<p>Here we are using the static constant of a nested struct as a class constant. This is a workaround for the lack of static class constants in Swift 1.1 and earlier, and still works as a workaround for the lack of static constants and variables in functions.</p>
+
+<h3>Approach C: dispatch_once</h3>
+
+<p>The traditional Objective-C approach ported to Swift.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class SingletonC {
+</span><span class='line'>    
+</span><span class='line'>    class var sharedInstance: SingletonC {
+</span><span class='line'>        struct Static {
+</span><span class='line'>            static var onceToken: dispatch_once_t = 0
+</span><span class='line'>            static var instance: SingletonC? = nil
+</span><span class='line'>        }
+</span><span class='line'>        dispatch_once(&Static.onceToken) {
+</span><span class='line'>            Static.instance = SingletonC()
+</span><span class='line'>        }
+</span><span class='line'>        return Static.instance!
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;m fairly certain there&rsquo;s no advantage over the nested struct approach but I&rsquo;m including it anyway as I find the differences in syntax interesting.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[转：iOS中的正则表达式]]></title>
