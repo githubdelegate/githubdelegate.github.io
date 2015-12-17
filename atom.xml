@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-12-17T15:55:08+08:00</updated>
+  <updated>2015-12-17T16:02:38+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -41,16 +41,17 @@
 
 <h3>iOS多线程同步的办法</h3>
 
-<h4><code>1.Atomic Operations</code></h4>
+<h4>1.Atomic Operations</h4>
 
 <p>原子操作是对简单的数据类型的最简单的同步方法。用原子操作的好处是不会阻塞正在竞争的线程，这比加锁好。</p>
 
-<h4><code>2.Locks</code></h4>
+<h4>2.Locks</h4>
 
-<p>锁是最常用的同步工具。你可以用锁保护一段一次只允许一个线程执行的代码块。比如，一段操作一份关键数据的代码，或者用到一些一次只允许一个用户操作的资源。通过把一个锁放在这段代码两边，可以阻止其他线程修改。</p>
+<p>锁是最常用的同步工具。你可以用锁保护一段一次只允许一个线程执行的代码块。比如，一段操作一份关键数据的代码，或者用到一些一次只允许一个用户操作的资源。通过把一个锁放在这段代码两边，可以阻止其他线程修改。
+iOS 中可以使用的锁如下代码：</p>
 
 <ul>
-<li><code>mutex lock</code></li>
+<li><code>1.mutex lock</code></li>
 </ul>
 
 
@@ -97,17 +98,17 @@ test=70
 </code></pre>
 
 <ul>
-<li><code>NSLock</code></li>
+<li><code>2.NSLock</code></li>
 </ul>
 
 
-<p> 注意: <code>NSLock</code> 在<code>POSIX threads</code> 基础上实现的。当对一个NSLock 对象调用<code>unlock</code>方法，你必须要保证和给<code>NSLock</code>对象调用<code>lock</code>方法在同一个线程。在不同的线程里unlock会导致未知的错误。连续两次调用lock方法会导致死锁。如果要递归的加锁，用<code>NSRecursiveLock</code>。对一个未<code>lock</code> lock 调用<code>unlock</code>是不正确的，要修正。</p>
+<p> 注意: <code>NSLock</code> 在<code>POSIX threads</code> 基础上实现的。当对一个NSLock 对象调用<code>unlock</code>方法，你必须要保证和给<code>NSLock</code>对象调用<code>lock</code>方法在同一个线程。在不同的线程里unlock会导致未知的错误。连续两次调用lock方法会导致死锁。如果要递归的加锁，用<code>NSRecursiveLock</code>。对一个未加锁的lock 调用<code>unlock</code>是不正确的，要修正。</p>
 
 <p> <code>tryLock</code> :尝试加锁，并且会立即返回，成功返回YES，不会阻塞。
  <code>lock</code> 方法: 加锁，如果当前是在锁的状态，当前线程的会阻塞，直到加锁</p>
 
 <ul>
-<li><code>@synchronized</code></li>
+<li><code>3.@synchronized</code></li>
 </ul>
 
 
@@ -169,7 +170,7 @@ test=70
 
 
 <ul>
-<li><code>NSRecursiveLock</code></li>
+<li><code>4.NSRecursiveLock</code></li>
 </ul>
 
 
@@ -190,12 +191,11 @@ test=70
 </code></pre>
 
 <ul>
-<li><code>NSConditionLock</code></li>
+<li><code>5.NSConditionLock</code></li>
 </ul>
 
 
-<p><code>NSConditionLock</code> 定义了一个可以通过特殊的值来锁和解锁的互斥锁。不要和<code>Condition</code>搞混，虽然这种方式和条件很像，但是实现完全不同。
-特别是当线程之间需要需要按照一个特殊的顺序执行任务的时候，你应该使用<code>NSConditionLock</code>,比如一个线程生产数据，另一个消费数据。当生产者正在执行的时候，消费者用条件请求锁。当生产者完成后，解锁并设置条件，唤醒消费线程，去消费数据。
+<p><code>NSConditionLock</code> 定义了一个可以通过特殊的值来锁和解锁的互斥锁。不要和<code>Condition</code>搞混，虽然这种方式和条件很像，但是实现完全不同。特别是当线程之间需要需要按照一个特殊的顺序执行任务的时候，你应该使用<code>NSConditionLock</code>,比如一个线程生产数据，另一个消费数据。当生产者正在执行的时候，消费者用条件请求锁。当生产者完成后，解锁并设置条件，唤醒消费线程，去消费数据。
 <code>NSConditionLock</code>的加锁和解锁方法可以各种组合。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -257,17 +257,16 @@ test=70
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4><code>3.Conditions</code></h4>
+<h4>Conditions 条件变量</h4>
 
-<pre><code>条件是另一种信号量，当满足某个条件的时候能允许其他线程运行。条件信号量主要用来表示某个资源可用个数，和保证线程安装固定的顺序运行。当一个线程需要某个condition的时候，会一直阻塞等待，直到只有当其他线程改变了条件信号量。互斥和条件信号量之间的区别是用条件信号量允许多个线程同时获得条件，运行。条件信号量就像门卫一样，根据资源的多少，决定让不同的线程可以进入。
-</code></pre>
+<p>条件是另一种信号量，当满足某个条件的时候能允许其他线程运行。条件信号量主要用来表示某个资源可用个数，和保证线程安装固定的顺序运行。当一个线程需要某个condition的时候，会一直阻塞等待，直到只有当其他线程改变了条件信号量。互斥和条件信号量之间的区别是用条件信号量允许多个线程同时获得条件，运行。条件信号量就像门卫一样，根据资源的多少，决定让不同的线程可以进入。</p>
 
 <h4>使用<code>Conditions</code></h4>
 
 <p>条件是一种特殊类型的锁，它可以用来同步各个操作   顺序。条件和同步锁之间的区别很微妙。一个线程等待一个条件会阻塞，直到另外一个线程明确的发出条件信号。</p>
 
 <ul>
-<li><code>POSIX Conditions</code>
+<li><code>1.POSIX Conditions</code>
   <code>POSIX</code> 线程条件锁要求同时使用条件和互斥。运行时互斥锁约束条件，等待信号的线程使用同样的互斥和条件变量。</li>
 </ul>
 
@@ -304,14 +303,10 @@ test=70
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
 <span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>- (IBAction)distributedlock:(id)sender {
-</span><span class='line'>
 </span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
 </span><span class='line'>        [self waitOnConditionfun];
 </span><span class='line'>    });
-</span><span class='line'>
 </span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
 </span><span class='line'>        [self signalThreadCondition];
 </span><span class='line'>    });
@@ -344,7 +339,7 @@ test=70
 
 
 <ul>
-<li>NSCondition</li>
+<li><code>2.NSCondition</code></li>
 </ul>
 
 
@@ -412,21 +407,21 @@ test=70
 <h3>线程安全设计技巧</h3>
 
 <ul>
-<li>避免同步</li>
+<li>1.避免同步</li>
 </ul>
 
 
 <p>同步工具不是万灵药，锁用的太多会导致性能低于没有使用同步的程序。寻找线程安全和性能的平衡是需要经验。实现同步最好的方法是减小线程间的交互，让同步任务相互独立。如果每个任务操作自己私有数据，就不需要使用锁来保护数据。如果不同的任务共享一块数据，你可以尝试把数据分割，或复制一份数据，虽然这也消耗性能，你可以再决定前权衡一下。</p>
 
 <ul>
-<li>理解同步的限制</li>
+<li>2.理解同步的限制</li>
 </ul>
 
 
 <p>同步工具只有被所有的线程一直使用才能最有效。如果创建一个互斥锁用来限制对某个资源的访问，你的所以线程必须请求相同的互斥变量才能操作这个数据。如果没达到这个效果，是一个程序员的错误！！！！</p>
 
 <ul>
-<li>正确编码的风险</li>
+<li>3.正确编码的风险</li>
 </ul>
 
 
@@ -483,14 +478,16 @@ test=70
 
 
 <ul>
-<li><p>小心死锁活锁</p>
+<li>4.小心死锁活锁</li>
+</ul>
 
-<pre><code>  任何时候一个线程一次想要获取多于一个锁，都有死锁的可能。死锁是两个线程分别获得一个锁后，又想去得到另外一个线程的锁。结果就是每个线程都会一直阻塞下去。以下是对死锁和活锁的形象描述。 现有个过道，两个人宽，两侧迎面走来两个人A和B。 死锁的情况： A和B都不是讲礼貌的人，都不愿给别人让路，所以A和B都在等对方让路，导致谁也过不去。 活锁的情况： A和B都是很讲礼貌的人，都主动给别人让路。A往左移，同时B往右移；A往右移，同时B往左移。 A和B在移动的时候，同时挡住对方，导致谁也过不去
-</code></pre></li>
-<li><p>正确的使用验证变量</p>
 
-<pre><code>  如果你已经使用了互斥锁保护一段代码，就不要再使用验证关键字去保护代码中重要变量。互斥包括一个内存栅栏去确保读取和写入操作的次序。添加一个验证变量会导致强制读取值每次，降低性能。如果一个互斥锁足够的话，就不要再使用了。
-</code></pre></li>
+<p>任何时候一个线程一次想要获取多于一个锁，都有死锁的可能。死锁是两个线程分别获得一个锁后，又想去得到另外一个线程的锁。结果就是每个线程都会一直阻塞下去。以下是对死锁和活锁的形象描述。 现有个过道，两个人宽，两侧迎面走来两个人A和B。 死锁的情况： A和B都不是讲礼貌的人，都不愿给别人让路，所以A和B都在等对方让路，导致谁也过不去。 活锁的情况： A和B都是很讲礼貌的人，都主动给别人让路。A往左移，同时B往右移；A往右移，同时B往左移。 A和B在移动的时候，同时挡住对方，导致谁也过不去</p>
+
+<ul>
+<li><p>5.正确的使用验证变量</p>
+
+<p>  如果你已经使用了互斥锁保护一段代码，就不要再使用验证关键字去保护代码中重要变量。互斥包括一个内存栅栏去确保读取和写入操作的次序。添加一个验证变量会导致强制读取值每次，降低性能。如果一个互斥锁足够的话，就不要再使用了。</p></li>
 </ul>
 
 
