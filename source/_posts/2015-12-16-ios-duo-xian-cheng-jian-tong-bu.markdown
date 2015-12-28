@@ -1,0 +1,338 @@
+---
+layout: post
+title: "iOS 多线程间同步"
+date: 2015-12-16 10:53:50 +0800
+comments: true
+categories: OC mutilThread
+---
+
+## iOS 多线程同步
+
+---
+
+###线程同步概念
+ 
+  同”字从字面上容易理解为一起动作其实不是，“同”字应是指协同、协助、互相配合。如进程、线程同步，可理解为进程或线程A和B一块配合，A执行到一定程度时要依靠B的某个结果，于是停下来，示意B运行；B依言执行，再将结果给A；A再继续操作。
+	所谓同步，就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回，同时其它线程也不能调用这个方法。按照这个定义，其实绝大多数函数都是同步调用（例如sin, isdigit等）。但是一般而言，我们在说同步、异步的时候，特指那些需要其他部件协作或者需要一定时间完成的任务。例如Window API函数SendMessage。该函数发送一个消息给某个窗口，在对方处理完消息之前，这个函数不返回。当对方处理完毕以后，该函数才把消息处理函数所返回的LRESULT值返回给调用者。
+	在多线程编程里面，一些敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何时刻，最多有一个线程访问，以保证数据的完整性。
+我们可以通过`互斥锁(mutex)`，`条件变量(condition variable)`和`读写锁(reader-writer lock)` 和`信号`来同步资源。
+ 
+ 
+* 互斥锁仅允许每次使用一个线程来执行特定的部分代码或者访问特定数据。
+* 读写锁允许对受保护的共享资源进行并发读取和独占写入。要修改资源，线程必须首先获取互斥写锁。只有释放所有的读锁之后，才允许使用互斥写锁。
+* 条件变量会一直阻塞线程，直到特定的条件为真。
+* 计数信号量通常用来协调对资源的访问。使用计数，可以限制访问某个信号的线程数达到指定的计数时，信号将阻塞。
+
+
+
+---
+###iOS多线程同步的办法
+
+#### 1.Atomic Operations
+		
+原子操作是对简单的数据类型的最简单的同步方法。用原子操作的好处是不会阻塞正在竞争的线程，这比加锁好。
+		
+#### 2.Locks
+锁是最常用的同步工具。你可以用锁保护一段一次只允许一个线程执行的代码块。比如，一段操作一份关键数据的代码，或者用到一些一次只允许一个用户操作的资源。通过把一个锁放在这段代码两边，可以阻止其他线程修改。
+iOS 中可以使用的锁如下代码：
+	
+
+ * `1.mutex lock`
+ 
+ ```
+ 
+  - (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.test = 10;
+    pthread_mutex_init(&mutex, NULL);
+    pthread_mutex_lock(&mutex);
+    self.test+=20;
+    printf("test=%d",self.test);
+}
+
+- (IBAction)btn1Click:(id)sender {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        pthread_mutex_lock(&mutex); // 如果mutex没有释放会在这里等待
+        self.test+=10;
+        printf("test=%d\n",self.test);
+        NSLog(@"current thread:%@",[NSThread currentThread]);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            pthread_mutex_unlock(&mutex);
+        });
+    });
+}
+	
+	- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+	{
+	    pthread_mutex_unlock(&mutex);
+	}
+
+ 	
+ ```
+ 
+ 输出：
+ 
+ ```
+ 
+test=30test=40
+2015-12-16 18:07:27.297 threadSynTest[5908:374571] current thread:<NSThread: 0x7b246080>{number = 2, name = (null)}
+test=50
+2015-12-16 18:07:28.392 threadSynTest[5908:374574] current thread:<NSThread: 0x7b2b6ce0>{number = 3, name = (null)}
+test=60
+2015-12-16 18:07:29.415 threadSynTest[5908:374570] current thread:<NSThread: 0x7b28a530>{number = 4, name = (null)}
+test=70
+2015-12-16 18:07:30.423 threadSynTest[5908:374575] current thread:<NSThread: 0x7b26c700>{number = 5, name = (null)}
+
+ ```
+ 
+ * `2.NSLock`
+
+ 注意: `NSLock` 在`POSIX threads` 基础上实现的。当对一个NSLock 对象调用`unlock`方法，你必须要保证和给`NSLock`对象调用`lock`方法在同一个线程。在不同的线程里unlock会导致未知的错误。连续两次调用lock方法会导致死锁。如果要递归的加锁，用`NSRecursiveLock`。对一个未加锁的lock 调用`unlock`是不正确的，要修正。
+
+ `tryLock` :尝试加锁，并且会立即返回，成功返回YES，不会阻塞。
+ `lock` 方法: 加锁，如果当前是在锁的状态，当前线程的会阻塞，直到加锁
+  
+  
+ * `3.@synchronized` 
+ 
+ `@synchronized` 指令可以非常方便的创建互斥锁，它会像其他互斥锁一样防止不同线程在同一时刻获得相同的锁。但是你并不需要创建`mutex lock `或`NSLock` 对象，相反你只需要简单用一个OC 对象作为一个lock token.
+传递给@synchronized指令的对象是唯一的，用来区别被保护的代码块。如果你在不同的线程执行这个指令，并用不同的对象作为参数，每个线程会产生自己的锁，并且会继续运行，相互之间不会相互影响。然而，如果你传递相同的对象作为参数，一个线程会先获得锁，另外一个会阻塞等待到第一个执行完成。
+
+```
+
+- (IBAction)synchrinized:(id)sender {
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        @synchronized(self) {
+            [self changeValue];
+            [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            @synchronized(self) {
+                [self changeValue];
+            }
+        });
+    });
+    
+    @synchronized(self) {
+        [self changeValue];
+        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
+    }
+
+```
+
+
+```
+2015-12-16 19:51:18.829 threadSynTest[6717:497526] test==20---current thread:<NSThread: 0x7ba3af80>{number = 1, name = main}
+2015-12-16 19:51:21.831 threadSynTest[6717:497574] test==30---current thread:<NSThread: 0x7b84d860>{number = 2, name = (null)}
+2015-12-16 19:51:24.837 threadSynTest[6717:497526] test==40---current thread:<NSThread: 0x7ba3af80>{number = 1, name = main}
+
+```
+ 
+ * `4.NSRecursiveLock`
+ 
+ `NSRecursiveLock` 定义一种可以被同一个线程多次加锁而且不会引起死锁.递归锁会记录当前被成功加了多少次锁，只有加锁和解锁次数一样，平衡时，这个锁最终才被释放，其他线程才能获得这个锁。递归锁通常用在递归函数内部防止递归操作阻塞线程。当然你也可以用在非递归的场合。
+ 
+ ```
+ 
+- (void)recursiveFun:(int)count
+{
+    [self.recursiveLock lock];
+    [self changeValue];
+    if (count != 0) {
+        count--;
+        [self recursiveFun:count];
+    }
+    
+    [self.recursiveLock unlock];
+}
+
+ 
+ ```
+
+* `5.NSConditionLock`
+
+
+`NSConditionLock` 定义了一个可以通过特殊的值来锁和解锁的互斥锁。不要和`Condition`搞混，虽然这种方式和条件很像，但是实现完全不同。特别是当线程之间需要需要按照一个特殊的顺序执行任务的时候，你应该使用`NSConditionLock`,比如一个线程生产数据，另一个消费数据。当生产者正在执行的时候，消费者用条件请求锁。当生产者完成后，解锁并设置条件，唤醒消费线程，去消费数据。
+`NSConditionLock`的加锁和解锁方法可以各种组合。
+
+```
+
+- (void)sendSharedData{
+    [self.conditionLock lock];
+    [self.sharedArray addObject:@1];
+    NSLog(@"添加数据 thread:%@",[NSThread currentThread]);
+    [self.conditionLock unlockWithCondition:1];
+    [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+}
+
+- (IBAction)conditionlock:(id)sender {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        while (1) {
+            [self.conditionLock lockWhenCondition:1];
+            [self.sharedArray removeObjectAtIndex:0];
+            NSLog(@"消耗一个数据 thread:%@",[NSThread currentThread]);
+            BOOL isEmpty = self.sharedArray.count == 0 ? YES : NO;
+            [self.conditionLock unlockWithCondition:(isEmpty ? 0 : 1)];
+            [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+        }
+    });
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(sendSharedData) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] run];
+    });
+}
+
+
+
+```
+
+#### Conditions 条件变量
+条件是另一种信号量，当满足某个条件的时候能允许其他线程运行。条件信号量主要用来表示某个资源可用个数，和保证线程安装固定的顺序运行。当一个线程需要某个condition的时候，会一直阻塞等待，直到只有当其他线程改变了条件信号量。互斥和条件信号量之间的区别是用条件信号量允许多个线程同时获得条件，运行。条件信号量就像门卫一样，根据资源的多少，决定让不同的线程可以进入。
+#### 使用`Conditions`
+条件是一种特殊类型的锁，它可以用来同步各个操作	顺序。条件和同步锁之间的区别很微妙。一个线程等待一个条件会阻塞，直到另外一个线程明确的发出条件信号。
+ 	
+* `1.POSIX Conditions`
+	`POSIX` 线程条件锁要求同时使用条件和互斥。运行时互斥锁约束条件，等待信号的线程使用同样的互斥和条件变量。
+
+```
+- (IBAction)distributedlock:(id)sender {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self waitOnConditionfun];
+    });
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self signalThreadCondition];
+    });
+}
+
+- (void)waitOnConditionfun{
+    
+    // mutex 如果等待线程先获得mutex，加锁。那signal如何获得锁，又如何加锁呢。哦如果不成功，直接就解锁
+    pthread_mutex_lock(&mutex);
+    while (ready_to_go) {
+        NSLog(@"wait--thread:%@",[NSThread currentThread]);
+        pthread_cond_wait(&condition, &mutex);
+    }
+    ready_to_go = false;
+    pthread_mutex_unlock(&mutex);
+}
+
+- (void)signalThreadCondition{
+
+    // At this point, there should be work for the other thread to do.
+    pthread_mutex_lock(&mutex);
+    ready_to_go = true;
+    // Signal the other thread to begin work.
+    pthread_cond_signal(&condition);
+    NSLog(@"signal--thread:%@",[NSThread currentThread]);
+    pthread_mutex_unlock(&mutex);
+}
+
+
+```
+
+* `2.NSCondition`
+
+`NSCondition`提供了和`POSIX condition`相同的功能，但是把请求锁和条件封装成一个对象，结果就是你只用它就可以实现互斥加锁和条件等待。
+
+```
+
+- (IBAction)nscondition:(id)sender {
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        while (1) {
+            [self.condition lock];
+            while (timeToWork <= 0) {
+                [self.condition wait];
+            }
+            timeToWork--;
+            NSLog(@"消费数据--thread:%@",[NSThread currentThread]);
+            [self.condition unlock];
+        }
+    });
+
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        while (1) {
+            [self.condition lock];
+            timeToWork++;
+            NSLog(@"添加数据--thread:%@",[NSThread currentThread]);
+            [self.condition signal];
+            [self.condition unlock];
+            [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+        }
+    });
+}
+
+
+```
+
+---
+### 线程安全设计技巧
+
+* 1.避免同步
+	
+同步工具不是万灵药，锁用的太多会导致性能低于没有使用同步的程序。寻找线程安全和性能的平衡是需要经验。实现同步最好的方法是减小线程间的交互，让同步任务相互独立。如果每个任务操作自己私有数据，就不需要使用锁来保护数据。如果不同的任务共享一块数据，你可以尝试把数据分割，或复制一份数据，虽然这也消耗性能，你可以再决定前权衡一下。
+
+	
+* 2.理解同步的限制
+	
+同步工具只有被所有的线程一直使用才能最有效。如果创建一个互斥锁用来限制对某个资源的访问，你的所以线程必须请求相同的互斥变量才能操作这个数据。如果没达到这个效果，是一个程序员的错误！！！！
+
+
+* 3.正确编码的风险
+
+当使用锁的时候，你必须非常的小心的实现你的代码。因为锁可能看起来很好的实现了，但是还是存在安全问题。看下面的例子，
+
+```
+NSLock* arrayLock = GetArrayLock();
+NSMutableArray* myArray = GetSharedArray();
+id anObject;
+ 
+[arrayLock lock];
+anObject = [myArray objectAtIndex:0];
+[arrayLock unlock];
+ 
+[anObject doSomething];
+
+```
+
+上面的代码，因为array 是可变的，这个lock会一直保护这个array，知道你得到`anobject`,而且因为anobject 是不可变的，所以`[anObject doSomething];`不需要锁的保护。但是这段代码有个问题，就是当获得了`anb=object`后，但是还没执行`[anObject doSomething];`之前，另外一个线程获得了lock并且把`myarray`里面的元素全部删掉了，iOS没有内存垃圾机制的，所以`anobject`指向的对象会被释放，`anobject`指针会指向一个非法的地址，解决这个问题，你可能会把`[anObject doSomething];`也放在锁里面，但是这会消耗很长时间，导致其他线程会长时间的等待。正确的做法应该是，保证`anobject`不会被释放.
+
+```
+
+NSLock* arrayLock = GetArrayLock();
+NSMutableArray* myArray = GetSharedArray();
+id anObject;
+ 
+[arrayLock lock];
+anObject = [myArray objectAtIndex:0];
+[anObject retain];
+[arrayLock unlock];
+ 
+[anObject doSomething];
+[anObject release];
+
+```
+
+* 4.小心死锁活锁
+
+任何时候一个线程一次想要获取多于一个锁，都有死锁的可能。死锁是两个线程分别获得一个锁后，又想去得到另外一个线程的锁。结果就是每个线程都会一直阻塞下去。以下是对死锁和活锁的形象描述。 现有个过道，两个人宽，两侧迎面走来两个人A和B。 死锁的情况： A和B都不是讲礼貌的人，都不愿给别人让路，所以A和B都在等对方让路，导致谁也过不去。 活锁的情况： A和B都是很讲礼貌的人，都主动给别人让路。A往左移，同时B往右移；A往右移，同时B往左移。 A和B在移动的时候，同时挡住对方，导致谁也过不去
+
+
+* 5.正确的使用验证变量
+	
+	如果你已经使用了互斥锁保护一段代码，就不要再使用验证关键字去保护代码中重要变量。互斥包括一个内存栅栏去确保读取和写入操作的次序。添加一个验证变量会导致强制读取值每次，降低性能。如果一个互斥锁足够的话，就不要再使用了。
+
+---
+### 线程安全总结
+	
+
+---
+###不同方法使用的场合，优缺点
+
+未完待续！！
+
+ [测试代码](https://github.com/githubdelegate/iOS-Thread-Synchronization.git)
