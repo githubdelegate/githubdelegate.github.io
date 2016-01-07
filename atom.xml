@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2015-12-28T16:01:26+08:00</updated>
+  <updated>2016-01-07T17:19:16+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -12,6 +12,462 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[oc转swift 错误记录]]></title>
+    <link href="http://githubdelegate.github.io/blog/2016/01/04/oczhuan-swift-cuo-wu-ji-lu/"/>
+    <updated>2016-01-04T14:34:43+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2016/01/04/oczhuan-swift-cuo-wu-ji-lu</id>
+    <content type="html"><![CDATA[<h2>1.option enum -> OptionSetType</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |UIViewAutoresizingFlexibleTopMargin;
+</span><span class='line'>  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>转</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>self.rightView?.autoresizingMask = [.FlexibleTopMargin,.FlexibleLeftMargin]</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><p>MIN -> min</p></li>
+<li><p>3.swift 闭包中的循环引用</p>
+
+<blockquote><p><a href="http://southpeak.github.io/blog/2014/06/27/ios-swift-closures-2/">Swift闭包二：循环引用</a></p></blockquote></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS UIAppearance使用]]></title>
+    <link href="http://githubdelegate.github.io/blog/2016/01/04/ios-uiappearanceshi-yong/"/>
+    <updated>2016-01-04T11:06:33+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2016/01/04/ios-uiappearanceshi-yong</id>
+    <content type="html"><![CDATA[<h1>iOS UIAppearance使用</h1>
+
+<h3>为什么要使用 <code>UIAppearance</code></h3>
+
+<p>在iOS 5以前，自定义原生控件的外观并没有原生支持，因此开发人员感觉很麻烦。开发人员经常面临的问题是修改一个控件所有实例的外观。解决这个问题的正确方法是重写一遍控件。但由于这么做非常费时，一些开发人员开始覆盖或混写一些方法，如drawRect:。</p>
+
+<p>从iOS 5开始，苹果通过两个协议（UIAppearance和UIAppearanceContainer）规范了对许多UIKit控件定制的支持。所有遵循UIAppearance协议的UI控件通过定制都可以呈现各种外观。不仅如此，UIAppearance协议甚至允许开发者基于控件所属的区域指定不同的外观。也就是说，当某个控件包含在特定视图中时，可以指定它的外观（如UIBarButtonItem的tintColor）。也可以获取该控件类的外观代理对象，用该代理定制外观来实现，下面来看一个例子</p>
+
+<p>iOS5及其以后提供了一个比较强大的工具UIAppearance，我们通过UIAppearance设置一些UI的全局效果，这样就可以很方便的实现UI的自定义效果又能最简单的实现统一界面风格，它提供如下两个方法。</p>
+
+<p><code>+ (id)appearance</code>
+这个方法是统一全部改，比如你设置UINavBar的tintColor，你可以这样写：[[UINavigationBar appearance] setTintColor:myColor];</p>
+
+<p><code>+ (id)appearanceWhenContainedIn:(Class &lt;&gt;)ContainerClass,...</code>
+这个方法可设置某个类的改变：例如：设置UIBarButtonItem 在UINavigationBar、UIPopoverController、UITabbar中的效果。就可以这样写
+[[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], [UIPopoverController class],[UITabbar class] nil] setTintColor:myPopoverNavBarColor];</p>
+
+<pre><code>请注意＊使用appearance设置UI效果最好采用全局的设置，在所有界面初始化前开始设置，否则可能失效。
+</code></pre>
+
+<p>但是它并不是支持所有的UI类。下面列出它支持的类</p>
+
+<p>　　1.UIActivitiIndicatorView</p>
+
+<p>　　2.UIBarButtonItem</p>
+
+<p>　　3.UIBarItem</p>
+
+<p>　　4.UINavgationBar</p>
+
+<p>　　5.UIPopoverControll</p>
+
+<p>　　6.UIProgressView</p>
+
+<p>　　7.UISearchBar</p>
+
+<p>　　8.UISegmentControll</p>
+
+<p>　　9.UISlider</p>
+
+<p>　　10.UISwitch</p>
+
+<p>　　11.UITabBar</p>
+
+<p>　　12.UITabBarItem</p>
+
+<p>　　13.UIToolBar</p>
+
+<p>　　14.UIView</p>
+
+<p>　　15.UIViewController
+　　</p>
+
+<h3>自己创建一个可自定义外观的控件</h3>
+
+<p>对于我们自己定义的控件，也可以支持UIAppearance协议，这样我们的控件也能支持自定义了。你只需要写一个设置外观的settor，然后在settor方法后面加上“UI_APPEARANCE_SELECTOR”标记就可以。</p>
+
+<h3>UIAppearance实现原理</h3>
+
+<p>在通过UIAppearance调用“UI_APPEARANCE_SELECTOR”标记的方法来配置外观时，UIAppearance实际上没有进行任何实际调用，而是把这个调用保存起来（在Objc中可以用NSInvocation对象来保存一个调用）。当实际的对象显示之前（添加到窗口上，drawRect:之前），就会对这个对象调用之前保存的调用。当这个setter调用后，你的界面风格自定义就完成了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS多线程一]]></title>
+    <link href="http://githubdelegate.github.io/blog/2016/01/02/iosduo-xian-cheng-yi/"/>
+    <updated>2016-01-02T15:50:05+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2016/01/02/iosduo-xian-cheng-yi</id>
+    <content type="html"><![CDATA[<h2>1.3多线程方案</h2>
+
+<table>
+<thead>
+<tr>
+<th>技术 </th>
+<th> 描述 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operation objects </td>
+<td> 一个operation对象是一个任务的包装，可以在子线程中正常的执行。这层包装隐藏了线程的管理，让你专心任务本身。你要把它和operation queue相结合。operation queue可以在多个线程中管理operation对象。  | Content Cell</td>
+</tr>
+<tr>
+<td>GCD </td>
+<td> GCD 是另一种使用多线程的方式，能让你专注于你的任务而不用担心线程管理。使用GCD,你设计你的任务，把任务添加到一个queue，queue负责调度你的任务在合适的线程。queue会计算当前可用的资源，让你的任务更高效的执行。  | Content Cell</td>
+</tr>
+<tr>
+<td>Idle-time notifications</td>
+<td> 对于一些很短，优先级很低的任务，空闲时间通知会在你的程序空闲的时候执行任务。Cocoa 用<code>NSNotificationQueue</code>提供了支持。 |</td>
+</tr>
+<tr>
+<td>Asynchronous functions</td>
+<td>系统接口提供了很多异步函数可以自动同步。这些API使用系统用户进程或者创建线程去执行任务，并把结果给你。|</td>
+</tr>
+<tr>
+<td>Timers</td>
+<td>你可以使用timers 在主线程中去执行定期的任务，这些任务|</td>
+</tr>
+</tbody>
+</table>
+
+
+<h3>1.3.1 线程包装</h3>
+
+<p>在应用层，全部的线程本质上都是一样的。开启一个线程后，线程运行状态有三种：<code>running</code>,<code>ready</code>,<code>blocked</code>。当一个线程当前不是运行，那么它可能是blocked，等待输入，或者是ready，等待调度。线程一直在这些状态中交替，直到退出，进入结束状态。
+当你创建一个线程，你必须明确一个入口函数，入口函数构建在线程运行的代码。当函数返回或者你明确的结束线程，线程永远的停止并且会被系统回收。因为线程很消耗内存和时间，所以推荐你的入口函数处理大量的工作，或者创建一个<code>run loop</code>去做一些周期重复的工作。</p>
+
+<h3>1.3.2 Run Loops</h3>
+
+<p> 一个run loop就是用来在线程中管理异步到达的事件的一种机制。一个runloop工作原理就是监控一个或多个事件源。当事件到达，系统唤醒线程，调度事件到runloop，把事件调度给你设置的handlers。如果当前没有事件处理，runloop就把线程sleep。
+并不要求你在线程中使用runloop，如果使用runloop可以给用户更好的体验。runloop可以保证线程使用最小的资源长期的存活下去，因为runloop会让线程进入睡眠状态，当线程无事可做的时候。它不需要不断的轮询，避免浪费CPU周期和防止处理器本身从睡觉和节约能源。
+配置一个runloop，你不得不开启你的线程，获得一个你的线程的引用，安装你的事件handlers，然后告诉runloop run即可。OS X 的主线程已经配置好了runloop。如果你打算创建一个长期生存的线程，你必须为线程配置runloop。</p>
+
+<h3>1.3.3 同步工具</h3>
+
+<p> 多线程编程的一个最危险的就是多线程间的资源的争夺。如果多个线程尝试使用或修改同样的资源在同一时刻，问题就会出现。
+Lock 提供一种狂野的方式保护一个时刻只能被一个线程执行的代码。最常见的锁是互斥锁，
+系统还提供了条件变量conditions，用来保证程序中正确的任务执行顺序。一个条件就像门卫，阻塞线程直到条件为真。</p>
+
+<h3>1.3.4 线程间的交互</h3>
+
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direct messaging</td>
+<td>Cocoa支持直接在别的线程执行方法</td>
+</tr>
+<tr>
+<td>Global variables, shared memory, and objects</td>
+<td></td>
+</tr>
+<tr>
+<td>Condition</td>
+<td></td>
+</tr>
+<tr>
+<td>Run loop sources</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>3.Run Loops</h2>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 自动化]]></title>
+    <link href="http://githubdelegate.github.io/blog/2016/01/02/title/"/>
+    <updated>2016-01-02T10:46:38+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2016/01/02/title</id>
+    <content type="html"><![CDATA[<h2></h2>
+
+<p>exceptionForNotification</p>
+
+<p>测试框架specta</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[学习block]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/12/31/xue-xi-bloc/"/>
+    <updated>2015-12-31T10:24:12+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/12/31/xue-xi-bloc</id>
+    <content type="html"><![CDATA[<blockquote><p><a href="https://www.zybuluo.com/MicroCai/note/57603">block没那么难</a></p></blockquote>
+
+<h2>1.block 基本构成</h2>
+
+<h3>2.<code>__block</code> 和 <code>__weak</code> 区别</h3>
+
+<ol>
+<li><p><strong>block 在 ARC 和非 ARC 下含义一样吗？
+</strong>block 在 ARC 下捕获的变量会被 block retain, 这样可能导致循环引用, 所以必须要使用弱引用才能解决该问题. 而在非 ARC 下, 可以直接使用 __block 说明符修饰变量, 因为在非 ARC 下, block 不会 retain 捕获的变量.</p></li>
+<li><p>以下 keywords 有什么区别: assign vs weak, <strong>block vs </strong>weak
+assign 和 weak 是用于在声明属性时, 为属性指定内存管理的语义.</p></li>
+</ol>
+
+
+<p>assign 用于简单的赋值, 不改变属性的引用计数, 用于 Objective-C 中的 NSInteger, CGFloat 以及 C 语言中 int, float, double 等数据类型.
+weak 用于对象类型, 由于 weak 同样不改变对象的引用计数且不持有对象实例, 当该对象废弃时, 该弱引用自动失效并且被赋值为 nil, 所以它可以用于避免两个强引用产生的循环引用导致内存无法释放的问题.
+<strong>block 和 </strong>weak 之间的却是确实极大的, 不过它们都用于修饰变量.</p>
+
+<p>前者用于指明当前声明的变量在被 block 捕获之后, 可以在 block 中改变变量的值. 因为在 block 声明的同时会截获该 block 所使用的全部自动变量的值, 而这些值只在 block 中只具有"使用权"而不具有"修改权". 而 <strong>block 说明符就为 block 提供了变量的修改权.
+后者是所有权修饰符, 什么是所有权修饰符? 这里涉及到另一个问题, 因为在 ARC 有效时, id 类型和对象类型同 C 语言中的其他类型不同, 必须附加所有权修饰符. 所有权修饰符一种有 4 种:
+</strong>strong
+<strong>weak
+</strong>unsafe_unretained
+<strong>autorelease
+</strong>weak 与 weak 的区别只在于, 前者用于变量的声明, 而后者用于属性的声明.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS could not find Foundation module error]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/12/30/ios-could-not-find-foundation-module-error/"/>
+    <updated>2015-12-30T14:41:25+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/12/30/ios-could-not-find-foundation-module-error</id>
+    <content type="html"><![CDATA[<h1>iOS Xcode 编译遇到<code>could not find Foudation module</code> 错误</h1>
+
+<p>在pch 文件中引用 <code>#import &lt;Foundation/Foundation.h&gt;</code> 出错
+解决办法：添加<code>#ifdef __OBJC__ 在这里引用 #endif</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS ARC下内存注意]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/"/>
+    <updated>2015-12-28T20:46:03+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi</id>
+    <content type="html"><![CDATA[<h2>ARC 下内存使用注意</h2>
+
+<ol>
+<li></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS 多线程GCD和NSOperation]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/12/28/ios-duo-xian-cheng-gcdhe-nsoperation/"/>
+    <updated>2015-12-28T20:30:35+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/12/28/ios-duo-xian-cheng-gcdhe-nsoperation</id>
+    <content type="html"><![CDATA[<h3>GCD和NSOperation使用说明</h3>
+
+<p>1.<code>NSOperation</code></p>
+
+<p> 1.NSOperation 类是一个抽象类，用来概括一个单独的任务的代码和数据。因为它是抽象类，所以要用他的子类，或者系统定义的子类（<code>NSInvocationOperation</code> &amp;&amp; <code>NSBlockOperation</code>）去执行真正的任务。尽管是抽象类，但是<code>NSOperation</code>的实现包括了重要的逻辑可以用来协调任务的安全执行。这种内建的逻辑可以让你集中精力在任务的实现上，而不是为了保证任务的正确运行而写的各种控制粘合代码。
+ 一个operaton对象是一个单发对象，意味着它执行任务一次完成后，就不能再执行了。你必须把operations对象添加到operation queue，才能执行它们。一个operation queue执行它的operations即可以通过在子线程中直接执行，也可以间接的使用GCD.
+如果你不想使用operation queue，你也可以通过直接调用<code>start</code>方法。因为start 一个不是在ready状态的operation，会导致exception，所以手动的执行operation会给代码带来负担。<code>ready</code>属性依据operation的准备就绪状态。</p>
+
+<p>1.1 <code>Operation Dependencies</code></p>
+
+<p>依赖是一个很方便的方法来让operation按照某种顺序执行。你可以通过<code>addDependency:</code> 和 <code>removeDependency:</code>方法来添加或者删除依赖。默认，一个有依赖的operation ，不能进入准备就绪状态，直到它的所有的依赖的operation执行完。一旦依赖的最后一个Operation 执行完毕，它就进入ready并且可以执行了。
+NSOperation的依赖之间并没有区别，不管一个被依赖的operation是成功的执行完成，还是不成功的，（换就话说就是，取消一个operation也是表示一个operation结束。）由你决定一个有依赖的operation是不是继续，当它的依赖operation被取消了，或者没有成功的执行完成。这就要求你在你的operation里面加上额外的错误跟踪机制。</p>
+
+<p>1.2 <code>KVO-Compliant Properties</code></p>
+
+<p><code>NSOperation</code> 类的属性可以使用KVC&amp;KVO.
+isCancelled - read-only
+isAsynchronous - read-only
+isExecuting - read-only
+isFinished - read-only
+isReady - read-only
+dependencies - read-only
+queuePriority - readable and writable
+completionBlock - readable and writable</p>
+
+<p>尽管你可以给这些属性添加观察者，但是你不应该把这些属性绑定上和界面相关的。因为界面相关的内容必须在主线程中执行。但是一个operation可能在任何一个线程中执行，同理KVO的通知也有可能在任何线程中执行。
+如果你自己实现前面的属性，你的实现一定要遵从KVC&amp;KVO,如果你定义了额外的属性，推荐你也让这些属性遵循KVC&amp;KVO。</p>
+
+<p>1.3 <code>Multicore Considerations</code></p>
+
+<p><code>NSOperation</code> 类是支持多核的。所以不需要添加lock也能安全的访问NSOperation对象。这种行为是必要的,因为一个操作通常运行在一个单独的线程的创建和监控。当你自定义了一个NSOperation的子类，你必须保证任何覆盖的昂达保持线程安全。如果你自定义了一些方法，比如自定义的数据访问，你必须保证线程安全，意味着任何的访问变量的操作都必须是同步的，防止潜在数据污染。</p>
+
+<p>1.4 <code>Asynchronous Versus Synchronous Operations</code></p>
+
+<p>如果你计划执行一个operation手动的，你应该设计你的Operation以同步或者异步的方式执行，而不是把它添加到queue中。
+Operation默认是同步的方式。在同步的方式中，operation不会创建一个新线程去执行，当你调用<code>start</code>方法的时候，operation在当前线程执行。当start方法返回的时候，任务执行完成。
+当你调用一个异步的operation的start方法，start会在对应的任务完成之前返回。一个异步的operation对象有责任在子线程中安排它的任务。operation可以通过直接开启一个新线程，调用一个异步方法，或者使用GCD.如果operation正在执行，方法返回了，这并没有关系，只要operation还在进行中就行。</p>
+
+<p>如果你只要考虑使用queue去执行你的operations。把它们定义成同步的会很简单。如果你要执行你的Operation手动的，所以你可能希望定义你的operation是异步的。定义一个异步的operation要求更多的工作量，因为你必须监控你的任务的运行状态，用KVO通知状态变化。但是定义一个异步的Operation很有用，当你手动执行operaiton并且不希望阻塞调用线程的时候。
+当你添加一个operation到一个queue的时候，queue不在乎异步的属性，总是直接在异步线程调用start方法。所以如果你一直通过添加operation到queue的方法去执行operation，根本没有必要让operation是异步的。</p>
+
+<p>1.5 <code>Subclassing Notes</code></p>
+
+<p><code>NSOPeration</code>类提供了基本的逻辑来追踪执行状态，但是必须继承它才能干实际的工作。怎么创建你的子类，依赖于你
+怎么设计你的operation，是并发的还是不并发的。</p>
+
+<ul>
+<li><p>对于不并发的opeartion，你只需要重写一个<code>main</code>方法：在这个方法中，放置任务需要执行的代码。你应该自己定义一个初始化方法，让创建实例更简单。也可以定义<code>getter</code> <code>setter</code>方法，你必须保证这些方法是多线程安全的。</p></li>
+<li><p>对于并发的operation，至少需要重写<code>start</code>,<code>asynchronous</code>,<code>executing</code>,<code>finished</code>方法。在并发操作中，你的start方法要开启operation异步地，不论是创建一个新线程还是调用异步的方法。一旦开启了operation，你的start方法还要更新executing属性状态，发送KVO通知。一旦执行完成或者取消执行了，你的同步的operation对象必须发送KVO通知，对应的<code>isExecuting</code> 和<code>isFInished</code>属性。(如果是取消，更新isFinisheh很重要，尽管Operation没有完整的完成任务)。</p></li>
+</ul>
+
+
+<p>2.<code>NSInvocationOperation</code></p>
+
+<p><code>start</code>方法：这个方法的默认实现是更新operation执行状态，调用<code>main</code>方法。当然这个方法也会检查确保operation可以run。例如，如果cancelled，或者finished，就不会调用main方法直接返回。如果operation当前正在运行或者还没准备好运行，会抛出<code>NSInvalidArgumentException</code>异常。
+注意:如果一个operation依赖一些还没finished的operations，那么就认为当前operation还没进入ready状态。
+如果你是实现一个同步operation，你必须重写start方法，在start方法里面初始化operation。你自己的start方法不能调用父类的start方法。为了设置运行环境，你的实现必须根据情况改变运行的状态。当operaton开始执行，然后结束运行的时候，要发送KVO通知，<code>isExecting</code> 和<code>isFinished</code>。
+如果你想主动主动的执行你的operations，你可以直接调用<code>start</code>方法。然而，对一个已经添加到queue的operation调用start方法是错误的。把一个已经调用过start方法的operation添加到queue，也是错误的。一旦把一个operation添加到queue，queue就会对这个operation全权负责了，你不需要关心了。</p>
+
+<h4><code>NSBlockOperation&amp;NSInvocationOperation</code></h4>
+
+<p><code>NSBlockOperation</code> 管理多个block的同步执行。你可以用这个对象一次执行多个block而不用分开创建不同的operation对象。当执行多个block的时候，只有当全部的block finished才算这个operation finished。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>   
+</span><span class='line'>       NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
+</span><span class='line'>        NSLog(@"1th block--current thread:%@",[NSThread currentThread]);
+</span><span class='line'>    }];
+</span><span class='line'>    
+</span><span class='line'>    // operation的所以block执行完成后，才会执行。在当前线程中执行。
+</span><span class='line'>    blockOperation.completionBlock = ^(){
+</span><span class='line'>        NSLog(@"blockoperaton 完成啦啦啦啦啦---current thread:%@",[NSThread currentThread]);
+</span><span class='line'>    };
+</span><span class='line'>    
+</span><span class='line'>    [blockOperation addExecutionBlock:^{
+</span><span class='line'>        NSLog(@"2th block--current thread:%@",[NSThread currentThread]);
+</span><span class='line'>    }];
+</span><span class='line'>    
+</span><span class='line'>    [blockOperation addExecutionBlock:^{
+</span><span class='line'>        NSLog(@"add 3th block--current thread:%@",[NSThread currentThread]);
+</span><span class='line'>    }];
+</span><span class='line'>    
+</span><span class='line'>    // 1.手动start执行，第一个block会在当前线程中执行，其余block会在异步线程中
+</span><span class='line'>    // [blockOperation start];
+</span><span class='line'>    
+</span><span class='line'>    // 2.放到queue中执行，queue会把其中的operation放在异步线程中执行，所以block会全部在异步线程中执行。并且是并发执行。
+</span><span class='line'>    [[[NSOperationQueue alloc] init] addOperation:blockOperation];
+</span><span class='line'>    
+</span><span class='line'>//##---------------------------------------------
+</span><span class='line'>    NSInvocationOperation *invocationOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(run:) object:@"123"];
+</span><span class='line'>    invocationOperation.completionBlock = ^(){
+</span><span class='line'>        NSLog(@"invocation完成--current thread:%@",[NSThread currentThread]);
+</span><span class='line'>    };
+</span><span class='line'>    
+</span><span class='line'>    // 1.手动start执行.在当前线程中执行。
+</span><span class='line'>    // [invocationOperation start];
+</span><span class='line'>    
+</span><span class='line'>    // 2.放到queue中执行，queue会把其中的operation放在异步线程中执行.
+</span><span class='line'>    [[[NSOperationQueue alloc] init] addOperation:invocationOperation];
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>输出结果：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2015-12-29 15:15:29.222 NSOperationTest[62550:4394450] add 3th block--current thread:&lt;NSThread: 0x796677a0&gt;{number = 4, name = (null)}
+</span><span class='line'>2015-12-29 15:15:29.222 NSOperationTest[62550:4394449] 2th block--current thread:&lt;NSThread: 0x79667970&gt;{number = 5, name = (null)}
+</span><span class='line'>2015-12-29 15:15:29.222 NSOperationTest[62550:4394436] 1th block--current thread:&lt;NSThread: 0x79667670&gt;{number = 3, name = (null)}
+</span><span class='line'>2015-12-29 15:15:29.222 NSOperationTest[62550:4394453] invocationOperaton---current thread:&lt;NSThread: 0x7978c4d0&gt;{number = 6, name = (null)}--obj=123
+</span><span class='line'>2015-12-29 15:15:29.225 NSOperationTest[62550:4394449] invocation完成--current thread:&lt;NSThread: 0x79667970&gt;{number = 5, name = (null)}
+</span><span class='line'>2015-12-29 15:15:29.225 NSOperationTest[62550:4394453] blockoperaton 完成啦啦啦啦啦---current thread:&lt;NSThread: 0x7978c4d0&gt;{number = 6, name = (null)}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>结论：<code>NSBlockOperation</code>添加的block会添加到<code>executionBlocks</code>中，猜测<code>start</code>方法的大概伪代码实现是</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (void)start
+</span><span class='line'>{
+</span><span class='line'>    Block block  = executionBlocks.firstObj;
+</span><span class='line'>    block(); // 先执行第一个block
+</span><span class='line'>
+</span><span class='line'>    for (int i = 1; i&lt;executionBlocks.count; i++) {
+</span><span class='line'>        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+</span><span class='line'>            (block)executionBlocks[i](); // 异步执行剩下的block
+</span><span class='line'>        });
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // 当前面的任务全部完成后调用完成block
+</span><span class='line'>    self.completionBlock();
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当放入queue中时，就是再异步线程中调用当前operation的 <code>start</code>方法。</p>
+
+<p>2.<code>GCD</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Xcode 不显示程序内存占用状态]]></title>
@@ -1152,106 +1608,6 @@ eg：021-68686868  0511-6868686；
 <li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
 
 <p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS使用AudioQueue录音遇到的内存泄露问题]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun/"/>
-    <updated>2015-08-04T00:15:17+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun</id>
-    <content type="html"><![CDATA[<h3>AudioQueue 录音</h3>
-
-<p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// 回调函数
-</span><span class='line'>void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer, const AudioTimeStamp *inStartTime,
-</span><span class='line'>                        UInt32 inNumPackets, const AudioStreamPacketDescription *inPacketDesc)
-</span><span class='line'>{
-</span><span class='line'>    Recorder *recorder = (__bridge Recorder *)inUserData;
-</span><span class='line'>    if (recorder == nil){
-</span><span class='line'>        return;
-</span><span class='line'>    }
-</span><span class='line'>    
-</span><span class='line'>    if ((inNumPackets &gt; 0) && (recorder.isRecording))
-</span><span class='line'>    {
-</span><span class='line'>         // 获取录音数据
-</span><span class='line'>        int _pcmSize = inBuffer-&gt;mAudioDataByteSize;
-</span><span class='line'>        char *_pcmData = (char *)inBuffer-&gt;mAudioData;
-</span><span class='line'>      
-</span><span class='line'>        NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];
-</span><span class='line'>        // 把录音数据传递出去
-</span><span class='line'>        [recorder writeRecordingData:data];
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<hr />
-
-<p>上面这段代码有问题，如果一直不停的录音，会发现内存一直不停的增加，而且每次增加的大小会和每次返回的录音数据大小相等。
-那导致这段代码内存泄露的原因，就是<code>NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];</code> 这段代码中<code>data</code> 没有释放导致的。虽然是在ARC环境下，但是这是个C函数，要自己管理内存，所以加上<code>@autorelease</code> 就能解决。</p>
-
-<hr />
-
-<blockquote><p>引用
-<a href="http://memo.tv/archive/memory_management_with_objective_c_cocoa_iphone">Memory Management with Objective C / Cocoa / iPhone </a></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress搭建博客中遇到的问题]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/07/24/blog/"/>
-    <updated>2015-07-24T00:15:17+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/07/24/blog</id>
-    <content type="html"><![CDATA[<ul>
-<li><p><code>gem install **</code> 提示安装失败</p>
-
-<ul>
-<li><p>修改gem source<br/>
-<code>gem sources -a https://ruby.taobao.org/</code> 添加
-<code>gem sources -r https://rubygems.org/</code> 删除原来的</p></li>
-<li><p>如果使用<code>bundle install</code> 的时候，安装失败，需要修Gemfile
-<code>修改Gemfile 中 source 为https://ruby.taobao.org/</code></p></li>
-</ul>
-</li>
-<li><p>使用<code>zsh</code> 遇到 <code>rake new_post[“title”]</code>  提示 <code>zsh: no matches found: new_post[...]</code></p>
-
-<ul>
-<li>修改~/.zshrc文件 添加 <code>alias rake="noglob rake"</code></li>
-</ul>
-</li>
-</ul>
-
-
-<hr />
-
-<p>相关blog</p>
-
-<ol>
-<li><a href="http://www.tuicool.com/articles/Av6fqu">http://www.tuicool.com/articles/Av6fqu</a></li>
-<li><a href="http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/">http://glgjing.github.io/blog/2014/12/06/li-yong-octopresshe-githubda-jian-ge-ren-bo-ke-(%5B%3F%5D-):ji-chu-huan-jing-da-jian/</a></li>
 </ol>
 
 ]]></content>

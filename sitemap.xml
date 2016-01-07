@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://githubdelegate.github.io/blog/2016/01/04/oczhuan-swift-cuo-wu-ji-lu/</loc>
+    <lastmod>2016-01-04T14:34:43+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/2016/01/04/ios-uiappearanceshi-yong/</loc>
+    <lastmod>2016-01-04T11:06:33+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/2016/01/02/iosduo-xian-cheng-yi/</loc>
+    <lastmod>2016-01-02T15:50:05+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/2016/01/02/title/</loc>
+    <lastmod>2016-01-02T10:46:38+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/2015/12/31/xue-xi-bloc/</loc>
+    <lastmod>2015-12-31T10:24:12+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/2015/12/30/ios-could-not-find-foundation-module-error/</loc>
+    <lastmod>2015-12-30T14:41:25+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/</loc>
+    <lastmod>2015-12-28T20:46:03+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/2015/12/28/ios-duo-xian-cheng-gcdhe-nsoperation/</loc>
+    <lastmod>2015-12-28T20:30:35+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://githubdelegate.github.io/blog/2015/12/28/xcode-bu-xian-shi-cheng-xu-nei-cun-zhan-yong-zhuang-tai/</loc>
     <lastmod>2015-12-28T15:57:23+08:00</lastmod>
   </url>
@@ -90,6 +122,6 @@
     <loc>http://githubdelegate.github.io/blog/categories/mutilthread/</loc>
   </url>
   <url>
-    <loc>http://githubdelegate.github.io/posts/2/</loc>
+    <loc>http://githubdelegate.github.io/blog/categories/uiappearance/</loc>
   </url>
 </urlset>
