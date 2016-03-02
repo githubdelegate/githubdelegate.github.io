@@ -95,7 +95,72 @@ rightView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | &hellip;">
 <li><p>3.swift 闭包中的循环引用</p>
 
 <blockquote><p><a href="http://southpeak.github.io/blog/2014/06/27/ios-swift-closures-2/">Swift闭包二：循环引用</a></p></blockquote></li>
+<li><p>4.swift中和NSRange相关接口使用</p></li>
 </ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let levels = "ABCDE"
+</span><span class='line'>
+</span><span class='line'>let nsRange = NSMakeRange(1, 4)
+</span><span class='line'>// 编译错误
+</span><span class='line'>// 'NSRange' is not convertible to 'Range&lt;String.Index&gt;'
+</span><span class='line'>levels.stringByReplacingCharactersInRange(nsRange, withString: "AAAA")
+</span><span class='line'>
+</span><span class='line'>let indexPositionOne = levels.startIndex.successor()
+</span><span class='line'>let swiftRange = indexPositionOne..&lt;advance(indexPositionOne, 4)
+</span><span class='line'>levels.stringByReplacingCharactersInRange(swiftRange, withString: "AAAA")
+</span><span class='line'>// 输出：
+</span><span class='line'>// AAAAA</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的方法太麻烦啦。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let nsRange = NSMakeRange(1, 4)
+</span><span class='line'>(levels as NSString).stringByReplacingCharactersInRange(
+</span><span class='line'>    nsRange, withString: "AAAA")</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>5 中文转拼音</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSString *)pinyinString:(NSString *)string
+</span><span class='line'>{
+</span><span class='line'>
+</span><span class='line'>    NSMutableString *mutableString = [NSMutableString stringWithString:string];
+</span><span class='line'>    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
+</span><span class='line'>    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformStripDiacritics, false);
+</span><span class='line'>    NSLog(@"%@",mutableString);
+</span><span class='line'>    return mutableString;
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
 

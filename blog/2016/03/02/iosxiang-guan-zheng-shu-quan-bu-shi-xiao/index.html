@@ -3,12 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>iOS ARC下内存注意 - Alpine Blog</title>
+	<title>iOS相关证书全部失效 - Alpine Blog</title>
 	<meta name="author" content="zy">
 
 	
-	<meta name="description" content=" iOS ARC下内存注意 ARC 下内存使用注意 1.wddomainzh_HH6
-2.wdvpnzhhh Comments Please enable JavaScript to view the comments powered by Disqus. ">
+	<meta name="description" content="iOS相关证书全部失效 某天打开电脑突然发现iOS相关证书全部失效。全部显示证书的签发者无效。 先找到一个失效证书，右击->评估证书->代码签名->显示证书，可以看到证书失效的原因： 去这个地址下载最新证书：https://developer.apple.com/ &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +17,7 @@
 
 	<link href="/atom.xml" rel="alternate" title="Alpine Blog" type="application/atom+xml">
 	
-	<link rel="canonical" href="http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/">
+	<link rel="canonical" href="http://githubdelegate.github.io/blog/2016/03/02/iosxiang-guan-zheng-shu-quan-bu-shi-xiao/">
 	<link href="/favicon.png" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -74,11 +73,15 @@
 			
 			<div class="mid-col-container">
 				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-	<h1 class="title" itemprop="name">iOS ARC下内存注意</h1>
-	<div class="entry-content" itemprop="articleBody"><h2>ARC 下内存使用注意</h2>
+	<h1 class="title" itemprop="name">iOS相关证书全部失效</h1>
+	<div class="entry-content" itemprop="articleBody"><p>某天打开电脑突然发现iOS相关证书全部失效。全部显示<code>证书的签发者无效</code>。</p>
 
-<p>1.wddomainzh_HH6
-2.wdvpnzhhh</p>
+<p>先找到一个失效证书，右击->评估证书->代码签名->显示证书，可以看到证书失效的原因：
+<img src="./certificate-invalidate.png" alt="图片" /></p>
+
+<p>去这个地址下载最新证书：<code>https://developer.apple.com/certificationauthority/AppleWWDRCA.cer</code> 安装.
+同时要把老证书全部删掉，在keychains里选择login,然后点选Certificates，在这个界面，选择工具栏的View -> Show Expired Certificates，这时候你会发现一个过期的“WWDR Certificate”（Apple Worldwide Developer Relations Certification Authority），删除它，同样的办法，在System的那一栏也有这个过期的“WWDR Certificate”.
+如果过期证书全部删除，并且已安装新证书，会发现证书全部都OK了。</p>
 </div>
 
 </article>
@@ -127,8 +130,8 @@ Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Sha
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/';
-        var disqus_url = 'http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/';
+        var disqus_identifier = 'http://githubdelegate.github.io/blog/2016/03/02/iosxiang-guan-zheng-shu-quan-bu-shi-xiao/';
+        var disqus_url = 'http://githubdelegate.github.io/blog/2016/03/02/iosxiang-guan-zheng-shu-quan-bu-shi-xiao/';
         var disqus_script = 'embed.js';
       
     (function () {

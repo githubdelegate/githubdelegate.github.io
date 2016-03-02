@@ -4,7 +4,7 @@
   <title><![CDATA[Category: swift | Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2016-01-07T17:19:16+08:00</updated>
+  <updated>2016-03-02T17:24:48+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -33,8 +33,46 @@ self.rightView?.autoresizingMask = [.FlexibleTopMargin,.FlexibleLeftMargin]
 <li><p>3.swift 闭包中的循环引用</p>
 
 <blockquote><p><a href="http://southpeak.github.io/blog/2014/06/27/ios-swift-closures-2/">Swift闭包二：循环引用</a></p></blockquote></li>
+<li><p>4.swift中和NSRange相关接口使用</p></li>
 </ul>
 
+
+<pre><code>let levels = "ABCDE"
+
+let nsRange = NSMakeRange(1, 4)
+// 编译错误
+// 'NSRange' is not convertible to 'Range&lt;String.Index&gt;'
+levels.stringByReplacingCharactersInRange(nsRange, withString: "AAAA")
+
+let indexPositionOne = levels.startIndex.successor()
+let swiftRange = indexPositionOne..&lt;advance(indexPositionOne, 4)
+levels.stringByReplacingCharactersInRange(swiftRange, withString: "AAAA")
+// 输出：
+// AAAAA
+</code></pre>
+
+<p>上面的方法太麻烦啦。
+<code>
+let nsRange = NSMakeRange(1, 4)
+(levels as NSString).stringByReplacingCharactersInRange(
+    nsRange, withString: "AAAA")
+</code></p>
+
+<ul>
+<li>5 中文转拼音</li>
+</ul>
+
+
+<pre><code>+ (NSString *)pinyinString:(NSString *)string
+{
+
+    NSMutableString *mutableString = [NSMutableString stringWithString:string];
+    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
+    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformStripDiacritics, false);
+    NSLog(@"%@",mutableString);
+    return mutableString;
+}
+</code></pre>
 ]]></content>
   </entry>
   

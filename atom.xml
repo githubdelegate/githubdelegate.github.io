@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2016-01-07T17:19:16+08:00</updated>
+  <updated>2016-03-02T17:24:48+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[iOS相关证书全部失效]]></title>
+    <link href="http://githubdelegate.github.io/blog/2016/03/02/iosxiang-guan-zheng-shu-quan-bu-shi-xiao/"/>
+    <updated>2016-03-02T17:14:33+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2016/03/02/iosxiang-guan-zheng-shu-quan-bu-shi-xiao</id>
+    <content type="html"><![CDATA[<p>某天打开电脑突然发现iOS相关证书全部失效。全部显示<code>证书的签发者无效</code>。</p>
+
+<p>先找到一个失效证书，右击->评估证书->代码签名->显示证书，可以看到证书失效的原因：
+<img src="./certificate-invalidate.png" alt="图片" /></p>
+
+<p>去这个地址下载最新证书：<code>https://developer.apple.com/certificationauthority/AppleWWDRCA.cer</code> 安装.
+同时要把老证书全部删掉，在keychains里选择login,然后点选Certificates，在这个界面，选择工具栏的View -> Show Expired Certificates，这时候你会发现一个过期的“WWDR Certificate”（Apple Worldwide Developer Relations Certification Authority），删除它，同样的办法，在System的那一栏也有这个过期的“WWDR Certificate”.
+如果过期证书全部删除，并且已安装新证书，会发现证书全部都OK了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[oc转swift 错误记录]]></title>
@@ -37,7 +53,72 @@
 <li><p>3.swift 闭包中的循环引用</p>
 
 <blockquote><p><a href="http://southpeak.github.io/blog/2014/06/27/ios-swift-closures-2/">Swift闭包二：循环引用</a></p></blockquote></li>
+<li><p>4.swift中和NSRange相关接口使用</p></li>
 </ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let levels = "ABCDE"
+</span><span class='line'>
+</span><span class='line'>let nsRange = NSMakeRange(1, 4)
+</span><span class='line'>// 编译错误
+</span><span class='line'>// 'NSRange' is not convertible to 'Range&lt;String.Index&gt;'
+</span><span class='line'>levels.stringByReplacingCharactersInRange(nsRange, withString: "AAAA")
+</span><span class='line'>
+</span><span class='line'>let indexPositionOne = levels.startIndex.successor()
+</span><span class='line'>let swiftRange = indexPositionOne..&lt;advance(indexPositionOne, 4)
+</span><span class='line'>levels.stringByReplacingCharactersInRange(swiftRange, withString: "AAAA")
+</span><span class='line'>// 输出：
+</span><span class='line'>// AAAAA</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的方法太麻烦啦。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let nsRange = NSMakeRange(1, 4)
+</span><span class='line'>(levels as NSString).stringByReplacingCharactersInRange(
+</span><span class='line'>    nsRange, withString: "AAAA")</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>5 中文转拼音</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ (NSString *)pinyinString:(NSString *)string
+</span><span class='line'>{
+</span><span class='line'>
+</span><span class='line'>    NSMutableString *mutableString = [NSMutableString stringWithString:string];
+</span><span class='line'>    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
+</span><span class='line'>    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformStripDiacritics, false);
+</span><span class='line'>    NSLog(@"%@",mutableString);
+</span><span class='line'>    return mutableString;
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
   </entry>
@@ -265,10 +346,8 @@ weak 用于对象类型, 由于 weak 同样不改变对象的引用计数且不�
     <id>http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi</id>
     <content type="html"><![CDATA[<h2>ARC 下内存使用注意</h2>
 
-<ol>
-<li></li>
-</ol>
-
+<p>1.wddomainzh_HH6
+2.wdvpnzhhh</p>
 ]]></content>
   </entry>
   
@@ -539,9 +618,7 @@ KVO实现原理： 当某个类的对象第一次被观察时，系统就会在�
 
 <h3>线程同步概念</h3>
 
-<p>  同”字从字面上容易理解为一起动作其实不是，“同”字应是指协同、协助、互相配合。如进程、线程同步，可理解为进程或线程A和B一块配合，A执行到一定程度时要依靠B的某个结果，于是停下来，示意B运行；B依言执行，再将结果给A；A再继续操作。
-    所谓同步，就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回，同时其它线程也不能调用这个方法。按照这个定义，其实绝大多数函数都是同步调用（例如sin, isdigit等）。但是一般而言，我们在说同步、异步的时候，特指那些需要其他部件协作或者需要一定时间完成的任务。例如Window API函数SendMessage。该函数发送一个消息给某个窗口，在对方处理完消息之前，这个函数不返回。当对方处理完毕以后，该函数才把消息处理函数所返回的LRESULT值返回给调用者。
-    在多线程编程里面，一些敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何时刻，最多有一个线程访问，以保证数据的完整性。
+<p>在多线程编程里面，一些敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何时刻，最多有一个线程访问，以保证数据的完整性。
 我们可以通过<code>互斥锁(mutex)</code>，<code>条件变量(condition variable)</code>和<code>读写锁(reader-writer lock)</code> 和<code>信号</code>来同步资源。</p>
 
 <ul>
@@ -1593,23 +1670,6 @@ eg：021-68686868  0511-6868686；
 </code></pre>
 
 <p>这两个方法的区别可以看这里<a href="https://developer.apple.com/library/ios/qa/qa1754/_index.html">AVAudioSessionCategoryOptionDefaultToSpeaker和AVAudioSessionPortOverrideSpeaker区别</a>，大概意思就是设置<code>AVAudioSessionPortOverrideSpeaker</code> 是临时性的，如果rout改变和audioSession被中断的话，这个设置就失效了，会返回到默认的设置。设置<code>AVAudioSessionCategoryOptionDefaultToSpeaker</code> 后，会一直生效。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS8 framework动态库遇到的问题]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/"/>
-    <updated>2015-09-08T14:32:29+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti</id>
-    <content type="html"><![CDATA[<ol>
-<li><p>编译显示<code>Include of non-modular header inside framework module</code> 错误</p>
-
-<p>  修改<code>Build Setting</code> 中<code>Allow Non-modular Include InFramework Modules</code> 为YES.</p></li>
-<li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
-
-<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
-</ol>
-
 ]]></content>
   </entry>
   

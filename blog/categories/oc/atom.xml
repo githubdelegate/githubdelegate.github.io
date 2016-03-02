@@ -4,7 +4,7 @@
   <title><![CDATA[Category: oc | Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/blog/categories/oc/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2016-01-07T17:19:16+08:00</updated>
+  <updated>2016-03-02T17:24:48+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -24,9 +24,7 @@
 
 <h3>线程同步概念</h3>
 
-<p>  同”字从字面上容易理解为一起动作其实不是，“同”字应是指协同、协助、互相配合。如进程、线程同步，可理解为进程或线程A和B一块配合，A执行到一定程度时要依靠B的某个结果，于是停下来，示意B运行；B依言执行，再将结果给A；A再继续操作。
-    所谓同步，就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回，同时其它线程也不能调用这个方法。按照这个定义，其实绝大多数函数都是同步调用（例如sin, isdigit等）。但是一般而言，我们在说同步、异步的时候，特指那些需要其他部件协作或者需要一定时间完成的任务。例如Window API函数SendMessage。该函数发送一个消息给某个窗口，在对方处理完消息之前，这个函数不返回。当对方处理完毕以后，该函数才把消息处理函数所返回的LRESULT值返回给调用者。
-    在多线程编程里面，一些敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何时刻，最多有一个线程访问，以保证数据的完整性。
+<p>在多线程编程里面，一些敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何时刻，最多有一个线程访问，以保证数据的完整性。
 我们可以通过<code>互斥锁(mutex)</code>，<code>条件变量(condition variable)</code>和<code>读写锁(reader-writer lock)</code> 和<code>信号</code>来同步资源。</p>
 
 <ul>

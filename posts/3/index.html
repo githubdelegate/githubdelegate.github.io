@@ -7,17 +7,7 @@
 	<meta name="author" content="zy">
 
 	
-	<meta name="description" content="Comments iOS使用AudioQueue录音遇到的内存泄露问题 AudioQueue 录音 AudioQueue 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码： 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11 &hellip;">
+	<meta name="description" content="ios Comments iOS8 Framework动态库遇到的问题 编译显示Include of non-modular header inside framework module 错误 修改Build Setting 中Allow Non-modular Include &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +74,51 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-08T14:32:29+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ios/'>ios</a>
+
+
+</div>
+		
+			<span class="comments"><a href="/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/#disqus_thread">Comments</a></span>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/" itemprop="url">iOS8 Framework动态库遇到的问题</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<ol>
+<li><p>编译显示<code>Include of non-modular header inside framework module</code> 错误</p>
+
+<p>  修改<code>Build Setting</code> 中<code>Allow Non-modular Include InFramework Modules</code> 为YES.</p></li>
+<li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
+
+<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
+</ol>
+
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
