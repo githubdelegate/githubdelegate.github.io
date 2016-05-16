@@ -1,0 +1,237 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>UIView在执行动画过程中如何响应点击事件 - Alpine Blog</title>
+	<meta name="author" content="zy">
+
+	
+	<meta name="description" content="UIView在执行动画过程中如何响应点击事件 UIView在执行动画过程中如何响应事件 先看代码 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18 - (void)viewDidLoad { [super viewDidLoad]; UIButton * &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Alpine Blog" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://githubdelegate.github.io/blog/2016/05/16/uiviewzai-zhi-xing-dong-hua-guo-cheng-zhong-ru-he-xiang-ying-dian-ji-shi-jian/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='http://www.gravatar.com/avatar/" + MD5("") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">Alpine Blog</a></h1>
+<p class="subtitle">keep learning</p>
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Blog</a></li>
+    <li><a href="http://about.me/shashankmehta">About</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+</ul></nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		<a class="github" href="https://github.com/githubdelegate" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">UIView在执行动画过程中如何响应点击事件</h1>
+	<div class="entry-content" itemprop="articleBody"><h1>UIView在执行动画过程中如何响应事件</h1>
+
+<p>先看代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>- (void)viewDidLoad {
+</span><span class='line'>    [super viewDidLoad];
+</span><span class='line'>
+</span><span class='line'>    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(100, 100, 100, 40)];
+</span><span class='line'>    self.btn = btn;
+</span><span class='line'>    [btn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+</span><span class='line'>    btn.backgroundColor = [UIColor greenColor];
+</span><span class='line'>    [self.view addSubview:btn];
+</span><span class='line'>    
+</span><span class='line'>}
+</span><span class='line'>- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event{
+</span><span class='line'>    [UIView animateWithDuration:15 delay:0 options:UIViewAnimationCurveLinear | UIViewAnimationOptionAllowUserInteraction animations:^{
+</span><span class='line'>         self.btn.frame = CGRectMake(300, 100, 100, 40);
+</span><span class='line'>    } completion:^(BOOL finished) {
+</span><span class='line'>        
+</span><span class='line'>    }];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面是一段很简单的动画代码，问题是在btn做动画，移动过程中，btn不能响应点击事件了。这是因为其实btn 接受事件的区域已经移动到300的位置，你点击300会发现触发了点击事件。实际的动画过程就是<code>.layer.presentationLayer</code>在做，就是你能看到的移动过程实际上是<code>.layer.presentationLayer</code>.所以要判断要想在动画过程中响应点击事件就需要判断手指点击的点是不是在<code>.layer.presentationLayer</code>上，使用UIView方法 <code>hitTest:withEvent:</code>方法，这个方法会返回一个View，就是在当前View的层级结构中找到一个最合适的View来处理事件。
+    大概的过程就是先调用<code>pointInside:withEvent:</code>方法，判断触摸点是不是在当前View中，若返回NO,表示触摸点不在当前View上，<code>hitTest:withEvent:</code>方法返回nil；若返回YES，表示触摸点在当前View内，然后从subviews数组中<code>尾部向前遍历</code>,每个子View同样执行这两个方法，直到有子视图的hitTest:withEvent:方法返回非空对象或者全部子视图遍历完毕。▷ 若第一次有子视图的hitTest:withEvent:方法返回非空对象,则当前视图的hitTest:withEvent:方法就返回此对象，处理结束
+▷ 若所有子视图的hitTest:withEvent:方法都返回nil，则当前视图的hitTest:withEvent:方法返回当前视图自身(self)
+• 最终，这个触摸事件交给主窗口的hitTest:withEvent:方法返回的视图对象去处理。</p>
+
+<p>现在考虑为什么使用<code>layer.presentationLayer</code>,这个可以看<a href="http://objccn.io/issue-12-1/">动画解释</a>,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if ([self.layer.presentationLayer hitTest:touchedPoint]){
+</span><span class='line'>    CGPoint newPoint = [self.layer.presentationLayer convertPoint:touchedPoint fromLayer:self.superview.layer];
+</span><span class='line'>    NSLog(@"得到新的点=%@",NSStringFromCGPoint(newPoint));
+</span><span class='line'>    if (newPoint.x &gt; 0 && newPoint.x &lt; 35) {
+</span><span class='line'>        if (self.bulletViewHeadImageTappedBlock) {
+</span><span class='line'>            self.bulletViewHeadImageTappedBlock(self.infoDict);
+</span><span class='line'>        }
+</span><span class='line'>        return YES;
+</span><span class='line'>    }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看这段代码，<code>hitTest:touchedPoint</code>有返回值表示点击点在self.layer.presentationLayer范围内，然后就是转换坐标系把点击点转换到<code>self.layer.presentationLayer</code>坐标系里面，就可以判断具体点击在哪个视图上了。</p>
+
+<blockquote><p>未完下次继续分析动画</p>
+
+<p><a href="http://www.superqq.com/blog/2015/04/23/iosyong-hu-dian-ji-shi-jian-chu-li/">http://www.superqq.com/blog/2015/04/23/iosyong-hu-dian-ji-shi-jian-chu-li/</a></p></blockquote>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style addthis_16x16_style">
+	
+	
+	
+	<a class="addthis_button_twitter"></a>
+	
+	
+	
+	<a class="addthis_button_compact"></a>
+	<a class="addthis_counter addthis_bubble_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2016
+
+    zy
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'alpinezy';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://githubdelegate.github.io/blog/2016/05/16/uiviewzai-zhi-xing-dong-hua-guo-cheng-zhong-ru-he-xiang-ying-dian-ji-shi-jian/';
+        var disqus_url = 'http://githubdelegate.github.io/blog/2016/05/16/uiviewzai-zhi-xing-dong-hua-guo-cheng-zhong-ru-he-xiang-ying-dian-ji-shi-jian/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

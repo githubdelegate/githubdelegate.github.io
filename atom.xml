@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2016-03-02T17:24:48+08:00</updated>
+  <updated>2016-05-16T21:24:11+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -14,6 +14,91 @@
 
   
   <entry>
+    <title type="html"><![CDATA[UIView在执行动画过程中如何响应点击事件]]></title>
+    <link href="http://githubdelegate.github.io/blog/2016/05/16/uiviewzai-zhi-xing-dong-hua-guo-cheng-zhong-ru-he-xiang-ying-dian-ji-shi-jian/"/>
+    <updated>2016-05-16T20:32:50+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2016/05/16/uiviewzai-zhi-xing-dong-hua-guo-cheng-zhong-ru-he-xiang-ying-dian-ji-shi-jian</id>
+    <content type="html"><![CDATA[<h1>UIView在执行动画过程中如何响应事件</h1>
+
+<p>先看代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>- (void)viewDidLoad {
+</span><span class='line'>    [super viewDidLoad];
+</span><span class='line'>
+</span><span class='line'>    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(100, 100, 100, 40)];
+</span><span class='line'>    self.btn = btn;
+</span><span class='line'>    [btn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+</span><span class='line'>    btn.backgroundColor = [UIColor greenColor];
+</span><span class='line'>    [self.view addSubview:btn];
+</span><span class='line'>    
+</span><span class='line'>}
+</span><span class='line'>- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event{
+</span><span class='line'>    [UIView animateWithDuration:15 delay:0 options:UIViewAnimationCurveLinear | UIViewAnimationOptionAllowUserInteraction animations:^{
+</span><span class='line'>         self.btn.frame = CGRectMake(300, 100, 100, 40);
+</span><span class='line'>    } completion:^(BOOL finished) {
+</span><span class='line'>        
+</span><span class='line'>    }];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面是一段很简单的动画代码，问题是在btn做动画，移动过程中，btn不能响应点击事件了。这是因为其实btn 接受事件的区域已经移动到300的位置，你点击300会发现触发了点击事件。实际的动画过程就是<code>.layer.presentationLayer</code>在做，就是你能看到的移动过程实际上是<code>.layer.presentationLayer</code>.所以要判断要想在动画过程中响应点击事件就需要判断手指点击的点是不是在<code>.layer.presentationLayer</code>上，使用UIView方法 <code>hitTest:withEvent:</code>方法，这个方法会返回一个View，就是在当前View的层级结构中找到一个最合适的View来处理事件。
+    大概的过程就是先调用<code>pointInside:withEvent:</code>方法，判断触摸点是不是在当前View中，若返回NO,表示触摸点不在当前View上，<code>hitTest:withEvent:</code>方法返回nil；若返回YES，表示触摸点在当前View内，然后从subviews数组中<code>尾部向前遍历</code>,每个子View同样执行这两个方法，直到有子视图的hitTest:withEvent:方法返回非空对象或者全部子视图遍历完毕。▷ 若第一次有子视图的hitTest:withEvent:方法返回非空对象,则当前视图的hitTest:withEvent:方法就返回此对象，处理结束
+▷ 若所有子视图的hitTest:withEvent:方法都返回nil，则当前视图的hitTest:withEvent:方法返回当前视图自身(self)
+• 最终，这个触摸事件交给主窗口的hitTest:withEvent:方法返回的视图对象去处理。</p>
+
+<p>现在考虑为什么使用<code>layer.presentationLayer</code>,这个可以看<a href="http://objccn.io/issue-12-1/">动画解释</a>,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if ([self.layer.presentationLayer hitTest:touchedPoint]){
+</span><span class='line'>    CGPoint newPoint = [self.layer.presentationLayer convertPoint:touchedPoint fromLayer:self.superview.layer];
+</span><span class='line'>    NSLog(@"得到新的点=%@",NSStringFromCGPoint(newPoint));
+</span><span class='line'>    if (newPoint.x &gt; 0 && newPoint.x &lt; 35) {
+</span><span class='line'>        if (self.bulletViewHeadImageTappedBlock) {
+</span><span class='line'>            self.bulletViewHeadImageTappedBlock(self.infoDict);
+</span><span class='line'>        }
+</span><span class='line'>        return YES;
+</span><span class='line'>    }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看这段代码，<code>hitTest:touchedPoint</code>有返回值表示点击点在self.layer.presentationLayer范围内，然后就是转换坐标系把点击点转换到<code>self.layer.presentationLayer</code>坐标系里面，就可以判断具体点击在哪个视图上了。</p>
+
+<blockquote><p>未完下次继续分析动画</p>
+
+<p><a href="http://www.superqq.com/blog/2015/04/23/iosyong-hu-dian-ji-shi-jian-chu-li/">http://www.superqq.com/blog/2015/04/23/iosyong-hu-dian-ji-shi-jian-chu-li/</a></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[iOS相关证书全部失效]]></title>
     <link href="http://githubdelegate.github.io/blog/2016/03/02/iosxiang-guan-zheng-shu-quan-bu-shi-xiao/"/>
     <updated>2016-03-02T17:14:33+08:00</updated>
@@ -21,11 +106,13 @@
     <content type="html"><![CDATA[<p>某天打开电脑突然发现iOS相关证书全部失效。全部显示<code>证书的签发者无效</code>。</p>
 
 <p>先找到一个失效证书，右击->评估证书->代码签名->显示证书，可以看到证书失效的原因：
-<img src="./certificate-invalidate.png" alt="图片" /></p>
+<img src="http://i.imgur.com/LxwxgAi.png?1" alt="图片" /></p>
 
 <p>去这个地址下载最新证书：<code>https://developer.apple.com/certificationauthority/AppleWWDRCA.cer</code> 安装.
 同时要把老证书全部删掉，在keychains里选择login,然后点选Certificates，在这个界面，选择工具栏的View -> Show Expired Certificates，这时候你会发现一个过期的“WWDR Certificate”（Apple Worldwide Developer Relations Certification Authority），删除它，同样的办法，在System的那一栏也有这个过期的“WWDR Certificate”.
 如果过期证书全部删除，并且已安装新证书，会发现证书全部都OK了。</p>
+
+<blockquote><p><a href="https://segmentfault.com/q/1010000004433963">https://segmentfault.com/q/1010000004433963</a></p></blockquote>
 ]]></content>
   </entry>
   
@@ -282,19 +369,6 @@ Lock 提供一种狂野的方式保护一个时刻只能被一个线程执行的
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[iOS 自动化]]></title>
-    <link href="http://githubdelegate.github.io/blog/2016/01/02/title/"/>
-    <updated>2016-01-02T10:46:38+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2016/01/02/title</id>
-    <content type="html"><![CDATA[<h2></h2>
-
-<p>exceptionForNotification</p>
-
-<p>测试框架specta</p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[学习block]]></title>
     <link href="http://githubdelegate.github.io/blog/2015/12/31/xue-xi-bloc/"/>
     <updated>2015-12-31T10:24:12+08:00</updated>
@@ -336,18 +410,6 @@ weak 用于对象类型, 由于 weak 同样不改变对象的引用计数且不�
 
 <p>在pch 文件中引用 <code>#import &lt;Foundation/Foundation.h&gt;</code> 出错
 解决办法：添加<code>#ifdef __OBJC__ 在这里引用 #endif</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS ARC下内存注意]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/"/>
-    <updated>2015-12-28T20:46:03+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi</id>
-    <content type="html"><![CDATA[<h2>ARC 下内存使用注意</h2>
-
-<p>1.wddomainzh_HH6
-2.wdvpnzhhh</p>
 ]]></content>
   </entry>
   
@@ -556,54 +618,6 @@ Operation默认是同步的方式。在同步的方式中，operation不会创�
     <content type="html"><![CDATA[<h3>Xcode 突然不显示程序运行的内存占用信息了</h3>
 
 <p>办法：<code>Product</code>-> <code>Scheme</code>-><code>Edit Scheme</code> -> <code>Diagnostic</code>-> <code>取消Enable Zombie Objects</code> 选项。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[对YYKit的理解]]></title>
-    <link href="http://githubdelegate.github.io/blog/2015/12/21/dui-yykitde-li-jie/"/>
-    <updated>2015-12-21T16:38:04+08:00</updated>
-    <id>http://githubdelegate.github.io/blog/2015/12/21/dui-yykitde-li-jie</id>
-    <content type="html"><![CDATA[<h3>1.YYKit Foudation中的<code>NSObject+YYAdd</code>分类</h3>
-
-<ul>
-<li>C中的可变参数
-
-<blockquote><p><a href="http://blog.csdn.net/edonlii/article/details/8497704">http://blog.csdn.net/edonlii/article/details/8497704</a>
-<a href="http://www.cnblogs.com/haoyuanyuan/p/3221463.html">深入C语言可变参数(va_arg,va_list,va_start,va_end,_INTSIZEOF)
-</a></p></blockquote></li>
-</ul>
-
-
-<p>1.<code>performSelectorWithArgs</code> 方法：中用到了<code>NSInvocation</code>and<code>NSMethodSignature</code>。
-NSInvocation 可以理解成一个发送一个消息，并接收消息返回内容，执行invoke就传递消息，里面包含参数，接受者，返回值。</p>
-
-<p>NSMethodSignature 是一个方法的封装，包括方法的参数类型，个数，返回值类型，返回值长度。</p>
-
-<p>2.<code>+ (BOOL)swizzleInstanceMethod:(SEL)originalSel with:(SEL)newSel</code> 方法。用到了runtime的中交换两个方法的实现。</p>
-
-<blockquote><p><a href="http://blog.csdn.net/yiyaaixuexi/article/details/9374411#t1"> Objective-C的hook方案（一）: Method Swizzling</a></p></blockquote>
-
-<ol>
-<li><code>- (void)addObserverBlockForKeyPath:(NSString*)keyPath block:(void (^)(__weak id obj, id oldVal, id newVal))block;</code> KVO 直接block不使用代理模式，简便明朗。
-KVO实现原理： 当某个类的对象第一次被观察时，系统就会在运行期动态地创建该类的一个派生类，在这个派生类中重写基类中任何被观察属性的 setter 方法。
-派生类在被重写的 setter 方法实现真正的通知机制，就如前面手动实现键值观察那样。这么做是基于设置属性会调用 setter 方法，而通过重写就获得了 KVO 需要的通知机制。当然前提是要通过遵循 KVO 的属性设置方式来变更属性值，如果仅是直接修改属性对应的成员变量，是无法实现 KVO 的。</li>
-</ol>
-
-
-<blockquote><p><a href="http://blog.csdn.net/wzzvictory/article/details/9674431">KVC/KVO原理详解及编程指南</a></p>
-
-<p><a href="http://blog.csdn.net/wzzvictory/article/details/8592492">Objective-C对象之类对象和元类对象（一）</a></p>
-
-<p><a href="http://www.jianshu.com/p/41735c66dccb">Objective-C isa 指针 与 runtime 机制</a></p></blockquote>
-
-<p>4.<code>__weak</code> 和<code>__block</code>的区别</p>
-
-<p><strong>__weak 本身是可以避免循环引用的问题的，但是其会导致外部对象释放了之后，block 内部也访问不到这个对象的问题，我们可以通过在 block 内部声明一个 </strong>strong 的变量来指向 weakObj，使外部对象既能在 block 内部保持住，又能避免循环引用的问题</p>
-
-<p><strong>__block 本身无法避免循环引用的问题，但是我们可以通过在 block 内部手动把 blockObj 赋值为 nil 的方式来避免循环引用的问题。另外一点就是 </strong>block 修饰的变量在 block 内外都是唯一的，要注意这个特性可能带来的隐患。</p>
-
-<p><a href="http://honglu.me/2015/01/06/weak%E4%B8%8Eblock%E5%8C%BA%E5%88%AB/"><strong>weak与</strong>block区别</a></p>
 ]]></content>
   </entry>
   
@@ -1670,6 +1684,86 @@ eg：021-68686868  0511-6868686；
 </code></pre>
 
 <p>这两个方法的区别可以看这里<a href="https://developer.apple.com/library/ios/qa/qa1754/_index.html">AVAudioSessionCategoryOptionDefaultToSpeaker和AVAudioSessionPortOverrideSpeaker区别</a>，大概意思就是设置<code>AVAudioSessionPortOverrideSpeaker</code> 是临时性的，如果rout改变和audioSession被中断的话，这个设置就失效了，会返回到默认的设置。设置<code>AVAudioSessionCategoryOptionDefaultToSpeaker</code> 后，会一直生效。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS8 framework动态库遇到的问题]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/"/>
+    <updated>2015-09-08T14:32:29+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti</id>
+    <content type="html"><![CDATA[<ol>
+<li><p>编译显示<code>Include of non-modular header inside framework module</code> 错误</p>
+
+<p>  修改<code>Build Setting</code> 中<code>Allow Non-modular Include InFramework Modules</code> 为YES.</p></li>
+<li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
+
+<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iOS使用AudioQueue录音遇到的内存泄露问题]]></title>
+    <link href="http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun/"/>
+    <updated>2015-08-04T00:15:17+08:00</updated>
+    <id>http://githubdelegate.github.io/blog/2015/08/04/ios-nei-cun</id>
+    <content type="html"><![CDATA[<h3>AudioQueue 录音</h3>
+
+<p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 回调函数
+</span><span class='line'>void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer, const AudioTimeStamp *inStartTime,
+</span><span class='line'>                        UInt32 inNumPackets, const AudioStreamPacketDescription *inPacketDesc)
+</span><span class='line'>{
+</span><span class='line'>    Recorder *recorder = (__bridge Recorder *)inUserData;
+</span><span class='line'>    if (recorder == nil){
+</span><span class='line'>        return;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    if ((inNumPackets &gt; 0) && (recorder.isRecording))
+</span><span class='line'>    {
+</span><span class='line'>         // 获取录音数据
+</span><span class='line'>        int _pcmSize = inBuffer-&gt;mAudioDataByteSize;
+</span><span class='line'>        char *_pcmData = (char *)inBuffer-&gt;mAudioData;
+</span><span class='line'>      
+</span><span class='line'>        NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];
+</span><span class='line'>        // 把录音数据传递出去
+</span><span class='line'>        [recorder writeRecordingData:data];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>上面这段代码有问题，如果一直不停的录音，会发现内存一直不停的增加，而且每次增加的大小会和每次返回的录音数据大小相等。
+那导致这段代码内存泄露的原因，就是<code>NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];</code> 这段代码中<code>data</code> 没有释放导致的。虽然是在ARC环境下，但是这是个C函数，要自己管理内存，所以加上<code>@autorelease</code> 就能解决。</p>
+
+<hr />
+
+<blockquote><p>引用
+<a href="http://memo.tv/archive/memory_management_with_objective_c_cocoa_iphone">Memory Management with Objective C / Cocoa / iPhone </a></p></blockquote>
 ]]></content>
   </entry>
   

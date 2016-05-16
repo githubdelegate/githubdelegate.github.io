@@ -7,7 +7,24 @@
 	<meta name="author" content="zy">
 
 	
-	<meta name="description" content="Comments iOS相关证书全部失效 某天打开电脑突然发现iOS相关证书全部失效。全部显示证书的签发者无效。 先找到一个失效证书，右击->评估证书->代码签名->显示证书，可以看到证书失效的原因： 去这个地址下载最新证书：https://developer.apple.com/ &hellip;">
+	<meta name="description" content="ios, 动画 Comments UIView在执行动画过程中如何响应点击事件 UIView在执行动画过程中如何响应事件 先看代码 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18 - (void)viewDidLoad { [super &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,6 +107,119 @@
   
 
 
+<time datetime="2016-05-16T20:32:50+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/dong-hua/'>动画</a>
+
+
+</div>
+		
+			<span class="comments"><a href="/blog/2016/05/16/uiviewzai-zhi-xing-dong-hua-guo-cheng-zhong-ru-he-xiang-ying-dian-ji-shi-jian/#disqus_thread">Comments</a></span>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2016/05/16/uiviewzai-zhi-xing-dong-hua-guo-cheng-zhong-ru-he-xiang-ying-dian-ji-shi-jian/" itemprop="url">UIView在执行动画过程中如何响应点击事件</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h1>UIView在执行动画过程中如何响应事件</h1>
+
+<p>先看代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>- (void)viewDidLoad {
+</span><span class='line'>    [super viewDidLoad];
+</span><span class='line'>
+</span><span class='line'>    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(100, 100, 100, 40)];
+</span><span class='line'>    self.btn = btn;
+</span><span class='line'>    [btn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+</span><span class='line'>    btn.backgroundColor = [UIColor greenColor];
+</span><span class='line'>    [self.view addSubview:btn];
+</span><span class='line'>    
+</span><span class='line'>}
+</span><span class='line'>- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event{
+</span><span class='line'>    [UIView animateWithDuration:15 delay:0 options:UIViewAnimationCurveLinear | UIViewAnimationOptionAllowUserInteraction animations:^{
+</span><span class='line'>         self.btn.frame = CGRectMake(300, 100, 100, 40);
+</span><span class='line'>    } completion:^(BOOL finished) {
+</span><span class='line'>        
+</span><span class='line'>    }];
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面是一段很简单的动画代码，问题是在btn做动画，移动过程中，btn不能响应点击事件了。这是因为其实btn 接受事件的区域已经移动到300的位置，你点击300会发现触发了点击事件。实际的动画过程就是<code>.layer.presentationLayer</code>在做，就是你能看到的移动过程实际上是<code>.layer.presentationLayer</code>.所以要判断要想在动画过程中响应点击事件就需要判断手指点击的点是不是在<code>.layer.presentationLayer</code>上，使用UIView方法 <code>hitTest:withEvent:</code>方法，这个方法会返回一个View，就是在当前View的层级结构中找到一个最合适的View来处理事件。
+    大概的过程就是先调用<code>pointInside:withEvent:</code>方法，判断触摸点是不是在当前View中，若返回NO,表示触摸点不在当前View上，<code>hitTest:withEvent:</code>方法返回nil；若返回YES，表示触摸点在当前View内，然后从subviews数组中<code>尾部向前遍历</code>,每个子View同样执行这两个方法，直到有子视图的hitTest:withEvent:方法返回非空对象或者全部子视图遍历完毕。▷ 若第一次有子视图的hitTest:withEvent:方法返回非空对象,则当前视图的hitTest:withEvent:方法就返回此对象，处理结束
+▷ 若所有子视图的hitTest:withEvent:方法都返回nil，则当前视图的hitTest:withEvent:方法返回当前视图自身(self)
+• 最终，这个触摸事件交给主窗口的hitTest:withEvent:方法返回的视图对象去处理。</p>
+
+<p>现在考虑为什么使用<code>layer.presentationLayer</code>,这个可以看<a href="http://objccn.io/issue-12-1/">动画解释</a>,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if ([self.layer.presentationLayer hitTest:touchedPoint]){
+</span><span class='line'>    CGPoint newPoint = [self.layer.presentationLayer convertPoint:touchedPoint fromLayer:self.superview.layer];
+</span><span class='line'>    NSLog(@"得到新的点=%@",NSStringFromCGPoint(newPoint));
+</span><span class='line'>    if (newPoint.x &gt; 0 && newPoint.x &lt; 35) {
+</span><span class='line'>        if (self.bulletViewHeadImageTappedBlock) {
+</span><span class='line'>            self.bulletViewHeadImageTappedBlock(self.infoDict);
+</span><span class='line'>        }
+</span><span class='line'>        return YES;
+</span><span class='line'>    }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看这段代码，<code>hitTest:touchedPoint</code>有返回值表示点击点在self.layer.presentationLayer范围内，然后就是转换坐标系把点击点转换到<code>self.layer.presentationLayer</code>坐标系里面，就可以判断具体点击在哪个视图上了。</p>
+
+<blockquote><p>未完下次继续分析动画</p>
+
+<p><a href="http://www.superqq.com/blog/2015/04/23/iosyong-hu-dian-ji-shi-jian-chu-li/">http://www.superqq.com/blog/2015/04/23/iosyong-hu-dian-ji-shi-jian-chu-li/</a></p></blockquote>
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
 <time datetime="2016-03-02T17:14:33+08:00" data-updated="true" itemprop="datePublished"></time></div>
 		<div class="tags">
 
@@ -103,11 +233,13 @@
 		<p>某天打开电脑突然发现iOS相关证书全部失效。全部显示<code>证书的签发者无效</code>。</p>
 
 <p>先找到一个失效证书，右击->评估证书->代码签名->显示证书，可以看到证书失效的原因：
-<img src="./certificate-invalidate.png" alt="图片" /></p>
+<img src="http://i.imgur.com/LxwxgAi.png?1" alt="图片" /></p>
 
 <p>去这个地址下载最新证书：<code>https://developer.apple.com/certificationauthority/AppleWWDRCA.cer</code> 安装.
 同时要把老证书全部删掉，在keychains里选择login,然后点选Certificates，在这个界面，选择工具栏的View -> Show Expired Certificates，这时候你会发现一个过期的“WWDR Certificate”（Apple Worldwide Developer Relations Certification Authority），删除它，同样的办法，在System的那一栏也有这个过期的“WWDR Certificate”.
 如果过期证书全部删除，并且已安装新证书，会发现证书全部都OK了。</p>
+
+<blockquote><p><a href="https://segmentfault.com/q/1010000004433963">https://segmentfault.com/q/1010000004433963</a></p></blockquote>
 
 		
 		
@@ -462,43 +594,6 @@ Lock 提供一种狂野的方式保护一个时刻只能被一个线程执行的
   
 
 
-<time datetime="2016-01-02T10:46:38+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-</div>
-		
-			<span class="comments"><a href="/blog/2016/01/02/title/#disqus_thread">Comments</a></span>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2016/01/02/title/" itemprop="url">iOS 自动化</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2></h2>
-
-<p>exceptionForNotification</p>
-
-<p>测试框架specta</p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
 <time datetime="2015-12-31T10:24:12+08:00" data-updated="true" itemprop="datePublished"></time></div>
 		<div class="tags">
 
@@ -570,42 +665,6 @@ weak 用于对象类型, 由于 weak 同样不改变对象的引用计数且不�
 
 <p>在pch 文件中引用 <code>#import &lt;Foundation/Foundation.h&gt;</code> 出错
 解决办法：添加<code>#ifdef __OBJC__ 在这里引用 #endif</code></p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-12-28T20:46:03+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-</div>
-		
-			<span class="comments"><a href="/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/#disqus_thread">Comments</a></span>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/" itemprop="url">iOS ARC下内存注意</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2>ARC 下内存使用注意</h2>
-
-<p>1.wddomainzh_HH6
-2.wdvpnzhhh</p>
 
 		
 		
@@ -862,6 +921,524 @@ Operation默认是同步的方式。在同步的方式中，operation不会创�
 		<h3>Xcode 突然不显示程序运行的内存占用信息了</h3>
 
 <p>办法：<code>Product</code>-> <code>Scheme</code>-><code>Edit Scheme</code> -> <code>Diagnostic</code>-> <code>取消Enable Zombie Objects</code> 选项。</p>
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-16T10:53:50+08:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/mutilthread/'>mutilthread</a>, <a class='category' href='/blog/categories/oc/'>oc</a>
+
+
+</div>
+		
+			<span class="comments"><a href="/blog/2015/12/16/ios-duo-xian-cheng-jian-tong-bu/#disqus_thread">Comments</a></span>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/12/16/ios-duo-xian-cheng-jian-tong-bu/" itemprop="url">iOS 多线程间同步</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h2>iOS 多线程同步</h2>
+
+<hr />
+
+<h3>线程同步概念</h3>
+
+<p>在多线程编程里面，一些敏感数据不允许被多个线程同时访问，此时就使用同步访问技术，保证数据在任何时刻，最多有一个线程访问，以保证数据的完整性。
+我们可以通过<code>互斥锁(mutex)</code>，<code>条件变量(condition variable)</code>和<code>读写锁(reader-writer lock)</code> 和<code>信号</code>来同步资源。</p>
+
+<ul>
+<li>互斥锁仅允许每次使用一个线程来执行特定的部分代码或者访问特定数据。</li>
+<li>读写锁允许对受保护的共享资源进行并发读取和独占写入。要修改资源，线程必须首先获取互斥写锁。只有释放所有的读锁之后，才允许使用互斥写锁。</li>
+<li>条件变量会一直阻塞线程，直到特定的条件为真。</li>
+<li>计数信号量通常用来协调对资源的访问。使用计数，可以限制访问某个信号的线程数达到指定的计数时，信号将阻塞。</li>
+</ul>
+
+
+<hr />
+
+<h3>iOS多线程同步的办法</h3>
+
+<h4>1.Atomic Operations</h4>
+
+<p>原子操作是对简单的数据类型的最简单的同步方法。用原子操作的好处是不会阻塞正在竞争的线程，这比加锁好。</p>
+
+<h4>2.Locks</h4>
+
+<p>锁是最常用的同步工具。你可以用锁保护一段一次只允许一个线程执行的代码块。比如，一段操作一份关键数据的代码，或者用到一些一次只允许一个用户操作的资源。通过把一个锁放在这段代码两边，可以阻止其他线程修改。
+iOS 中可以使用的锁如下代码：</p>
+
+<ul>
+<li><code>1.mutex lock</code></li>
+</ul>
+
+
+<pre><code class="`">
+  - (void)viewDidLoad {
+    [super viewDidLoad];
+
+    self.test = 10;
+    pthread_mutex_init(&amp;mutex, NULL);
+    pthread_mutex_lock(&amp;mutex);
+    self.test+=20;
+    printf("test=%d",self.test);
+}
+
+- (IBAction)btn1Click:(id)sender {
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        pthread_mutex_lock(&amp;mutex); // 如果mutex没有释放会在这里等待
+        self.test+=10;
+        printf("test=%d\n",self.test);
+        NSLog(@"current thread:%@",[NSThread currentThread]);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            pthread_mutex_unlock(&amp;mutex);
+        });
+    });
+}
+
+    - (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event
+    {
+        pthread_mutex_unlock(&amp;mutex);
+    }
+</code></pre>
+
+<p> 输出：</p>
+
+<pre><code class="`">
+test=30test=40
+2015-12-16 18:07:27.297 threadSynTest[5908:374571] current thread:&lt;NSThread: 0x7b246080&gt;{number = 2, name = (null)}
+test=50
+2015-12-16 18:07:28.392 threadSynTest[5908:374574] current thread:&lt;NSThread: 0x7b2b6ce0&gt;{number = 3, name = (null)}
+test=60
+2015-12-16 18:07:29.415 threadSynTest[5908:374570] current thread:&lt;NSThread: 0x7b28a530&gt;{number = 4, name = (null)}
+test=70
+2015-12-16 18:07:30.423 threadSynTest[5908:374575] current thread:&lt;NSThread: 0x7b26c700&gt;{number = 5, name = (null)}
+</code></pre>
+
+<ul>
+<li><code>2.NSLock</code></li>
+</ul>
+
+
+<p> 注意: <code>NSLock</code> 在<code>POSIX threads</code> 基础上实现的。当对一个NSLock 对象调用<code>unlock</code>方法，你必须要保证和给<code>NSLock</code>对象调用<code>lock</code>方法在同一个线程。在不同的线程里unlock会导致未知的错误。连续两次调用lock方法会导致死锁。如果要递归的加锁，用<code>NSRecursiveLock</code>。对一个未加锁的lock 调用<code>unlock</code>是不正确的，要修正。</p>
+
+<p> <code>tryLock</code> :尝试加锁，并且会立即返回，成功返回YES，不会阻塞。
+ <code>lock</code> 方法: 加锁，如果当前是在锁的状态，当前线程的会阻塞，直到加锁</p>
+
+<ul>
+<li><code>3.@synchronized</code></li>
+</ul>
+
+
+<p> <code>@synchronized</code> 指令可以非常方便的创建互斥锁，它会像其他互斥锁一样防止不同线程在同一时刻获得相同的锁。但是你并不需要创建<code>mutex lock</code>或<code>NSLock</code> 对象，相反你只需要简单用一个OC 对象作为一个lock token.
+传递给@synchronized指令的对象是唯一的，用来区别被保护的代码块。如果你在不同的线程执行这个指令，并用不同的对象作为参数，每个线程会产生自己的锁，并且会继续运行，相互之间不会相互影响。然而，如果你传递相同的对象作为参数，一个线程会先获得锁，另外一个会阻塞等待到第一个执行完成。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>- (IBAction)synchrinized:(id)sender {
+</span><span class='line'>    
+</span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+</span><span class='line'>        @synchronized(self) {
+</span><span class='line'>            [self changeValue];
+</span><span class='line'>            [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
+</span><span class='line'>        }
+</span><span class='line'>        
+</span><span class='line'>        dispatch_async(dispatch_get_main_queue(), ^{
+</span><span class='line'>            @synchronized(self) {
+</span><span class='line'>                [self changeValue];
+</span><span class='line'>            }
+</span><span class='line'>        });
+</span><span class='line'>    });
+</span><span class='line'>    
+</span><span class='line'>    @synchronized(self) {
+</span><span class='line'>        [self changeValue];
+</span><span class='line'>        [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:3]];
+</span><span class='line'>    }
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2015-12-16 19:51:18.829 threadSynTest[6717:497526] test==20---current thread:&lt;NSThread: 0x7ba3af80&gt;{number = 1, name = main}
+</span><span class='line'>2015-12-16 19:51:21.831 threadSynTest[6717:497574] test==30---current thread:&lt;NSThread: 0x7b84d860&gt;{number = 2, name = (null)}
+</span><span class='line'>2015-12-16 19:51:24.837 threadSynTest[6717:497526] test==40---current thread:&lt;NSThread: 0x7ba3af80&gt;{number = 1, name = main}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>4.NSRecursiveLock</code></li>
+</ul>
+
+
+<p> <code>NSRecursiveLock</code> 定义一种可以被同一个线程多次加锁而且不会引起死锁.递归锁会记录当前被成功加了多少次锁，只有加锁和解锁次数一样，平衡时，这个锁最终才被释放，其他线程才能获得这个锁。递归锁通常用在递归函数内部防止递归操作阻塞线程。当然你也可以用在非递归的场合。</p>
+
+<pre><code class="`">
+- (void)recursiveFun:(int)count
+{
+    [self.recursiveLock lock];
+    [self changeValue];
+    if (count != 0) {
+        count--;
+        [self recursiveFun:count];
+    }
+
+    [self.recursiveLock unlock];
+}
+</code></pre>
+
+<ul>
+<li><code>5.NSConditionLock</code></li>
+</ul>
+
+
+<p><code>NSConditionLock</code> 定义了一个可以通过特殊的值来锁和解锁的互斥锁。不要和<code>Condition</code>搞混，虽然这种方式和条件很像，但是实现完全不同。特别是当线程之间需要需要按照一个特殊的顺序执行任务的时候，你应该使用<code>NSConditionLock</code>,比如一个线程生产数据，另一个消费数据。当生产者正在执行的时候，消费者用条件请求锁。当生产者完成后，解锁并设置条件，唤醒消费线程，去消费数据。
+<code>NSConditionLock</code>的加锁和解锁方法可以各种组合。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>- (void)sendSharedData{
+</span><span class='line'>    [self.conditionLock lock];
+</span><span class='line'>    [self.sharedArray addObject:@1];
+</span><span class='line'>    NSLog(@"添加数据 thread:%@",[NSThread currentThread]);
+</span><span class='line'>    [self.conditionLock unlockWithCondition:1];
+</span><span class='line'>    [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (IBAction)conditionlock:(id)sender {
+</span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+</span><span class='line'>        while (1) {
+</span><span class='line'>            [self.conditionLock lockWhenCondition:1];
+</span><span class='line'>            [self.sharedArray removeObjectAtIndex:0];
+</span><span class='line'>            NSLog(@"消耗一个数据 thread:%@",[NSThread currentThread]);
+</span><span class='line'>            BOOL isEmpty = self.sharedArray.count == 0 ? YES : NO;
+</span><span class='line'>            [self.conditionLock unlockWithCondition:(isEmpty ? 0 : 1)];
+</span><span class='line'>            [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+</span><span class='line'>        }
+</span><span class='line'>    });
+</span><span class='line'>    
+</span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+</span><span class='line'>        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(sendSharedData) userInfo:nil repeats:YES];
+</span><span class='line'>        [[NSRunLoop currentRunLoop] run];
+</span><span class='line'>    });
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Conditions 条件变量</h4>
+
+<p>条件是另一种信号量，当满足某个条件的时候能允许其他线程运行。条件信号量主要用来表示某个资源可用个数，和保证线程安装固定的顺序运行。当一个线程需要某个condition的时候，会一直阻塞等待，直到只有当其他线程改变了条件信号量。互斥和条件信号量之间的区别是用条件信号量允许多个线程同时获得条件，运行。条件信号量就像门卫一样，根据资源的多少，决定让不同的线程可以进入。</p>
+
+<h4>使用<code>Conditions</code></h4>
+
+<p>条件是一种特殊类型的锁，它可以用来同步各个操作   顺序。条件和同步锁之间的区别很微妙。一个线程等待一个条件会阻塞，直到另外一个线程明确的发出条件信号。</p>
+
+<ul>
+<li><code>1.POSIX Conditions</code>
+  <code>POSIX</code> 线程条件锁要求同时使用条件和互斥。运行时互斥锁约束条件，等待信号的线程使用同样的互斥和条件变量。</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (IBAction)distributedlock:(id)sender {
+</span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+</span><span class='line'>        [self waitOnConditionfun];
+</span><span class='line'>    });
+</span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+</span><span class='line'>        [self signalThreadCondition];
+</span><span class='line'>    });
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)waitOnConditionfun{
+</span><span class='line'>    
+</span><span class='line'>    // mutex 如果等待线程先获得mutex，加锁。那signal如何获得锁，又如何加锁呢。哦如果不成功，直接就解锁
+</span><span class='line'>    pthread_mutex_lock(&mutex);
+</span><span class='line'>    while (ready_to_go) {
+</span><span class='line'>        NSLog(@"wait--thread:%@",[NSThread currentThread]);
+</span><span class='line'>        pthread_cond_wait(&condition, &mutex);
+</span><span class='line'>    }
+</span><span class='line'>    ready_to_go = false;
+</span><span class='line'>    pthread_mutex_unlock(&mutex);
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)signalThreadCondition{
+</span><span class='line'>
+</span><span class='line'>    // At this point, there should be work for the other thread to do.
+</span><span class='line'>    pthread_mutex_lock(&mutex);
+</span><span class='line'>    ready_to_go = true;
+</span><span class='line'>    // Signal the other thread to begin work.
+</span><span class='line'>    pthread_cond_signal(&condition);
+</span><span class='line'>    NSLog(@"signal--thread:%@",[NSThread currentThread]);
+</span><span class='line'>    pthread_mutex_unlock(&mutex);
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>2.NSCondition</code></li>
+</ul>
+
+
+<p><code>NSCondition</code>提供了和<code>POSIX condition</code>相同的功能，但是把请求锁和条件封装成一个对象，结果就是你只用它就可以实现互斥加锁和条件等待。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>- (IBAction)nscondition:(id)sender {
+</span><span class='line'>    
+</span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+</span><span class='line'>        while (1) {
+</span><span class='line'>            [self.condition lock];
+</span><span class='line'>            while (timeToWork &lt;= 0) {
+</span><span class='line'>                [self.condition wait];
+</span><span class='line'>            }
+</span><span class='line'>            timeToWork--;
+</span><span class='line'>            NSLog(@"消费数据--thread:%@",[NSThread currentThread]);
+</span><span class='line'>            [self.condition unlock];
+</span><span class='line'>        }
+</span><span class='line'>    });
+</span><span class='line'>
+</span><span class='line'>    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+</span><span class='line'>        while (1) {
+</span><span class='line'>            [self.condition lock];
+</span><span class='line'>            timeToWork++;
+</span><span class='line'>            NSLog(@"添加数据--thread:%@",[NSThread currentThread]);
+</span><span class='line'>            [self.condition signal];
+</span><span class='line'>            [self.condition unlock];
+</span><span class='line'>            [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+</span><span class='line'>        }
+</span><span class='line'>    });
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h3>线程安全设计技巧</h3>
+
+<ul>
+<li>1.避免同步</li>
+</ul>
+
+
+<p>同步工具不是万灵药，锁用的太多会导致性能低于没有使用同步的程序。寻找线程安全和性能的平衡是需要经验。实现同步最好的方法是减小线程间的交互，让同步任务相互独立。如果每个任务操作自己私有数据，就不需要使用锁来保护数据。如果不同的任务共享一块数据，你可以尝试把数据分割，或复制一份数据，虽然这也消耗性能，你可以再决定前权衡一下。</p>
+
+<ul>
+<li>2.理解同步的限制</li>
+</ul>
+
+
+<p>同步工具只有被所有的线程一直使用才能最有效。如果创建一个互斥锁用来限制对某个资源的访问，你的所以线程必须请求相同的互斥变量才能操作这个数据。如果没达到这个效果，是一个程序员的错误！！！！</p>
+
+<ul>
+<li>3.正确编码的风险</li>
+</ul>
+
+
+<p>当使用锁的时候，你必须非常的小心的实现你的代码。因为锁可能看起来很好的实现了，但是还是存在安全问题。看下面的例子，</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>NSLock* arrayLock = GetArrayLock();
+</span><span class='line'>NSMutableArray* myArray = GetSharedArray();
+</span><span class='line'>id anObject;
+</span><span class='line'> 
+</span><span class='line'>[arrayLock lock];
+</span><span class='line'>anObject = [myArray objectAtIndex:0];
+</span><span class='line'>[arrayLock unlock];
+</span><span class='line'> 
+</span><span class='line'>[anObject doSomething];
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上面的代码，因为array 是可变的，这个lock会一直保护这个array，知道你得到<code>anobject</code>,而且因为anobject 是不可变的，所以<code>[anObject doSomething];</code>不需要锁的保护。但是这段代码有个问题，就是当获得了<code>anb=object</code>后，但是还没执行<code>[anObject doSomething];</code>之前，另外一个线程获得了lock并且把<code>myarray</code>里面的元素全部删掉了，iOS没有内存垃圾机制的，所以<code>anobject</code>指向的对象会被释放，<code>anobject</code>指针会指向一个非法的地址，解决这个问题，你可能会把<code>[anObject doSomething];</code>也放在锁里面，但是这会消耗很长时间，导致其他线程会长时间的等待。正确的做法应该是，保证<code>anobject</code>不会被释放.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>NSLock* arrayLock = GetArrayLock();
+</span><span class='line'>NSMutableArray* myArray = GetSharedArray();
+</span><span class='line'>id anObject;
+</span><span class='line'> 
+</span><span class='line'>[arrayLock lock];
+</span><span class='line'>anObject = [myArray objectAtIndex:0];
+</span><span class='line'>[anObject retain];
+</span><span class='line'>[arrayLock unlock];
+</span><span class='line'> 
+</span><span class='line'>[anObject doSomething];
+</span><span class='line'>[anObject release];
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>4.小心死锁活锁</li>
+</ul>
+
+
+<p>任何时候一个线程一次想要获取多于一个锁，都有死锁的可能。死锁是两个线程分别获得一个锁后，又想去得到另外一个线程的锁。结果就是每个线程都会一直阻塞下去。以下是对死锁和活锁的形象描述。 现有个过道，两个人宽，两侧迎面走来两个人A和B。 死锁的情况： A和B都不是讲礼貌的人，都不愿给别人让路，所以A和B都在等对方让路，导致谁也过不去。 活锁的情况： A和B都是很讲礼貌的人，都主动给别人让路。A往左移，同时B往右移；A往右移，同时B往左移。 A和B在移动的时候，同时挡住对方，导致谁也过不去</p>
+
+<ul>
+<li><p>5.正确的使用验证变量</p>
+
+<p>  如果你已经使用了互斥锁保护一段代码，就不要再使用验证关键字去保护代码中重要变量。互斥包括一个内存栅栏去确保读取和写入操作的次序。添加一个验证变量会导致强制读取值每次，降低性能。如果一个互斥锁足够的话，就不要再使用了。</p></li>
+</ul>
+
+
+<hr />
+
+<h3>线程安全总结</h3>
+
+<hr />
+
+<h3>不同方法使用的场合，优缺点</h3>
+
+<p>未完待续！！</p>
+
+<p> <a href="https://github.com/githubdelegate/iOS-Thread-Synchronization.git">测试代码</a></p>
 
 		
 		

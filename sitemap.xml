@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://githubdelegate.github.io/blog/2016/05/16/uiviewzai-zhi-xing-dong-hua-guo-cheng-zhong-ru-he-xiang-ying-dian-ji-shi-jian/</loc>
+    <lastmod>2016-05-16T20:32:50+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://githubdelegate.github.io/blog/2016/03/02/iosxiang-guan-zheng-shu-quan-bu-shi-xiao/</loc>
     <lastmod>2016-03-02T17:14:33+08:00</lastmod>
   </url>
@@ -17,10 +21,6 @@
     <lastmod>2016-01-02T15:50:05+08:00</lastmod>
   </url>
   <url>
-    <loc>http://githubdelegate.github.io/blog/2016/01/02/title/</loc>
-    <lastmod>2016-01-02T10:46:38+08:00</lastmod>
-  </url>
-  <url>
     <loc>http://githubdelegate.github.io/blog/2015/12/31/xue-xi-bloc/</loc>
     <lastmod>2015-12-31T10:24:12+08:00</lastmod>
   </url>
@@ -29,20 +29,12 @@
     <lastmod>2015-12-30T14:41:25+08:00</lastmod>
   </url>
   <url>
-    <loc>http://githubdelegate.github.io/blog/2015/12/28/ios-arcxia-nei-cun-zhu-yi/</loc>
-    <lastmod>2015-12-28T20:46:03+08:00</lastmod>
-  </url>
-  <url>
     <loc>http://githubdelegate.github.io/blog/2015/12/28/ios-duo-xian-cheng-gcdhe-nsoperation/</loc>
     <lastmod>2015-12-28T20:30:35+08:00</lastmod>
   </url>
   <url>
     <loc>http://githubdelegate.github.io/blog/2015/12/28/xcode-bu-xian-shi-cheng-xu-nei-cun-zhan-yong-zhuang-tai/</loc>
     <lastmod>2015-12-28T15:57:23+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://githubdelegate.github.io/blog/2015/12/21/dui-yykitde-li-jie/</loc>
-    <lastmod>2015-12-21T16:38:04+08:00</lastmod>
   </url>
   <url>
     <loc>http://githubdelegate.github.io/blog/2015/12/16/ios-duo-xian-cheng-jian-tong-bu/</loc>
@@ -127,5 +119,14 @@
   </url>
   <url>
     <loc>http://githubdelegate.github.io/blog/categories/uiappearance/</loc>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/blog/categories/dong-hua/</loc>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://githubdelegate.github.io/posts/3/</loc>
   </url>
 </urlset>

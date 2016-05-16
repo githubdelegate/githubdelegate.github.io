@@ -7,7 +7,9 @@
 	<meta name="author" content="zy">
 
 	
-	<meta name="description" content="ios Comments iOS8 Framework动态库遇到的问题 编译显示Include of non-modular header inside framework module 错误 修改Build Setting 中Allow Non-modular Include &hellip;">
+	<meta name="description" content="Comments Octopress搭建博客中遇到的问题 gem install ** 提示安装失败 修改gem source
+gem sources -a https://ruby.taobao.org/ 添加
+gem sources -r https://rubygems.org/ &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,138 +76,6 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-09-08T14:32:29+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/ios/'>ios</a>
-
-
-</div>
-		
-			<span class="comments"><a href="/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/#disqus_thread">Comments</a></span>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2015/09/08/ios8chuang-jian-frameworkyu-dao-de-wen-ti/" itemprop="url">iOS8 Framework动态库遇到的问题</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<ol>
-<li><p>编译显示<code>Include of non-modular header inside framework module</code> 错误</p>
-
-<p>  修改<code>Build Setting</code> 中<code>Allow Non-modular Include InFramework Modules</code> 为YES.</p></li>
-<li><p>在代码中引用头文件 <code>#import "***Kit.h"</code> 提示找不到</p>
-
-<p> 这个时候要检查对应的framework target <code>Build Phases-&gt;Headers-&gt;Public</code> 是否包含对应的类。一般要提供给其他target使用的类的.h文件都应该放到Public中.</p></li>
-</ol>
-
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-08-04T00:15:17+08:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-</div>
-		
-			<span class="comments"><a href="/blog/2015/08/04/ios-nei-cun/#disqus_thread">Comments</a></span>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2015/08/04/ios-nei-cun/" itemprop="url">iOS使用AudioQueue录音遇到的内存泄露问题</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3>AudioQueue 录音</h3>
-
-<p><code>AudioQueue</code> 是iOS中比较底层的音频处理类，可以用来播放和录音。录音的话，每个一段时间都会通过一个C的回掉函数返回录音数据。如下面的代码：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// 回调函数
-</span><span class='line'>void inputBufferHandler(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer, const AudioTimeStamp *inStartTime,
-</span><span class='line'>                        UInt32 inNumPackets, const AudioStreamPacketDescription *inPacketDesc)
-</span><span class='line'>{
-</span><span class='line'>    Recorder *recorder = (__bridge Recorder *)inUserData;
-</span><span class='line'>    if (recorder == nil){
-</span><span class='line'>        return;
-</span><span class='line'>    }
-</span><span class='line'>    
-</span><span class='line'>    if ((inNumPackets &gt; 0) && (recorder.isRecording))
-</span><span class='line'>    {
-</span><span class='line'>         // 获取录音数据
-</span><span class='line'>        int _pcmSize = inBuffer-&gt;mAudioDataByteSize;
-</span><span class='line'>        char *_pcmData = (char *)inBuffer-&gt;mAudioData;
-</span><span class='line'>      
-</span><span class='line'>        NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];
-</span><span class='line'>        // 把录音数据传递出去
-</span><span class='line'>        [recorder writeRecordingData:data];
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<hr />
-
-<p>上面这段代码有问题，如果一直不停的录音，会发现内存一直不停的增加，而且每次增加的大小会和每次返回的录音数据大小相等。
-那导致这段代码内存泄露的原因，就是<code>NSData *data = [[NSData alloc] initWithBytes:_pcmData length:_pcmSize];</code> 这段代码中<code>data</code> 没有释放导致的。虽然是在ARC环境下，但是这是个C函数，要自己管理内存，所以加上<code>@autorelease</code> 就能解决。</p>
-
-<hr />
-
-<blockquote><p>引用
-<a href="http://memo.tv/archive/memory_management_with_objective_c_cocoa_iphone">Memory Management with Objective C / Cocoa / iPhone </a></p></blockquote>
-
-		
-		
-	</div>
-
-</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
