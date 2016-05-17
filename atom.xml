@@ -4,7 +4,7 @@
   <title><![CDATA[Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2016-05-16T21:24:11+08:00</updated>
+  <updated>2016-05-17T10:08:53+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -92,7 +92,19 @@
 
 <p>看这段代码，<code>hitTest:touchedPoint</code>有返回值表示点击点在self.layer.presentationLayer范围内，然后就是转换坐标系把点击点转换到<code>self.layer.presentationLayer</code>坐标系里面，就可以判断具体点击在哪个视图上了。</p>
 
-<blockquote><p>未完下次继续分析动画</p>
+<p>注意：</p>
+
+<ol>
+<li>使用这种方法要把View的userInteractionEnabled=NO.</li>
+<li>如果View中如果有Button，也要把Button的userInteractionEnabled = NO.</li>
+</ol>
+
+
+<h2>CALayer</h2>
+
+<blockquote><p><a href="http://xiongzenghuidegithub.github.io/blog/2015/08/18/layerxue-xi-zong-jie/">CALayer总结</a>
+<a href="http://blog.handy.wang/blog/2015/10/11/uiviewyu-calayerzhong-dong-hua-de-chuang-jian-he-zhi-xing-guo-cheng/">UIView与CALayer中动画的创建和执行过程</a>
+未完待续</p>
 
 <p><a href="http://www.superqq.com/blog/2015/04/23/iosyong-hu-dian-ji-shi-jian-chu-li/">http://www.superqq.com/blog/2015/04/23/iosyong-hu-dian-ji-shi-jian-chu-li/</a></p></blockquote>
 ]]></content>
