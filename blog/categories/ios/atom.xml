@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios | Alpine Blog]]></title>
   <link href="http://githubdelegate.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://githubdelegate.github.io/"/>
-  <updated>2016-05-17T10:08:53+08:00</updated>
+  <updated>2016-05-18T15:09:14+08:00</updated>
   <id>http://githubdelegate.github.io/</id>
   <author>
     <name><![CDATA[zy]]></name>
@@ -70,6 +70,67 @@
 <li>如果View中如果有Button，也要把Button的userInteractionEnabled = NO.</li>
 </ol>
 
+
+<h2><code>hitTest</code>进一步研究</h2>
+
+<pre><code>    // testview 禁止用户交互
+    testView *view = [[testView alloc] init];
+    self.tv = view;
+    self.tv.userInteractionEnabled = NO;
+    [self.view addSubview:view];
+
+
+ // testView 内部实现
+@implementation testView
+
+- (instancetype)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
+
+        _label = [[UILabel alloc] init];
+        _label.backgroundColor = [UIColor redColor];
+        [self addSubview:_label];
+
+        _btn = [[UIButton alloc] init];
+        [_btn setBackgroundColor:[UIColor yellowColor]];
+        [_btn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_btn];
+
+        _imageView = [[UIImageView alloc] init];
+        [_imageView setBackgroundColor:[UIColor purpleColor]];
+        _imageView.userInteractionEnabled = YES;
+        [self addSubview:_imageView];
+
+        UITapGestureRecognizer *tapges= [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTapped)];
+        [_imageView addGestureRecognizer:tapges];
+
+        _kbv = [[keyboardView alloc] init];
+        _kbv.backgroundColor = [UIColor darkGrayColor];
+        [self addSubview:_kbv];
+
+        self.backgroundColor = [UIColor blueColor];
+    }
+    return self;
+}
+
+- (void)imageTapped{
+    NSLog(@"--method = %s--current thread:%@",__func__,[NSThread currentThread]);
+}
+
+// 这个方法返回imageView
+- (UIView *)hitTest:(CGPoint)point w- ithEvent:(UIEvent *)event{
+    NSLog(@"--method = %s--current thread:%@",__func__,[NSThread currentThread]);
+    return _imageView;
+}
+</code></pre>
+
+<p>打印输出：</p>
+
+<pre><code>2016-05-17 22:09:06.793 AutoTest[2527:707374] --method = -[testView hitTest:withEvent:]--current thread:&lt;NSThread: 0x13560bf50&gt;{number = 1, name = main}
+2016-05-17 22:09:06.794 AutoTest[2527:707374] --method = -[testView hitTest:withEvent:]--current thread:&lt;NSThread: 0x13560bf50&gt;{number = 1, name = main}
+2016-05-17 22:09:10.615 AutoTest[2527:707374] --method = -[testView imageTapped]--current thread:&lt;NSThread: 0x13560bf50&gt;{number = 1, name = main}
+</code></pre>
+
+<p>从打印结果可以看到行了 <code>hitTest</code>方法执行了两边，然后还是执行了<code>imageView</code>的点击事件。至于为什么会执行两边<code>hitTest</code>方法，还没弄明白原因。</p>
 
 <h2>CALayer</h2>
 

@@ -203,6 +203,122 @@
 </ol>
 
 
+<h2><code>hitTest</code>进一步研究</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// testview 禁止用户交互
+</span><span class='line'>testView *view = [[testView alloc] init];
+</span><span class='line'>self.tv = view;
+</span><span class='line'>self.tv.userInteractionEnabled = NO;
+</span><span class='line'>[self.view addSubview:view];
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'> // testView 内部实现
+</span><span class='line'>@implementation testView
+</span><span class='line'>
+</span><span class='line'>- (instancetype)initWithFrame:(CGRect)frame{
+</span><span class='line'>if (self = [super initWithFrame:frame]) {
+</span><span class='line'>    
+</span><span class='line'>    _label = [[UILabel alloc] init];
+</span><span class='line'>    _label.backgroundColor = [UIColor redColor];
+</span><span class='line'>    [self addSubview:_label];
+</span><span class='line'>    
+</span><span class='line'>    _btn = [[UIButton alloc] init];
+</span><span class='line'>    [_btn setBackgroundColor:[UIColor yellowColor]];
+</span><span class='line'>    [_btn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+</span><span class='line'>    [self addSubview:_btn];
+</span><span class='line'>    
+</span><span class='line'>    _imageView = [[UIImageView alloc] init];
+</span><span class='line'>    [_imageView setBackgroundColor:[UIColor purpleColor]];
+</span><span class='line'>    _imageView.userInteractionEnabled = YES;
+</span><span class='line'>    [self addSubview:_imageView];
+</span><span class='line'>    
+</span><span class='line'>    UITapGestureRecognizer *tapges= [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTapped)];
+</span><span class='line'>    [_imageView addGestureRecognizer:tapges];
+</span><span class='line'>    
+</span><span class='line'>    _kbv = [[keyboardView alloc] init];
+</span><span class='line'>    _kbv.backgroundColor = [UIColor darkGrayColor];
+</span><span class='line'>    [self addSubview:_kbv];
+</span><span class='line'>    
+</span><span class='line'>    self.backgroundColor = [UIColor blueColor];
+</span><span class='line'>}
+</span><span class='line'>return self;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>- (void)imageTapped{
+</span><span class='line'>NSLog(@"--method = %s--current thread:%@",__func__,[NSThread currentThread]);
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>// 这个方法返回imageView
+</span><span class='line'>- (UIView *)hitTest:(CGPoint)point w- ithEvent:(UIEvent *)event{
+</span><span class='line'>NSLog(@"--method = %s--current thread:%@",__func__,[NSThread currentThread]);
+</span><span class='line'>return _imageView;
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>打印输出：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2016-05-17 22:09:06.793 AutoTest[2527:707374] --method = -[testView hitTest:withEvent:]--current thread:&lt;NSThread: 0x13560bf50&gt;{number = 1, name = main}
+</span><span class='line'>2016-05-17 22:09:06.794 AutoTest[2527:707374] --method = -[testView hitTest:withEvent:]--current thread:&lt;NSThread: 0x13560bf50&gt;{number = 1, name = main}
+</span><span class='line'>2016-05-17 22:09:10.615 AutoTest[2527:707374] --method = -[testView imageTapped]--current thread:&lt;NSThread: 0x13560bf50&gt;{number = 1, name = main}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从打印结果可以看到行了 <code>hitTest</code>方法执行了两边，然后还是执行了<code>imageView</code>的点击事件。至于为什么会执行两边<code>hitTest</code>方法，还没弄明白原因。</p>
+
 <h2>CALayer</h2>
 
 <blockquote><p><a href="http://xiongzenghuidegithub.github.io/blog/2015/08/18/layerxue-xi-zong-jie/">CALayer总结</a>
