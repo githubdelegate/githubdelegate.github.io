@@ -3,6 +3,42 @@
   
     
     <entry>
+      <title><![CDATA[mac ffmpeg 开发环境设置]]></title>
+      <url>/2017/08/03/mac-ffmpeg-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/</url>
+      <content type="html"><![CDATA[<h1 id="mac-ffmpeg-开发环境设置"><a href="#mac-ffmpeg-开发环境设置" class="headerlink" title="mac-ffmpeg-开发环境设置"></a>mac-ffmpeg-开发环境设置</h1><p>#2017/ffmpeg#</p>
+<ol>
+<li>Mac 上安装FFmpeg<br>最简单的办法：<code>brew install ffmpeg</code></li>
+</ol>
+<p>安装完成后 执行<code>ffmpeg</code><br>[image:9E5F4C3E-BB3A-4021-9977-7E1E5C8CAED1-602-00002577A16B4DCD/C6E830EE-026A-4022-AF43-17285995FBC4.png]</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fi6rgott4jj30hc088dh6.jpg" alt=""></p>
+<p>代表安装好了。<br>安装完成后可以在<code>/usr/local/Cellar/ffmpeg/3.3.3/lib</code> 找到动态库文件。<br>[image:D5EC1DAC-4F30-48A5-AC39-EF05F542B360-602-000025A461E14647/66DA3B7E-6CDA-400B-96B3-E2C22A001F41.png]<br><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fi6rhflva5j30lk05a0tw.jpg" alt=""></p>
+<ol>
+<li>使用Xcode 创建一个command-lIne 工程</li>
+</ol>
+<ul>
+<li><p>导入ffmpeg动态库：添加第三方库，选择<code>/usr/local/Cellar/ffmpeg/3.3.3/lib</code> 路径下的动态库文件。</p>
+</li>
+<li><p>设置Header search path<br>设置为<code>/usr/local/include</code> 递归查找<br>[image:C9D8383C-66B6-4448-8DB8-7D27D1C33336-602-000025CC3D567C86/5BD566B9-92F8-4CAF-BC76-FD5D4FD3137B.png]</p>
+</li>
+</ul>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fi6rhjv0m1j31h40gwdjx.jpg" alt=""></p>
+<ol>
+<li>测试一下</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">int main(int argc, const char * argv[]) &#123;</div><div class="line">// insert code here...</div><div class="line"></div><div class="line">avcodec_register_all();</div><div class="line"></div><div class="line">printf(&quot;Hello, World!\n&quot;);</div><div class="line">return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>完美运行。</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> FFmpeg </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Java Collections]]></title>
       <url>/2017/08/01/Java-Collections/</url>
       <content type="html"><![CDATA[<h2 id="Hash-Set"><a href="#Hash-Set" class="headerlink" title="Hash Set"></a>Hash Set</h2><ul>
