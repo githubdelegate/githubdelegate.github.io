@@ -3,6 +3,18 @@
   
     
     <entry>
+      <title><![CDATA[H.264 原理知识]]></title>
+      <url>/2017/08/14/H-264-%E5%8E%9F%E7%90%86%E7%9F%A5%E8%AF%86/</url>
+      <content type="html"><![CDATA[<p>今天 学习一下h.264 编码 原理 记录一下。</p>
+<blockquote>
+<p> <a href="http://simplecodesky.com/2016/11/15/深入浅出理解视频编码H264结构/" target="_blank" rel="external">深入浅出理解视频编码H264结构</a> 讲解 h.264的过程原理。<br><a href="http://www.samirchen.com/video-concept/" target="_blank" rel="external">关于视频的一些概念</a> 这个主要讲解一些基本的概念。<br><a href="http://silencewt.github.io/2015/04/29/YUV和RGB格式分析/" target="_blank" rel="external">YUV和RGB格式分析</a>  这个主要讲YUV 原理很透彻。</p>
+</blockquote>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[mac ffmpeg 开发环境设置]]></title>
       <url>/2017/08/03/mac-ffmpeg-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/</url>
       <content type="html"><![CDATA[<h1 id="mac-ffmpeg-开发环境设置"><a href="#mac-ffmpeg-开发环境设置" class="headerlink" title="mac-ffmpeg-开发环境设置"></a>mac-ffmpeg-开发环境设置</h1><p>#2017/ffmpeg#</p>
