@@ -15,22 +15,21 @@
 
 
 
-<meta name="description" content="mac-ffmpeg-开发环境设置#2017/ffmpeg#  Mac 上安装FFmpeg最简单的办法：brew install ffmpeg  安装完成后 执行ffmpeg[image:9E5F4C3E-BB3A-4021-9977-7E1E5C8CAED1-602-00002577A16B4DCD/C6E830EE-026A-4022-AF43-17285995FBC4.png]  代表安装好">
-<meta name="keywords" content="FFmpeg">
+<meta name="description" content="Scale  Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。 scale=w=200:h=100转到200*100scale=200:100scale=qcif 变成1/4  format把输入文件转换到指定的像素格式。ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4把一个420">
+<meta name="keywords" content="ffmpeg">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mac ffmpeg 开发环境设置">
-<meta property="og:url" content="http://githubdelegate.github.io/2017/08/03/mac-ffmpeg-开发环境设置/index.html">
+<meta property="og:title" content="ffmpeg avfilter">
+<meta property="og:url" content="http://githubdelegate.github.io/2017/09/19/ffmpeg-avfilter/index.html">
 <meta property="og:site_name" content="Nigo">
-<meta property="og:description" content="mac-ffmpeg-开发环境设置#2017/ffmpeg#  Mac 上安装FFmpeg最简单的办法：brew install ffmpeg  安装完成后 执行ffmpeg[image:9E5F4C3E-BB3A-4021-9977-7E1E5C8CAED1-602-00002577A16B4DCD/C6E830EE-026A-4022-AF43-17285995FBC4.png]  代表安装好">
+<meta property="og:description" content="Scale  Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。 scale=w=200:h=100转到200*100scale=200:100scale=qcif 变成1/4  format把输入文件转换到指定的像素格式。ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4把一个420">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fi6rgott4jj30hc088dh6.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fi6rhflva5j30lk05a0tw.jpg">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fi6rhjv0m1j31h40gwdjx.jpg">
-<meta property="og:updated_time" content="2017-08-03T11:33:07.000Z">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mc7uraj30o819qn80.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mys9nkj31kw0zmqev.jpg">
+<meta property="og:updated_time" content="2017-09-19T11:32:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mac ffmpeg 开发环境设置">
-<meta name="twitter:description" content="mac-ffmpeg-开发环境设置#2017/ffmpeg#  Mac 上安装FFmpeg最简单的办法：brew install ffmpeg  安装完成后 执行ffmpeg[image:9E5F4C3E-BB3A-4021-9977-7E1E5C8CAED1-602-00002577A16B4DCD/C6E830EE-026A-4022-AF43-17285995FBC4.png]  代表安装好">
-<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fi6rgott4jj30hc088dh6.jpg">
+<meta name="twitter:title" content="ffmpeg avfilter">
+<meta name="twitter:description" content="Scale  Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。 scale=w=200:h=100转到200*100scale=200:100scale=qcif 变成1/4  format把输入文件转换到指定的像素格式。ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4把一个420">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mc7uraj30o819qn80.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -62,7 +61,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>mac ffmpeg 开发环境设置 | Nigo</title>
+<title>ffmpeg avfilter | Nigo</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -277,11 +276,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-mac-ffmpeg-开发环境设置" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-ffmpeg-avfilter" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/08/03/mac-ffmpeg-开发环境设置/" class="article-date">
-      <time datetime="2017-08-03T11:19:20.000Z" itemprop="datePublished">2017-08-03</time>
+      <a href="/2017/09/19/ffmpeg-avfilter/" class="article-date">
+      <time datetime="2017-09-19T11:29:12.000Z" itemprop="datePublished">2017-09-19</time>
 </a>
 
 
@@ -296,7 +295,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      mac ffmpeg 开发环境设置
+      ffmpeg avfilter
     </h1>
   
 
@@ -307,7 +306,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FFmpeg/">FFmpeg</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -317,28 +316,56 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="mac-ffmpeg-开发环境设置"><a href="#mac-ffmpeg-开发环境设置" class="headerlink" title="mac-ffmpeg-开发环境设置"></a>mac-ffmpeg-开发环境设置</h1><p>#2017/ffmpeg#</p>
-<ol>
-<li>Mac 上安装FFmpeg<br>最简单的办法：<code>brew install ffmpeg</code></li>
+        <ol>
+<li>Scale</li>
 </ol>
-<p>安装完成后 执行<code>ffmpeg</code><br>[image:9E5F4C3E-BB3A-4021-9977-7E1E5C8CAED1-602-00002577A16B4DCD/C6E830EE-026A-4022-AF43-17285995FBC4.png]</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fi6rgott4jj30hc088dh6.jpg" alt=""></p>
-<p>代表安装好了。<br>安装完成后可以在<code>/usr/local/Cellar/ffmpeg/3.3.3/lib</code> 找到动态库文件。<br>[image:D5EC1DAC-4F30-48A5-AC39-EF05F542B360-602-000025A461E14647/66DA3B7E-6CDA-400B-96B3-E2C22A001F41.png]<br><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fi6rhflva5j30lk05a0tw.jpg" alt=""></p>
+<p>Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。</p>
+<p><code>scale=w=200:h=100</code>转到200*100<br><code>scale=200:100</code><br><code>scale=qcif</code> 变成1/4</p>
 <ol>
-<li>使用Xcode 创建一个command-lIne 工程</li>
+<li><p>format<br>把输入文件转换到指定的像素格式。<br><code>ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4</code><br>把一个420p转换到444p.</p>
+</li>
+<li><p>movie， amovie</p>
+</li>
+<li><p>setpts ,asetpts<br>修改输入frame的PTS。</p>
+</li>
+<li><p>crop<br>将输入视频剪切到指定的宽高。</p>
+</li>
 </ol>
 <ul>
-<li><p>导入ffmpeg动态库：添加第三方库，选择<code>/usr/local/Cellar/ffmpeg/3.3.3/lib</code> 路径下的动态库文件。</p>
+<li>w,h,out_w,out_h 输出视频的宽高。默认是iw,ih.只在一开始的时候计算一次。</li>
+<li>x,y : 从输入视频的那个位置开始剪切。每帧都会计算一次。</li>
+<li>keep_aspect:是否保持宽高比不变。</li>
+<li>exact:是否使用精确的剪切采样，默认不开启就是使用近视值。<br><code>ffmpeg -i xxx.mp4 -vf crop=100:100:12:34 out11.mp4</code></li>
+</ul>
+<p><code>ffmpeg -i test.mp4 -vf &quot;crop=in_w/2:in_h/2:(in_w-out_w)/2+((in_w-out_w)/2)*sin(t*10):(in_h-out_h)/2 +((in_h-out_h)/2)*sin(t*13)&quot; out12.mp4</code> 这个输出的视频会有摄像头晃动的效果。</p>
+<ol>
+<li>slip<br>把输入分成多个相同的输出。需要有个指定输出数量的的参数。默认是2.<br><code>[in] split [out0][out1]</code> .</li>
+</ol>
+<p><code>ffmpeg -i test.mp4 -filter_complex asplit=5 11.mp4</code>  这条命令输出的视频包含5个音频流。</p>
+<ol>
+<li><p>hflip<br>水平翻转输入视频。<br><code>ffmpeg -i test.mp4 -vf hflip 11.mp4</code> 这个很像录制时候的镜像功能。</p>
 </li>
-<li><p>设置Header search path<br>设置为<code>/usr/local/include</code> 递归查找<br>[image:C9D8383C-66B6-4448-8DB8-7D27D1C33336-602-000025CC3D567C86/5BD566B9-92F8-4CAF-BC76-FD5D4FD3137B.png]</p>
+<li><p>pad<br>对输入的图片添加边框，并把原来的输入放到x,y参数的位置。</p>
+</li>
+</ol>
+<p><code>ffmpeg -i test.mp4 -vf &quot;pad=2*iw:2*ih:ow-iw:oh-ih&quot; 11.mp4</code> 如下图，把原来视频放大两倍，把输入视频放到右下角。屌屌的。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mc7uraj30o819qn80.jpg" alt=""></p>
+<ol>
+<li>overlay<br>把一个视频放到另一个上。有两个输入一个输出。第一个输入作为main，第二个覆盖到上面。</li>
+</ol>
+<ul>
+<li>x,y : 设置上面视频的坐标。</li>
+<li>eof_action:第二个视频结束的时候，如何处理。repeat 重复最后一帧;endall 结束全部；pass main视频继续。</li>
+<li>shortest: 当最短的输入流结束的时候强制结束输出。默认0.</li>
+<li>format: 设置输出视频的格式。yuv420,yuv422,yuv444,rgb,grgb,auto,默认是yuv420</li>
+<li><p>repeatlasr:强制绘制overlay最后一帧直到结束。默认1.</p>
+</li>
+<li><p>加水印<br><code>ffmpeg -i input -i logo -filter_complex &#39;overlay=10:main_h-overlay_h-10&#39; output</code></p>
+</li>
+<li><p>加两个水印<br><code>ffmpeg -i input -i logo1 -i logo2 -filter_complex &#39;overlay=x=10:y=H-h-10,overlay=x=W-w-10:y=H-h-10&#39; output</code></p>
 </li>
 </ul>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fi6rhjv0m1j31h40gwdjx.jpg" alt=""></p>
-<ol>
-<li>测试一下</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">int main(int argc, const char * argv[]) &#123;</div><div class="line">// insert code here...</div><div class="line"></div><div class="line">avcodec_register_all();</div><div class="line"></div><div class="line">printf(&quot;Hello, World!\n&quot;);</div><div class="line">return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>完美运行。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mys9nkj31kw0zmqev.jpg" alt=""></p>
 
       
     </div>
@@ -453,13 +480,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/08/03/mac-ffmpeg-开发环境设置/">mac ffmpeg 开发环境设置</a></p>
+        <p><span>本文标题:</span><a href="/2017/09/19/ffmpeg-avfilter/">ffmpeg avfilter</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Nigo</a></p>
-        <p><span>发布时间:</span>2017-08-03, 19:19:20</p>
-        <p><span>最后更新:</span>2017-08-03, 19:33:07</p>
+        <p><span>发布时间:</span>2017-09-19, 19:29:12</p>
+        <p><span>最后更新:</span>2017-09-19, 19:32:05</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/08/03/mac-ffmpeg-开发环境设置/" title="mac ffmpeg 开发环境设置">http://githubdelegate.github.io/2017/08/03/mac-ffmpeg-开发环境设置/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://githubdelegate.github.io/2017/08/03/mac-ffmpeg-开发环境设置/　　作者: Nigo" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/19/ffmpeg-avfilter/" title="ffmpeg avfilter">http://githubdelegate.github.io/2017/09/19/ffmpeg-avfilter/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://githubdelegate.github.io/2017/09/19/ffmpeg-avfilter/　　作者: Nigo" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -471,16 +498,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/08/14/H-264-原理知识/">
-                    H.264 原理知识
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/08/01/Java-Collections/">
-                    Java Collections
+                <a href="/2017/08/14/H-264-原理知识/">
+                    H.264 原理知识
                 </a>
             </div>
         
@@ -492,7 +513,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mac-ffmpeg-开发环境设置"><span class="toc-number">1.</span> <span class="toc-text">mac-ffmpeg-开发环境设置</span></a></li></ol>
+            
         
     </div>
     <style>
@@ -528,7 +549,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"mac ffmpeg 开发环境设置　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"ffmpeg avfilter　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -548,15 +569,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/08/14/H-264-原理知识/" title="上一篇: H.264 原理知识">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/08/01/Java-Collections/" title="下一篇: Java Collections">
+            <a href="/2017/08/14/H-264-原理知识/" title="下一篇: H.264 原理知识">
                 <i class="fa fa-angle-right"></i>
             </a>
         

@@ -3,6 +3,70 @@
   
     
     <entry>
+      <title><![CDATA[ffmpeg avfilter]]></title>
+      <url>/2017/09/19/ffmpeg-avfilter/</url>
+      <content type="html"><![CDATA[<ol>
+<li>Scale</li>
+</ol>
+<p>Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。</p>
+<p><code>scale=w=200:h=100</code>转到200*100<br><code>scale=200:100</code><br><code>scale=qcif</code> 变成1/4</p>
+<ol>
+<li><p>format<br>把输入文件转换到指定的像素格式。<br><code>ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4</code><br>把一个420p转换到444p.</p>
+</li>
+<li><p>movie， amovie</p>
+</li>
+<li><p>setpts ,asetpts<br>修改输入frame的PTS。</p>
+</li>
+<li><p>crop<br>将输入视频剪切到指定的宽高。</p>
+</li>
+</ol>
+<ul>
+<li>w,h,out_w,out_h 输出视频的宽高。默认是iw,ih.只在一开始的时候计算一次。</li>
+<li>x,y : 从输入视频的那个位置开始剪切。每帧都会计算一次。</li>
+<li>keep_aspect:是否保持宽高比不变。</li>
+<li>exact:是否使用精确的剪切采样，默认不开启就是使用近视值。<br><code>ffmpeg -i xxx.mp4 -vf crop=100:100:12:34 out11.mp4</code></li>
+</ul>
+<p><code>ffmpeg -i test.mp4 -vf &quot;crop=in_w/2:in_h/2:(in_w-out_w)/2+((in_w-out_w)/2)*sin(t*10):(in_h-out_h)/2 +((in_h-out_h)/2)*sin(t*13)&quot; out12.mp4</code> 这个输出的视频会有摄像头晃动的效果。</p>
+<ol>
+<li>slip<br>把输入分成多个相同的输出。需要有个指定输出数量的的参数。默认是2.<br><code>[in] split [out0][out1]</code> .</li>
+</ol>
+<p><code>ffmpeg -i test.mp4 -filter_complex asplit=5 11.mp4</code>  这条命令输出的视频包含5个音频流。</p>
+<ol>
+<li><p>hflip<br>水平翻转输入视频。<br><code>ffmpeg -i test.mp4 -vf hflip 11.mp4</code> 这个很像录制时候的镜像功能。</p>
+</li>
+<li><p>pad<br>对输入的图片添加边框，并把原来的输入放到x,y参数的位置。</p>
+</li>
+</ol>
+<p><code>ffmpeg -i test.mp4 -vf &quot;pad=2*iw:2*ih:ow-iw:oh-ih&quot; 11.mp4</code> 如下图，把原来视频放大两倍，把输入视频放到右下角。屌屌的。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mc7uraj30o819qn80.jpg" alt=""></p>
+<ol>
+<li>overlay<br>把一个视频放到另一个上。有两个输入一个输出。第一个输入作为main，第二个覆盖到上面。</li>
+</ol>
+<ul>
+<li>x,y : 设置上面视频的坐标。</li>
+<li>eof_action:第二个视频结束的时候，如何处理。repeat 重复最后一帧;endall 结束全部；pass main视频继续。</li>
+<li>shortest: 当最短的输入流结束的时候强制结束输出。默认0.</li>
+<li>format: 设置输出视频的格式。yuv420,yuv422,yuv444,rgb,grgb,auto,默认是yuv420</li>
+<li><p>repeatlasr:强制绘制overlay最后一帧直到结束。默认1.</p>
+</li>
+<li><p>加水印<br><code>ffmpeg -i input -i logo -filter_complex &#39;overlay=10:main_h-overlay_h-10&#39; output</code></p>
+</li>
+<li><p>加两个水印<br><code>ffmpeg -i input -i logo1 -i logo2 -filter_complex &#39;overlay=x=10:y=H-h-10,overlay=x=W-w-10:y=H-h-10&#39; output</code></p>
+</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mys9nkj31kw0zmqev.jpg" alt=""></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> ffmpeg </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[H.264 原理知识]]></title>
       <url>/2017/08/14/H-264-%E5%8E%9F%E7%90%86%E7%9F%A5%E8%AF%86/</url>
       <content type="html"><![CDATA[<p>今天 学习一下h.264 编码 原理 记录一下。</p>
