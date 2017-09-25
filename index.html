@@ -278,6 +278,105 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-VideoToolBox-压缩" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/25/VideoToolBox-压缩/" class="article-date">
+      <time datetime="2017-09-25T09:52:41.000Z" itemprop="datePublished">2017-09-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/25/VideoToolBox-压缩/">VideoToolBox 压缩</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="VTCompressionSession"><a href="#VTCompressionSession" class="headerlink" title="VTCompressionSession"></a>VTCompressionSession</h2><p>管理输入视频数据压缩的会话。<br>压缩会话支持一系列视频frame的压缩。流程如下：</p>
+<ul>
+<li><code>VTCompressionSessionCreate</code> 创建session</li>
+<li>使用<code>VTSessionSetProperty</code> <code>VTSessionSetProperties</code> 配置sessions属性。</li>
+<li>使用<code>VTCompressionSessionEncodeFrame</code>编码视频frames,在<code>VTCompressionOutputCallback</code> 里接收压缩的视频frames.</li>
+<li><code>VTComressionSessionCompleteFrames</code> 表示没有视频数据输入了。</li>
+<li><code>VTCompressionSessionInvalidate</code> 结束session，释放内存。</li>
+</ul>
+<hr>
+<ul>
+<li><p>创建session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionCreate</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置session</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Compression Properties</div><div class="line">Properties used to configure a VideoToolbox compression session.</div></pre></td></tr></table></figure>
+<ul>
+<li><p>编码frame</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionPrepareToEncodeFrames</div><div class="line">编码器在开始编码前进行资源分配，可选</div><div class="line"></div><div class="line">VTCompressionSessionEncodeFrame</div><div class="line">给session 提供frame</div><div class="line"></div><div class="line">VTCompressionSessionEncodeFrameWithOutputHandler</div><div class="line">给sesion 提供frame，压缩完成后调用callback。</div><div class="line"></div><div class="line">VTCompressionSessionCompleteFrames</div><div class="line">结束压缩session。</div></pre></td></tr></table></figure>
+</li>
+<li><p>检查session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionGetPixelBufferPool</div><div class="line">返回一个为压缩session提供理想资源pixel buffer的容器池。</div><div class="line"></div><div class="line">VTCompressionSessionGetTypeID</div><div class="line">Retrieves the Core Foundation type identifier for the compression session.</div></pre></td></tr></table></figure>
+</li>
+<li><p>多通道压缩</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionBeginPass</div><div class="line">标记一个压缩通道的开始</div><div class="line"></div><div class="line">VTCompressionSessionEndPass</div><div class="line">Marks the end of a compression pass.</div><div class="line"></div><div class="line">VTCompressionSessionGetTimeRangesForNextPass</div><div class="line">获取下一个通道的时间范围。</div></pre></td></tr></table></figure>
+</li>
+<li><p>结束Session</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionInvalidate</div><div class="line">Tears down a compression session.</div></pre></td></tr></table></figure>
+<ul>
+<li>数据类型</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionRef</div><div class="line">A reference to a VideoToolbox compression session.</div><div class="line">VTCompressionOutputCallback</div><div class="line">Prototype for the callback invoked when frame compression is complete.</div><div class="line">VTCompressionOutputHandler</div><div class="line">Prototype for the block invoked when frame compression is complete.</div></pre></td></tr></table></figure>
+<ul>
+<li>枚举<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionOptionFlags</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">VTEncodeInfoFlags</div><div class="line">kVTEncodeInfo_Asynchronous</div><div class="line">异步编码</div><div class="line">kVTEncodeInfo_FrameDropped</div><div class="line">编码的时候一个frame 被丢弃了。</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="article-content">
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-ffmpeg-transcoding" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
