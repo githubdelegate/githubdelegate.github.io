@@ -15,17 +15,18 @@
 
 
 
-<meta name="description" content="#  title: ‘Opengles学习2-Vextex attributes,Vextex array,VBO’date: 2017-10-11 19:20:10 tags: OpenglES1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的">
+<meta name="description" content="1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的数据都一样，比如color都是白色;相应的另一种就是有不一样的值,所有需要用array保存每个顶点的数据。 1.1  const vextex attribute设置const attribute">
+<meta name="keywords" content="OpenglES">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Nigo">
+<meta property="og:title" content="Opengles学习2-Vextex attributes,Vextex array,VBO">
 <meta property="og:url" content="http://githubdelegate.github.io/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/index.html">
 <meta property="og:site_name" content="Nigo">
-<meta property="og:description" content="#  title: ‘Opengles学习2-Vextex attributes,Vextex array,VBO’date: 2017-10-11 19:20:10 tags: OpenglES1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的">
+<meta property="og:description" content="1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的数据都一样，比如color都是白色;相应的另一种就是有不一样的值,所有需要用array保存每个顶点的数据。 1.1  const vextex attribute设置const attribute">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-11T12:21:37.346Z">
+<meta property="og:updated_time" content="2017-10-11T13:22:33.903Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Nigo">
-<meta name="twitter:description" content="#  title: ‘Opengles学习2-Vextex attributes,Vextex array,VBO’date: 2017-10-11 19:20:10 tags: OpenglES1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的">
+<meta name="twitter:title" content="Opengles学习2-Vextex attributes,Vextex array,VBO">
+<meta name="twitter:description" content="1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的数据都一样，比如color都是白色;相应的另一种就是有不一样的值,所有需要用array保存每个顶点的数据。 1.1  const vextex attribute设置const attribute">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -57,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Nigo</title>
+<title>Opengles学习2-Vextex attributes,Vextex array,VBO | Nigo</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -276,7 +277,7 @@
   
     <div class="article-meta">
       <a href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/" class="article-date">
-      <time datetime="2017-10-11T11:20:10.163Z" itemprop="datePublished">2017-10-11</time>
+      <time datetime="2017-10-11T11:20:10.000Z" itemprop="datePublished">2017-10-11</time>
 </a>
 
 
@@ -287,13 +288,32 @@
       <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Opengles学习2-Vextex attributes,Vextex array,VBO
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenglES/">OpenglES</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>#</p>
-<hr>
-<p>title: ‘Opengles学习2-Vextex attributes,Vextex array,VBO’<br>date: 2017-10-11 19:20:10</p>
-<h2 id="tags-OpenglES"><a href="#tags-OpenglES" class="headerlink" title="tags: OpenglES"></a>tags: OpenglES</h2><h2 id="1-Vextex-attributes"><a href="#1-Vextex-attributes" class="headerlink" title="1. Vextex attributes"></a>1. Vextex attributes</h2><p>一个顶点基本上有postion,color，normal,texture coordinate等数据。<br> vextex attribute 分两种: 一种是所有顶点的数据都一样，比如color都是白色;相应的另一种就是有不一样的值,所有需要用array保存每个顶点的数据。</p>
+        <h2 id="1-Vextex-attributes"><a href="#1-Vextex-attributes" class="headerlink" title="1. Vextex attributes"></a>1. Vextex attributes</h2><p>一个顶点基本上有postion,color，normal,texture coordinate等数据。<br> vextex attribute 分两种: 一种是所有顶点的数据都一样，比如color都是白色;相应的另一种就是有不一样的值,所有需要用array保存每个顶点的数据。</p>
 <h3 id="1-1-const-vextex-attribute"><a href="#1-1-const-vextex-attribute" class="headerlink" title="1.1  const vextex attribute"></a>1.1  const vextex attribute</h3><p>设置const attribute<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">void glVertexAttrib1f(GLuint index, GLfloat x); void glVertexAttrib2f(GLuint index, GLfloat x, GLfloat y); void glVertexAttrib3f(GLuint index, GLfloat x, GLfloat y, GLfloat z);</div><div class="line"></div><div class="line">stride : 代表指针位置幅度，the components of vertex attribute specified by size are stored sequentially for each vertex. stride specifies the delta between data for vertex index I and vertex (I + 1). If stride is 0, attribute data for all vertices are stored sequentially. If stride is &gt; 0, then we use the stride value as the pitch to get vertex data for next index</div></pre></td></tr></table></figure></p>
 <h3 id="1-2-vertex-arrays"><a href="#1-2-vertex-arrays" class="headerlink" title="1.2 vertex  arrays"></a>1.2 vertex  arrays</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *ptr)</div></pre></td></tr></table></figure>
 <p>保存顶点数据数组的两种方式：</p>
@@ -311,6 +331,19 @@
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 一个包含全部顶点position属性的数组</span></div><div class="line"><span class="keyword">float</span> *position = <span class="built_in">malloc</span>(numVertices * VERTEX_POS_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"><span class="comment">// 一个包含全部顶点normal属性的数组</span></div><div class="line"><span class="keyword">float</span> *normal = <span class="built_in">malloc</span>(numVertices * VERTEX_NORMAL_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"><span class="comment">// 一个包含全部顶点texcoord0属性的数组</span></div><div class="line"><span class="keyword">float</span> *texcoord0 = <span class="built_in">malloc</span>(numVertices * VERTEX_TEXCOORD0_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"><span class="comment">// 一个包含全部顶点texcoord1属性的数组</span></div><div class="line"><span class="keyword">float</span> *texcoord1 = <span class="built_in">malloc</span>(numVertices * VERTEX_TEXCOORD1_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"></div><div class="line"><span class="comment">// position is vertex attribute 0</span></div><div class="line"> glVertexAttribPointer(VERTEX_POS_INDX, VERTEX_POS_SIZE,GL_FLOAT, GL_FALSE, VERTEX_POS_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), position);</div><div class="line"></div><div class="line"><span class="comment">// normal is vertex attribute 1</span></div><div class="line">glVertexAttribPointer(VERTEX_NORMAL_INDX, VERTEX_NORMAL_SIZE,GL_FLOAT, GL_FALSE, VERTEX_NORMAL_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), normal);</div><div class="line"></div><div class="line"><span class="comment">// texture coordinate 0 is vertex attribute 2</span></div><div class="line">glVertexAttribPointer(VERTEX_TEXCOORD0_INDX, VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, VERTEX_TEXCOORD0_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), texcoord0);</div><div class="line"></div><div class="line"><span class="comment">// texture coordinate 1 is vertex attribute 3</span></div><div class="line">glVertexAttribPointer(VERTEX_TEXCOORD1_INDX, VERTEX_TEXCOORD1_SIZE, GL_FLOAT, GL_FALSE, VERTEX_TEXCOORD1_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), texcoord1);</div></pre></td></tr></table></figure>
 <h3 id="1-3-选择使用const-vextex-还是vextex-array"><a href="#1-3-选择使用const-vextex-还是vextex-array" class="headerlink" title="1.3 选择使用const vextex 还是vextex array"></a>1.3 选择使用const vextex 还是vextex array</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">void glEnableVertexAttribArray(GLuint index);</div><div class="line">void glDisableVertexAttribArray(GLuint index);</div></pre></td></tr></table></figure>
+<h2 id="2-VBO"><a href="#2-VBO" class="headerlink" title="2. VBO"></a>2. VBO</h2><p>为什么需要vbo,因为vextex data，vextex arrays 保存在应用内存中，当绘制的时候需要拷贝到GPU内存中，影响性能。<br>所以如果能把vextex data 直接放大GPU内存中就好了。</p>
+<h3 id="2-1-那什么是VBO"><a href="#2-1-那什么是VBO" class="headerlink" title="2.1 那什么是VBO?"></a>2.1 那什么是VBO?</h3><p>Opengles 中有两种类型的buffer object：</p>
+<ul>
+<li>array buffer object</li>
+</ul>
+<p><code>GL_ARRAY_BUFFER</code> 用来保存vextex data.</p>
+<ul>
+<li>element buffer object</li>
+</ul>
+<p><code>GL_ELEMENT_ARRAY_BUFFER</code>用来保存 图元的indicts.</p>
+<h3 id="2-2-如何使用VBO"><a href="#2-2-如何使用VBO" class="headerlink" title="2.2 如何使用VBO?"></a>2.2 如何使用VBO?</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 创建</span></div><div class="line">glGenBuffers(<span class="number">2</span>, vboIds);</div><div class="line"><span class="comment">//  设置为当前的 array buffer</span></div><div class="line">glBindBuffer(GL_ARRAY_BUFFER, vboIds[<span class="number">0</span>]);</div><div class="line">glBufferData(GL_ARRAY_BUFFER, numVertices * <span class="keyword">sizeof</span>(<span class="keyword">vertex_t</span>), vertexBuffer, GL_STATIC_DRAW);</div><div class="line"><span class="comment">// bind buffer object for element indices</span></div><div class="line">glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[<span class="number">1</span>]);</div><div class="line">glBufferData(GL_ELEMENT_ARRAY_BUFFER,numIndices * <span class="keyword">sizeof</span>(GLushort),indices, GL_STATIC_DRAW);</div></pre></td></tr></table></figure>
+<p>看一下代码 绘制图元 不用VBO和使用VBOde 区别</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 每个属性的大小(几个float 组成)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_POS_SIZE      3</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_NORMAL_SIZE  3</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_TEXCOORD0_SIZE  2</span></div><div class="line"><span class="comment">// 属性的下标</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_POS_INDX  0</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_NORMAL_INDX 1</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_TEXCOORD0_INDX 2</span></div><div class="line"></div><div class="line"> <span class="function"><span class="keyword">void</span> <span class="title">drawPrimitiveWithoutVBOs</span><span class="params">(GLfloat *vertices, GLint vtxStride, GLint numIndices, GLushort *indices)</span> </span>&#123;</div><div class="line">   GLfloat *vtxBuf = vertices;</div><div class="line">   glBindBuffer(GL_ARRAY_BUFFER, <span class="number">0</span>);</div><div class="line">   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, <span class="number">0</span>);</div><div class="line"></div><div class="line">   glEnableVertexAttribArray(VERTEX_POS_INDX);</div><div class="line">   glEnableVertexAttribArray(VERTEX_NORMAL_INDX);</div><div class="line">   glEnableVertexAttribArray&#123;VERTEX_TEXCOORD0_INDX);</div><div class="line"></div><div class="line">   glVertexAttribPointer(VERTEX_POS_INDX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, vtxStride, vtxBuf);</div><div class="line">   vtxBuf += VERTEX_POS_SIZE;</div><div class="line">   glVertexAttribPointer(VERTEX_NORMAL_INDX, VERTEX_NORMAL_SIZE, GL_FLOAT, GL_FALSE, vtxStride, vtxBuf);</div><div class="line">   vtxBuf += VERTEX_NORMAL_SIZE;</div><div class="line">   glVertexAttribPointer(VERTEX_TEXCOORD0_INDX,VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, vtxStride, vtxBuf);</div><div class="line"></div><div class="line">   glBindAttribLocation(program, VERTEX_POS_INDX, <span class="string">"v_position"</span>);</div><div class="line">   glBindAttribLocation(program, VERTEX_NORMAL_INDX, <span class="string">"v_normal"</span>);</div><div class="line">   glBindAttribLocation(program, VERTEX_TEXCOORD0_INDX, <span class="string">"v_texcoord"</span>);</div><div class="line"></div><div class="line">   glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, indices);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"></div><div class="line"> <span class="function"><span class="keyword">void</span> <span class="title">drawPrimitiveWithVBOs</span><span class="params">(GLint numVertices, GLfloat *vtxBuf, GLint vtxStride, GLint numIndices, GLushort *indices)</span></span></div><div class="line"><span class="function"> </span>&#123;</div><div class="line">   GLuint offset = <span class="number">0</span>;</div><div class="line">   GLuint vboIds[<span class="number">2</span>];<span class="comment">// vboIds[0] – used to store vertex attribute data // vboIds[1] – used to store element indices glGenBuffers(2, vboIds);</span></div><div class="line"></div><div class="line">   glBindBuffer(GL_ARRAY_BUFFER, vboIds[<span class="number">0</span>]);</div><div class="line">   glBufferData(GL_ARRAY_BUFFER, vtxStride * numVertices, vtxBuf, GL_STATIC_DRAW);</div><div class="line">   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[<span class="number">1</span>]);</div><div class="line"></div><div class="line">   glBufferData(GL_ELEMENT_ARRAY_BUFFER, <span class="keyword">sizeof</span>(GLushort) * numIndices, indices, GL_STATIC_DRAW);</div><div class="line"></div><div class="line">   glEnableVertexAttribArray(VERTEX_POS_INDX);</div><div class="line">   glEnableVertexAttribArray(VERTEX_NORMAL_INDX);</div><div class="line">   glEnableVertexAttribArray&#123;VERTEX_TEXCOORD0_INDX);</div><div class="line"></div><div class="line">     glVertexAttribPointer(VERTEX_POS_INDX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, vtxStride, (<span class="keyword">const</span> <span class="keyword">void</span>*)offset);</div><div class="line"></div><div class="line">     offset += VERTEX_POS_SIZE * <span class="keyword">sizeof</span>(GLfloat);</div><div class="line">     glVertexAttribPointer(VERTEX_NORMAL_INDX, VERTEX_NORMAL_SIZE, GL_FLOAT, GL_FALSE, vtxStride, (<span class="keyword">const</span> <span class="keyword">void</span>*)offset);</div><div class="line"></div><div class="line">     offset += VERTEX_NORMAL_SIZE * <span class="keyword">sizeof</span>(GLfloat);</div><div class="line">     glVertexAttribPointer(VERTEX_TEXCOORD0_INDX,VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, vtxStride, (<span class="keyword">const</span> <span class="keyword">void</span>*)offset);</div><div class="line"></div><div class="line"></div><div class="line">     glBindAttribLocation(program, VERTEX_POS_INDX, <span class="string">"v_position"</span>);</div><div class="line">     glBindAttribLocation(program, VERTEX_NORMAL_INDX, <span class="string">"v_normal"</span>);</div><div class="line">     glBindAttribLocation(program, VERTEX_TEXCOORD0_INDX, <span class="string">"v_texcoord"</span>);</div><div class="line"></div><div class="line">     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, <span class="number">0</span>);</div><div class="line"></div><div class="line">     glDeleteBuffers(<span class="number">2</span>, vboIds);</div><div class="line"></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -425,12 +458,12 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/"></a></p>
+        <p><span>本文标题:</span><a href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/">Opengles学习2-Vextex attributes,Vextex array,VBO</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Nigo</a></p>
         <p><span>发布时间:</span>2017-10-11, 19:20:10</p>
-        <p><span>最后更新:</span>2017-10-11, 20:21:37</p>
+        <p><span>最后更新:</span>2017-10-11, 21:22:33</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/" title="">http://githubdelegate.github.io/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/</a>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/" title="Opengles学习2-Vextex attributes,Vextex array,VBO">http://githubdelegate.github.io/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/</a>
             <span class="copy-path" data-clipboard-text="原文: http://githubdelegate.github.io/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/　　作者: Nigo" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -458,7 +491,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags-OpenglES"><span class="toc-number">1.</span> <span class="toc-text">tags: OpenglES</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Vextex-attributes"><span class="toc-number">2.</span> <span class="toc-text">1. Vextex attributes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-const-vextex-attribute"><span class="toc-number">2.1.</span> <span class="toc-text">1.1  const vextex attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-vertex-arrays"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 vertex  arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-选择使用const-vextex-还是vextex-array"><span class="toc-number">2.3.</span> <span class="toc-text">1.3 选择使用const vextex 还是vextex array</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Vextex-attributes"><span class="toc-number">1.</span> <span class="toc-text">1. Vextex attributes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-const-vextex-attribute"><span class="toc-number">1.1.</span> <span class="toc-text">1.1  const vextex attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-vertex-arrays"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 vertex  arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-选择使用const-vextex-还是vextex-array"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 选择使用const vextex 还是vextex array</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-VBO"><span class="toc-number">2.</span> <span class="toc-text">2. VBO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-那什么是VBO"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 那什么是VBO?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-如何使用VBO"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 如何使用VBO?</span></a></li></ol></li></ol>
         
     </div>
     <style>
@@ -494,7 +527,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"Opengles学习2-Vextex attributes,Vextex array,VBO　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -526,7 +559,7 @@
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/">Opengles学习2-Vextex-attributes-Vextex-array-VBO</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Opengl学习1-draw-line-on-ios/">Opengl学习1- draw line on ios</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/25/VideoToolBox-压缩/">VideoToolBox 压缩</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/19/ffmpeg-transcoding/">ffmpeg transcoding</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/19/ffmpeg-avfilter/">ffmpeg avfilter</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/14/H-264-原理知识/">H.264 原理知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/mac-ffmpeg-开发环境设置/">mac ffmpeg 开发环境设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Java-Collections/">Java Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/init-document/">init document</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/hello-world/">Hello World</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/">Opengles学习2-Vextex attributes,Vextex array,VBO</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Opengl学习1-draw-line-on-ios/">Opengl学习1- draw line on ios</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/25/VideoToolBox-压缩/">VideoToolBox 压缩</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/19/ffmpeg-transcoding/">ffmpeg transcoding</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/19/ffmpeg-avfilter/">ffmpeg avfilter</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/14/H-264-原理知识/">H.264 原理知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/mac-ffmpeg-开发环境设置/">mac ffmpeg 开发环境设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Java-Collections/">Java Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/init-document/">init document</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/hello-world/">Hello World</a></li></ul>
 
 
 
