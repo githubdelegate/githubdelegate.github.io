@@ -15,21 +15,17 @@
 
 
 
-<meta name="description" content="Scale  Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。 scale=w=200:h=100转到200*100scale=200:100scale=qcif 变成1/4  format把输入文件转换到指定的像素格式。ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4把一个420">
-<meta name="keywords" content="FFmpeg">
+<meta name="description" content="#  title: ‘Opengles学习2-Vextex attributes,Vextex array,VBO’date: 2017-10-11 19:20:10 tags: OpenglES1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ffmpeg avfilter">
-<meta property="og:url" content="http://githubdelegate.github.io/2017/09/19/ffmpeg-avfilter/index.html">
+<meta property="og:title" content="Nigo">
+<meta property="og:url" content="http://githubdelegate.github.io/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/index.html">
 <meta property="og:site_name" content="Nigo">
-<meta property="og:description" content="Scale  Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。 scale=w=200:h=100转到200*100scale=200:100scale=qcif 变成1/4  format把输入文件转换到指定的像素格式。ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4把一个420">
+<meta property="og:description" content="#  title: ‘Opengles学习2-Vextex attributes,Vextex array,VBO’date: 2017-10-11 19:20:10 tags: OpenglES1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mc7uraj30o819qn80.jpg">
-<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mys9nkj31kw0zmqev.jpg">
-<meta property="og:updated_time" content="2017-09-19T11:33:13.000Z">
+<meta property="og:updated_time" content="2017-10-11T12:21:37.346Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ffmpeg avfilter">
-<meta name="twitter:description" content="Scale  Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。 scale=w=200:h=100转到200*100scale=200:100scale=qcif 变成1/4  format把输入文件转换到指定的像素格式。ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4把一个420">
-<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mc7uraj30o819qn80.jpg">
+<meta name="twitter:title" content="Nigo">
+<meta name="twitter:description" content="#  title: ‘Opengles学习2-Vextex attributes,Vextex array,VBO’date: 2017-10-11 19:20:10 tags: OpenglES1. Vextex attributes一个顶点基本上有postion,color，normal,texture coordinate等数据。 vextex attribute 分两种: 一种是所有顶点的">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -61,7 +57,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>ffmpeg avfilter | Nigo</title>
+<title>Nigo</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -276,11 +272,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-ffmpeg-avfilter" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Opengles学习2-Vextex-attributes-Vextex-array-VBO" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/09/19/ffmpeg-avfilter/" class="article-date">
-      <time datetime="2017-09-19T11:29:12.000Z" itemprop="datePublished">2017-09-19</time>
+      <a href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/" class="article-date">
+      <time datetime="2017-10-11T11:20:10.163Z" itemprop="datePublished">2017-10-11</time>
 </a>
 
 
@@ -291,81 +287,30 @@
       <input type="hidden" class="isFancy" />
     
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      ffmpeg avfilter
-    </h1>
-  
-
-      </header>
-      
-      <div class="article-info article-info-post">
-        
-
-        
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FFmpeg/">FFmpeg</a></li></ul>
-    </div>
-
-        <div class="clearfix"></div>
-      </div>
-      
-    
     <div class="article-entry" itemprop="articleBody">
       
           
-        <ol>
-<li>Scale</li>
-</ol>
-<p>Scale 保存DAR不变，改变SAR.并且如果输入流的格式不等于下一个filter的输入格式，scale会自动转换格式。</p>
-<p><code>scale=w=200:h=100</code>转到200*100<br><code>scale=200:100</code><br><code>scale=qcif</code> 变成1/4</p>
-<ol>
-<li><p>format<br>把输入文件转换到指定的像素格式。<br><code>ffmpeg -i xxx.mp4 -vf format=yuv444p out7.mp4</code><br>把一个420p转换到444p.</p>
-</li>
-<li><p>movie， amovie</p>
-</li>
-<li><p>setpts ,asetpts<br>修改输入frame的PTS。</p>
-</li>
-<li><p>crop<br>将输入视频剪切到指定的宽高。</p>
-</li>
-</ol>
+        <p>#</p>
+<hr>
+<p>title: ‘Opengles学习2-Vextex attributes,Vextex array,VBO’<br>date: 2017-10-11 19:20:10</p>
+<h2 id="tags-OpenglES"><a href="#tags-OpenglES" class="headerlink" title="tags: OpenglES"></a>tags: OpenglES</h2><h2 id="1-Vextex-attributes"><a href="#1-Vextex-attributes" class="headerlink" title="1. Vextex attributes"></a>1. Vextex attributes</h2><p>一个顶点基本上有postion,color，normal,texture coordinate等数据。<br> vextex attribute 分两种: 一种是所有顶点的数据都一样，比如color都是白色;相应的另一种就是有不一样的值,所有需要用array保存每个顶点的数据。</p>
+<h3 id="1-1-const-vextex-attribute"><a href="#1-1-const-vextex-attribute" class="headerlink" title="1.1  const vextex attribute"></a>1.1  const vextex attribute</h3><p>设置const attribute<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">void glVertexAttrib1f(GLuint index, GLfloat x); void glVertexAttrib2f(GLuint index, GLfloat x, GLfloat y); void glVertexAttrib3f(GLuint index, GLfloat x, GLfloat y, GLfloat z);</div><div class="line"></div><div class="line">stride : 代表指针位置幅度，the components of vertex attribute specified by size are stored sequentially for each vertex. stride specifies the delta between data for vertex index I and vertex (I + 1). If stride is 0, attribute data for all vertices are stored sequentially. If stride is &gt; 0, then we use the stride value as the pitch to get vertex data for next index</div></pre></td></tr></table></figure></p>
+<h3 id="1-2-vertex-arrays"><a href="#1-2-vertex-arrays" class="headerlink" title="1.2 vertex  arrays"></a>1.2 vertex  arrays</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *ptr)</div></pre></td></tr></table></figure>
+<p>保存顶点数据数组的两种方式：</p>
 <ul>
-<li>w,h,out_w,out_h 输出视频的宽高。默认是iw,ih.只在一开始的时候计算一次。</li>
-<li>x,y : 从输入视频的那个位置开始剪切。每帧都会计算一次。</li>
-<li>keep_aspect:是否保持宽高比不变。</li>
-<li>exact:是否使用精确的剪切采样，默认不开启就是使用近视值。<br><code>ffmpeg -i xxx.mp4 -vf crop=100:100:12:34 out11.mp4</code></li>
+<li>每个顶点的所有属性保存在一个struct中，然后有一个保存每个顶点struct的数组。array of structs</li>
+<li>每个顶点同样属性保存在一个数组中，然后一个struct里面保存全部属性的数组。struct of arrays</li>
 </ul>
-<p><code>ffmpeg -i test.mp4 -vf &quot;crop=in_w/2:in_h/2:(in_w-out_w)/2+((in_w-out_w)/2)*sin(t*10):(in_h-out_h)/2 +((in_h-out_h)/2)*sin(t*13)&quot; out12.mp4</code> 这个输出的视频会有摄像头晃动的效果。</p>
-<ol>
-<li>slip<br>把输入分成多个相同的输出。需要有个指定输出数量的的参数。默认是2.<br><code>[in] split [out0][out1]</code> .</li>
-</ol>
-<p><code>ffmpeg -i test.mp4 -filter_complex asplit=5 11.mp4</code>  这条命令输出的视频包含5个音频流。</p>
-<ol>
-<li><p>hflip<br>水平翻转输入视频。<br><code>ffmpeg -i test.mp4 -vf hflip 11.mp4</code> 这个很像录制时候的镜像功能。</p>
-</li>
-<li><p>pad<br>对输入的图片添加边框，并把原来的输入放到x,y参数的位置。</p>
-</li>
-</ol>
-<p><code>ffmpeg -i test.mp4 -vf &quot;pad=2*iw:2*ih:ow-iw:oh-ih&quot; 11.mp4</code> 如下图，把原来视频放大两倍，把输入视频放到右下角。屌屌的。</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mc7uraj30o819qn80.jpg" alt=""></p>
-<ol>
-<li>overlay<br>把一个视频放到另一个上。有两个输入一个输出。第一个输入作为main，第二个覆盖到上面。</li>
-</ol>
+<p>假如每个顶点的属性只有postion ,normal ,两个textcoord。<br>两种方式代码书写的区别：</p>
 <ul>
-<li>x,y : 设置上面视频的坐标。</li>
-<li>eof_action:第二个视频结束的时候，如何处理。repeat 重复最后一帧;endall 结束全部；pass main视频继续。</li>
-<li>shortest: 当最短的输入流结束的时候强制结束输出。默认0.</li>
-<li>format: 设置输出视频的格式。yuv420,yuv422,yuv444,rgb,grgb,auto,默认是yuv420</li>
-<li><p>repeatlasr:强制绘制overlay最后一帧直到结束。默认1.</p>
-</li>
-<li><p>加水印<br><code>ffmpeg -i input -i logo -filter_complex &#39;overlay=10:main_h-overlay_h-10&#39; output</code></p>
-</li>
-<li><p>加两个水印<br><code>ffmpeg -i input -i logo1 -i logo2 -filter_complex &#39;overlay=x=10:y=H-h-10,overlay=x=W-w-10:y=H-h-10&#39; output</code></p>
-</li>
+<li>array of structs</li>
 </ul>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjp3mys9nkj31kw0zmqev.jpg" alt=""></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 每个属性的大小(几个float 组成)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_POS_SIZE      3</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_NORMAL_SIZE  3</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_TEXCOORD0_SIZE  2</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_TEXCOORD1_SIZE  2</span></div><div class="line"><span class="comment">// 属性的下标</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_POS_INDX  0</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_NORMAL_INDX 1</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_TEXCOORD0_INDX 2</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> VERTEX_TEXCOORD1_INDX 3</span></div><div class="line"></div><div class="line"><span class="comment">// the following 4 defines are used to determine location of various // attributes if vertex data is are stored as an array of structures</span></div><div class="line"> <span class="meta">#<span class="meta-keyword">define</span> VERTEX_POS_OFFSET 0</span></div><div class="line"> <span class="meta">#<span class="meta-keyword">define</span> VERTEX_NORMAL_OFFSET 3</span></div><div class="line"> <span class="meta">#<span class="meta-keyword">define</span> VERTEX_TEXCOORD0_OFFSET 6</span></div><div class="line"> <span class="meta">#<span class="meta-keyword">define</span> VERTEX_TEXCOORD1_OFFSET 8</span></div><div class="line"></div><div class="line"><span class="comment">// 一个顶点strcut 的大小</span></div><div class="line"> <span class="meta">#<span class="meta-keyword">define</span> VERTEX_ATTRIB_SIZE VERTEX_POS_SIZE + \</span></div><div class="line">                            VERTEX_NORMAL_SIZE + \</div><div class="line">                            VERTEX_TEXCOORD0_SIZE + \</div><div class="line">                            VERTEX_TEXCOORD1_SIZE</div><div class="line"><span class="comment">// array of structs,创建</span></div><div class="line"><span class="keyword">float</span> *p = <span class="built_in">malloc</span>(numVertices * VERTEX_ATTRIB_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"><span class="comment">// 设置每个属性</span></div><div class="line"><span class="comment">// position is vertex attribute 0</span></div><div class="line">glVertexAttribPointer(VERTEX_POS_INDX, VERTEX_POS_SIZE,GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), p);</div><div class="line"></div><div class="line"><span class="comment">// normal is vertex attribute 1</span></div><div class="line">glVertexAttribPointer(VERTEX_NORMAL_INDX, VERTEX_NORMAL_SIZE, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), (p + VERTEX_NORMAL_OFFSET));</div><div class="line"></div><div class="line"><span class="comment">// texture coordinate 0 is vertex attribute 2</span></div><div class="line">glVertexAttribPointer(VERTEX_TEXCOORD0_INDX, VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), (p + VERTEX_TEXCOORD0_OFFSET));</div><div class="line"></div><div class="line"><span class="comment">// texture coordinate 1 is vertex attribute 3</span></div><div class="line">glVertexAttribPointer(VERTEX_TEXCOORD1_INDX, VERTEX_TEXCOORD1_SIZE, GL_FLOAT, GL_FALSE, VERTEX_ATTRIB_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), (p + VERTEX_TEXCOORD1_OFFSET));</div></pre></td></tr></table></figure>
+<ul>
+<li>struct of arrays</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 一个包含全部顶点position属性的数组</span></div><div class="line"><span class="keyword">float</span> *position = <span class="built_in">malloc</span>(numVertices * VERTEX_POS_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"><span class="comment">// 一个包含全部顶点normal属性的数组</span></div><div class="line"><span class="keyword">float</span> *normal = <span class="built_in">malloc</span>(numVertices * VERTEX_NORMAL_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"><span class="comment">// 一个包含全部顶点texcoord0属性的数组</span></div><div class="line"><span class="keyword">float</span> *texcoord0 = <span class="built_in">malloc</span>(numVertices * VERTEX_TEXCOORD0_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"><span class="comment">// 一个包含全部顶点texcoord1属性的数组</span></div><div class="line"><span class="keyword">float</span> *texcoord1 = <span class="built_in">malloc</span>(numVertices * VERTEX_TEXCOORD1_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</div><div class="line"></div><div class="line"><span class="comment">// position is vertex attribute 0</span></div><div class="line"> glVertexAttribPointer(VERTEX_POS_INDX, VERTEX_POS_SIZE,GL_FLOAT, GL_FALSE, VERTEX_POS_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), position);</div><div class="line"></div><div class="line"><span class="comment">// normal is vertex attribute 1</span></div><div class="line">glVertexAttribPointer(VERTEX_NORMAL_INDX, VERTEX_NORMAL_SIZE,GL_FLOAT, GL_FALSE, VERTEX_NORMAL_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), normal);</div><div class="line"></div><div class="line"><span class="comment">// texture coordinate 0 is vertex attribute 2</span></div><div class="line">glVertexAttribPointer(VERTEX_TEXCOORD0_INDX, VERTEX_TEXCOORD0_SIZE, GL_FLOAT, GL_FALSE, VERTEX_TEXCOORD0_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), texcoord0);</div><div class="line"></div><div class="line"><span class="comment">// texture coordinate 1 is vertex attribute 3</span></div><div class="line">glVertexAttribPointer(VERTEX_TEXCOORD1_INDX, VERTEX_TEXCOORD1_SIZE, GL_FLOAT, GL_FALSE, VERTEX_TEXCOORD1_SIZE * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), texcoord1);</div></pre></td></tr></table></figure>
+<h3 id="1-3-选择使用const-vextex-还是vextex-array"><a href="#1-3-选择使用const-vextex-还是vextex-array" class="headerlink" title="1.3 选择使用const vextex 还是vextex array"></a>1.3 选择使用const vextex 还是vextex array</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">void glEnableVertexAttribArray(GLuint index);</div><div class="line">void glDisableVertexAttribArray(GLuint index);</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -480,13 +425,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/09/19/ffmpeg-avfilter/">ffmpeg avfilter</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/"></a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Nigo</a></p>
-        <p><span>发布时间:</span>2017-09-19, 19:29:12</p>
-        <p><span>最后更新:</span>2017-09-19, 19:33:13</p>
+        <p><span>发布时间:</span>2017-10-11, 19:20:10</p>
+        <p><span>最后更新:</span>2017-10-11, 20:21:37</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/09/19/ffmpeg-avfilter/" title="ffmpeg avfilter">http://githubdelegate.github.io/2017/09/19/ffmpeg-avfilter/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://githubdelegate.github.io/2017/09/19/ffmpeg-avfilter/　　作者: Nigo" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/" title="">http://githubdelegate.github.io/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://githubdelegate.github.io/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/　　作者: Nigo" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -498,16 +443,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/09/19/ffmpeg-transcoding/">
-                    ffmpeg transcoding
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/08/14/H-264-原理知识/">
-                    H.264 原理知识
+                <a href="/2017/10/11/Opengl学习1-draw-line-on-ios/">
+                    Opengl学习1- draw line on ios
                 </a>
             </div>
         
@@ -519,7 +458,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags-OpenglES"><span class="toc-number">1.</span> <span class="toc-text">tags: OpenglES</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Vextex-attributes"><span class="toc-number">2.</span> <span class="toc-text">1. Vextex attributes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-const-vextex-attribute"><span class="toc-number">2.1.</span> <span class="toc-text">1.1  const vextex attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-vertex-arrays"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 vertex  arrays</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-选择使用const-vextex-还是vextex-array"><span class="toc-number">2.3.</span> <span class="toc-text">1.3 选择使用const vextex 还是vextex array</span></a></li></ol></li></ol>
         
     </div>
     <style>
@@ -555,7 +494,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"ffmpeg avfilter　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -575,15 +514,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/09/19/ffmpeg-transcoding/" title="上一篇: ffmpeg transcoding">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/08/14/H-264-原理知识/" title="下一篇: H.264 原理知识">
+            <a href="/2017/10/11/Opengl学习1-draw-line-on-ios/" title="下一篇: Opengl学习1- draw line on ios">
                 <i class="fa fa-angle-right"></i>
             </a>
         

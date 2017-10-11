@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Nigo" />
+
+
+
+<meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta name="keywords" content="OpenglES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Opengl学习1- draw line on ios">
+<meta property="og:url" content="http://githubdelegate.github.io/2017/10/11/Opengl学习1-draw-line-on-ios/index.html">
+<meta property="og:site_name" content="Nigo">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-11T11:15:12.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Opengl学习1- draw line on ios">
+<meta name="twitter:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Nigo" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Opengl学习1- draw line on ios | Nigo</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Nigo</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">take care of your time,man!</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/随笔">随笔</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:123@123.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/githubdelegate/" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/FFmpeg/">FFmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenglES/">OpenglES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/video-FFmpeg/">video,FFmpeg</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Nigo</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Nigo</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">take care of your time,man!</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/随笔">随笔</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:123@123.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/githubdelegate/" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Opengl学习1-draw-line-on-ios" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/11/Opengl学习1-draw-line-on-ios/" class="article-date">
+      <time datetime="2017-10-11T10:46:29.000Z" itemprop="datePublished">2017-10-11</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Opengl学习1- draw line on ios
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenglES/">OpenglES</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div></pre></td><td class="code"><pre><div class="line">//</div><div class="line">//  ZYGLView.m</div><div class="line">//  esgl_1</div><div class="line">//</div><div class="line">//  Created by zhangyun on 2017/10/9.</div><div class="line">//  Copyright © 2017年 zhangyun. All rights reserved.</div><div class="line">//</div><div class="line"></div><div class="line">#import &quot;ZYGLView.h&quot;</div><div class="line">#import &lt;GLKit/GLKit.h&gt;</div><div class="line">#import &quot;VFMatrix.h&quot;</div><div class="line"></div><div class="line">typedef struct&#123;</div><div class="line">    CGFloat red;</div><div class="line">    CGFloat green;</div><div class="line">    CGFloat blue;</div><div class="line">    CGFloat alpha;</div><div class="line">&#125;RGBAColor;</div><div class="line"></div><div class="line">// vertex attribute struct</div><div class="line">typedef struct &#123;</div><div class="line">    GLfloat Position[3];</div><div class="line">    GLfloat Color[4];</div><div class="line"></div><div class="line">&#125;VFVertex;</div><div class="line"></div><div class="line">// 白色</div><div class="line">static const GLfloat whiteColor[] = &#123;1,1,1,1&#125;;</div><div class="line">static const RGBAColor kDefaultColor = &#123;0.4,0.7,0.9,1.f&#125;;</div><div class="line"></div><div class="line">// 4个顶点的数据</div><div class="line">static const VFVertex crossLinesVertices[] = &#123;</div><div class="line">  // line one</div><div class="line">    &#123;0.5f,0.5f,0.f&#125;,</div><div class="line">    &#123;-0.5f,-0.5f,0.f&#125;,</div><div class="line"></div><div class="line">    // line two</div><div class="line">    &#123;-0.53f,0.48f,0.f&#125;,</div><div class="line">    &#123;0.55f,-0.4f,0.f&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">@interface ZYGLView()&#123;</div><div class="line">    GLint programID;</div><div class="line">&#125;</div><div class="line">@property (nonatomic,strong) EAGLContext *ctx;</div><div class="line">@property (nonatomic,assign) GLfloat windowScale;</div><div class="line">@end</div><div class="line"></div><div class="line">@implementation ZYGLView</div><div class="line"></div><div class="line">+ (Class)layerClass&#123;</div><div class="line">    return [CAEAGLLayer class];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (instancetype)initWithFrame:(CGRect)frame&#123;</div><div class="line">    if (self = [super initWithFrame:frame]) &#123;</div><div class="line">        CAEAGLLayer *layer = (CAEAGLLayer *)self.layer;</div><div class="line">        layer.drawableProperties = @&#123;kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8,kEAGLDrawablePropertyRetainedBacking:@(YES)&#125;;</div><div class="line">        layer.contentsScale = [UIScreen mainScreen].scale;</div><div class="line">        layer.opaque = YES;</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)prepare&#123;</div><div class="line"></div><div class="line">    // 1.设置上下文环境</div><div class="line">    EAGLContext *ctx = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];</div><div class="line">    [EAGLContext setCurrentContext:ctx];</div><div class="line">    self.ctx = ctx;</div><div class="line"></div><div class="line">    // 2. 设置背景颜色</div><div class="line">    glClearColor(kDefaultColor.red, kDefaultColor.green, kDefaultColor.blue, kDefaultColor.alpha);</div><div class="line"></div><div class="line">    // 3. 配置rbo</div><div class="line">    GLuint rboId;</div><div class="line">    glGenRenderbuffers(1, &amp;rboId);</div><div class="line">    glBindRenderbuffer(GL_RENDERBUFFER, rboId);</div><div class="line"></div><div class="line">    // 4. 配置fbo</div><div class="line">    GLuint fboId;</div><div class="line">    glGenFramebuffers(1, &amp;fboId);</div><div class="line">    glBindFramebuffer(GL_FRAMEBUFFER, fboId);</div><div class="line"></div><div class="line">    // 5. 绑定fbo rbo</div><div class="line">   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rboId);</div><div class="line"></div><div class="line">    // 6. 绑定renderbuffer到绘制表面</div><div class="line">    [ctx renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];</div><div class="line"></div><div class="line">    // 7. 下面的shader的内容</div><div class="line">    GLuint vertexId = [self addShader:GL_VERTEX_SHADER];</div><div class="line">    GLuint fragmentId = [self addShader:GL_FRAGMENT_SHADER];</div><div class="line">    if (vertexId ==0 || fragmentId == 0) &#123;</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 8. 创建program</div><div class="line">    GLuint programId = glCreateProgram();</div><div class="line"></div><div class="line">    // 9. 添加shader 到program</div><div class="line">    glAttachShader(programId, vertexId);</div><div class="line">    glAttachShader(programId, fragmentId);</div><div class="line"></div><div class="line">    // 10. 设置attribute 的index</div><div class="line">    glBindAttribLocation(programId, 0, &quot;v_Position&quot;);</div><div class="line">    glBindAttribLocation(programId, 1, &quot;v_Color&quot;);</div><div class="line"></div><div class="line">    // 11. link program</div><div class="line">    glLinkProgram(programId);</div><div class="line">    GLint linkSuccess;</div><div class="line">    // 检查是否链接成功</div><div class="line">    glGetProgramiv(programId, GL_LINK_STATUS, &amp;linkSuccess);</div><div class="line">    if (linkSuccess == GL_FALSE) &#123;</div><div class="line">        GLint infoLen;</div><div class="line">        glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &amp;infoLen);</div><div class="line">        if (infoLen &gt; 0) &#123;</div><div class="line">            GLchar *msg = malloc(sizeof(GLchar *) * infoLen);</div><div class="line">            glGetProgramInfoLog(programId, infoLen,NULL, msg);</div><div class="line">            NSString *str = [NSString stringWithUTF8String:msg];</div><div class="line">            NSLog(@&quot;**----&gt;shader link error:%@&quot;,str);</div><div class="line">            free(msg);</div><div class="line">        &#125;</div><div class="line">        NSLog(@&quot;**----&gt;shader link error return&quot;);</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    programID = programId;</div><div class="line"></div><div class="line">    // 12. 重置渲染内存</div><div class="line">    glClear(GL_COLOR_BUFFER_BIT);</div><div class="line"></div><div class="line">    // 13. 设置视窗</div><div class="line">    GLint renderbufW,renderbufH;</div><div class="line">    // 获取当前设备窗口的宽高</div><div class="line">    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &amp;renderbufW);</div><div class="line">    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &amp;renderbufH);</div><div class="line">    glViewport(0, 0, renderbufW, renderbufH);</div><div class="line"></div><div class="line">    // 获取宽高比,用来做坐标系转换</div><div class="line">    self.windowScale = ((GLfloat)renderbufW / (GLfloat)renderbufH);</div><div class="line"></div><div class="line">    // 14. 加载顶点数据</div><div class="line">    GLuint vboId;</div><div class="line">    glGenBuffers(1, &amp;vboId);</div><div class="line"></div><div class="line">    const GLvoid *dataPtr;</div><div class="line">    GLsizeiptr dataSize;</div><div class="line">    GLsizei verticesIndicesCount;</div><div class="line"></div><div class="line">    dataSize = sizeof(crossLinesVertices);</div><div class="line">    dataPtr = crossLinesVertices;</div><div class="line">    verticesIndicesCount = (GLsizei)(sizeof(crossLinesVertices) / sizeof(crossLinesVertices[0]));</div><div class="line"></div><div class="line">    // vbo</div><div class="line">    glBindBuffer(GL_ARRAY_BUFFER, vboId);</div><div class="line">    glBufferData(GL_ARRAY_BUFFER, dataSize, dataPtr, GL_STATIC_DRAW);</div><div class="line">    glEnableVertexAttribArray(0);</div><div class="line">    // 设置shader中postion数据</div><div class="line">    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VFVertex), (const GLvoid *)offsetof(VFVertex,Position));</div><div class="line">    // 设置shader 中color数据</div><div class="line">    glDisableVertexAttribArray(1);</div><div class="line">    glVertexAttrib4fv(1, whiteColor);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)display&#123;</div><div class="line">    // 1. 使用program</div><div class="line">    glUseProgram(programID);</div><div class="line"></div><div class="line">    // 2. 坐标系转换，这块好复杂，没搞懂，直接使用了https://github.com/huangwenfei/OpenGLES2Learning 里的代码</div><div class="line">    VFMatrix4 scaleMat4 = VFMatrix4MakeScaleY(self.windowScale);</div><div class="line">    VFMatrix4 transMat4 = VFMatrix4Identity;</div><div class="line">    glUniformMatrix4fv(0,   // 定义的 uniform 变量的内存标识符</div><div class="line">                       1,                                           // 不是 uniform 数组，只是一个 uniform -&gt; 1</div><div class="line">                       GL_FALSE,                                    // ES 下 只能是 False</div><div class="line">                       (const GLfloat *)scaleMat4.m1D);             // 数据的首指针</div><div class="line"></div><div class="line">    glUniformMatrix4fv(1,   // 定义的 uniform 变量的内存标识符</div><div class="line">                       1,                                           // 不是 uniform 数组，只是一个 uniform -&gt; 1</div><div class="line">                       GL_FALSE,                                    // ES 下 只能是 False</div><div class="line">                       (const GLfloat *)transMat4.m1D);             // 数据的首指针</div><div class="line"></div><div class="line">    glLineWidth(10);</div><div class="line">    // 2. 绘制</div><div class="line">    glDrawArrays(GL_LINES, 0, 4);</div><div class="line"></div><div class="line">    // 3. 展示renderbuffer内容</div><div class="line">    [self.ctx presentRenderbuffer:GL_RENDERBUFFER];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (GLuint)addShader:(GLenum)type&#123;</div><div class="line">    NSString *fileName;</div><div class="line">    if (type == GL_VERTEX_SHADER) &#123;</div><div class="line">        fileName = @&quot;vertex.glsl&quot;;</div><div class="line">    &#125;else&#123;</div><div class="line">        fileName = @&quot;fragment.glsl&quot;;</div><div class="line">    &#125;</div><div class="line">    // 1. 从文件中加载shader代码</div><div class="line">    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];</div><div class="line">    NSString *shaderSource = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];</div><div class="line"></div><div class="line">    const GLchar *stringDatas = [shaderSource UTF8String];</div><div class="line">    GLint stringLen = (GLint)shaderSource.length;</div><div class="line"></div><div class="line">    // 2. 创建shader</div><div class="line">    GLuint shaderId = glCreateShader(type);</div><div class="line"></div><div class="line">    // 3. 加载代码</div><div class="line">    glShaderSource(shaderId, 1, &amp;stringDatas, &amp;stringLen);</div><div class="line"></div><div class="line">    // 4. 编译</div><div class="line">    glCompileShader(shaderId);</div><div class="line">    GLint compileSuccess;</div><div class="line"></div><div class="line">    // 5. 检查是否编译成功</div><div class="line">    glGetShaderiv(shaderId, GL_COMPILE_STATUS, &amp;compileSuccess);</div><div class="line">    if (compileSuccess == GL_FALSE) &#123;</div><div class="line">        GLint infoLen;</div><div class="line">        glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &amp;infoLen);</div><div class="line">        if (infoLen &gt; 0) &#123;</div><div class="line">            GLchar *msg = malloc(sizeof(GLchar *) * infoLen);</div><div class="line">            glGetShaderInfoLog(shaderId, infoLen, NULL, msg);</div><div class="line">            NSString *msgS = [NSString stringWithUTF8String:msg];</div><div class="line">            NSLog(@&quot;&amp;&amp;&amp;--&gt;shader erro: %@&quot;,msgS);</div><div class="line">            free(msg);</div><div class="line">        &#125;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line">    return shaderId;</div><div class="line">&#125;</div><div class="line">@end</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-content">
+      
+        
+          <!-- css -->
+          <style type="text/css">
+              .center {
+                  text-align: center;
+              }
+              .hidden {
+                  display: none;
+              }
+            .donate_bar a.btn_donate{
+              display: inline-block;
+              width: 82px;
+              height: 82px;
+              background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+              _background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+
+              <!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+                   因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+                 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+                 嵌入其它博客时不一定要它们。 -->
+              -webkit-transition: background 0s;
+              -moz-transition: background 0s;
+              -o-transition: background 0s;
+              -ms-transition: background 0s;
+              transition: background 0s;
+              <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+            }
+
+            .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+            .donate_bar .donate_txt {
+              display: block;
+              color: #9d9d9d;
+              font: 14px/2 "Microsoft Yahei";
+            }
+            .bold{ font-weight: bold; }
+          </style>
+          <!-- /css -->
+
+            <!-- Donate Module -->
+            <div id="donate_module">
+
+          <!-- btn_donate & tips -->
+          <div id="donate_board" class="donate_bar center">
+              <br>
+              
+              <br>
+            <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="点我走上人生巅峰"></a>
+            <span class="donate_txt">
+              会不会有人就是想不开要打赏我呢？这是个问题！
+            </span>
+
+
+          </div>
+          <!-- /btn_donate & tips -->
+
+          <!-- donate guide -->
+
+          <div id="donate_guide" class="donate_bar center hidden">
+                <br>
+
+              <br>
+
+            <a href="https://ws4.sinaimg.cn/large/006tKfTcly1fi4bhneuk8j30jh0jdtaq.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+              <img src="https://ws4.sinaimg.cn/large/006tKfTcly1fi4bhneuk8j30jh0jdtaq.jpg" title="用微信转账羞辱他" height="190px" width="auto"/>
+            </a>
+
+                &nbsp;&nbsp;
+
+            <a href="https://ws2.sinaimg.cn/large/006tKfTcly1fi4bitdimrj30al09umy1.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+              <img src="https://ws2.sinaimg.cn/large/006tKfTcly1fi4bitdimrj30al09umy1.jpg" title="用支付宝转账羞辱他" height="190px" width="auto"/>
+            </a>
+
+            <span class="donate_txt">
+              会不会有人就是想不开要打赏我呢？这是个问题！
+            </span>
+
+          </div>
+          <!-- /donate guide -->
+
+          <!-- donate script -->
+          <script type="text/javascript">
+            document.getElementById('btn_donate').onclick = function() {
+              $('#donate_board').addClass('hidden');
+              $('#donate_guide').removeClass('hidden');
+            }
+
+            function donate_on_web(){
+              $('#donate').submit();
+                }
+
+            var original_window_onload = window.onload;
+                window.onload = function () {
+                    if (original_window_onload) {
+                        original_window_onload();
+                    }
+                    document.getElementById('donate_board_wdg').className = 'hidden';
+            }
+          </script>
+          <!-- /donate script -->
+        </div>
+        <!-- /Donate Module -->
+           
+      
+    </div>
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/11/Opengl学习1-draw-line-on-ios/">Opengl学习1- draw line on ios</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Nigo</a></p>
+        <p><span>发布时间:</span>2017-10-11, 18:46:29</p>
+        <p><span>最后更新:</span>2017-10-11, 19:15:12</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/11/Opengl学习1-draw-line-on-ios/" title="Opengl学习1- draw line on ios">http://githubdelegate.github.io/2017/10/11/Opengl学习1-draw-line-on-ios/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://githubdelegate.github.io/2017/10/11/Opengl学习1-draw-line-on-ios/　　作者: Nigo" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/">
+                    
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/25/VideoToolBox-压缩/">
+                    VideoToolBox 压缩
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-6 i,
+        .toc-level-6 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Opengl学习1- draw line on ios　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/" title="上一篇: ">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/25/VideoToolBox-压缩/" title="下一篇: VideoToolBox 压缩">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Opengles学习2-Vextex-attributes-Vextex-array-VBO/">Opengles学习2-Vextex-attributes-Vextex-array-VBO</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Opengl学习1-draw-line-on-ios/">Opengl学习1- draw line on ios</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/25/VideoToolBox-压缩/">VideoToolBox 压缩</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/19/ffmpeg-transcoding/">ffmpeg transcoding</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/19/ffmpeg-avfilter/">ffmpeg avfilter</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/14/H-264-原理知识/">H.264 原理知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/mac-ffmpeg-开发环境设置/">mac ffmpeg 开发环境设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/Java-Collections/">Java Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/init-document/">init document</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/hello-world/">Hello World</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Nigo
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '103798003', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
