@@ -278,6 +278,90 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-OpenglES学习3-FBO-RBO" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/12/OpenglES学习3-FBO-RBO/" class="article-date">
+      <time datetime="2017-10-12T13:11:35.000Z" itemprop="datePublished">2017-10-12</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/12/OpenglES学习3-FBO-RBO/">OpenglES学习3 FBO RBO</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="1-FrameBuffer"><a href="#1-FrameBuffer" class="headerlink" title="1.FrameBuffer"></a>1.FrameBuffer</h1><h2 id="1-1-为什么需要FBO"><a href="#1-1-为什么需要FBO" class="headerlink" title="1.1 为什么需要FBO"></a>1.1 为什么需要FBO</h2><p>系统提供的framebuffer不适用于所有场合。比如:<br>many applications need to render to a texture, and for this using the window system provided framebuffer as your drawing surface is usually not an ideal option. Examples of where render to texture is useful are dynamic reflections and environment-mapping, multipass techniques for depth-of-field, motion blur effects, and post-processing effects.</p>
+<h2 id="1-2-什么是FBO"><a href="#1-2-什么是FBO" class="headerlink" title="1.2 什么是FBO"></a>1.2 什么是FBO</h2><p>A framebuffer object (often referred to as an FBO) is a collection of color, depth, and stencil buffer attachment points; state that describes properties such as the size and format of the color, depth, and stencil buffers attached to the FBO; and the names of the texture and renderbuffer objects attached to the FBO. Various 2D images can be attached to the color attachment point in the framebuffer object. These include a renderbuffer object that stores color values, a mip-level of a 2D texture or a cubemap face, or even a mip-level of a 2D slice in a 3D texture. Similarly, various 2D images containing depth values can be attached to the depth attachment point of an FBO. These can include a renderbuffer, a mip-level of a 2D texture or a cubemap face that stores depth values. The only 2D image that can be attached to the stencil attachment point of an FBO is a renderbuffer object that stores stencil values.</p>
+<ul>
+<li>FBO API 支持系列操作</li>
+</ul>
+<p>• Creating and using multiple framebuffer objects within a single EGL context; that is, without requiring a rendering context per framebuffer.<br>• Creating off-screen color, depth, or stencil renderbuffers and textures, and attaching these to a framebuffer object.<br>• Sharing color, depth or stencil buffers across multiple framebuffers.<br>• Attaching textures directly to a framebuffer as color or depth and avoiding the need to do a copy operation.</p>
+<h2 id="1-3-如何使用FBO"><a href="#1-3-如何使用FBO" class="headerlink" title="1.3 如何使用FBO"></a>1.3 如何使用FBO</h2><ol>
+<li>创建</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">glGenFramebuffers</span><span class="params">(GLsizei n, GLuint *ids)</span></span></div><div class="line">n:number of framebuffer object names to return</div><div class="line">ids:pointer to an <span class="built_in">array</span> of n entries, where allocated framebuffer objects are returned</div></pre></td></tr></table></figure>
+<p>ids是大于0的，等于0表示失败。</p>
+<ol>
+<li>glBindFramebuffer</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">void glBindFramebuffer(GLenum target, GLuint framebuffer)</div><div class="line">target:must be set to GL_FRAMEBUFFER</div><div class="line">framebuffer:framebuffer object name</div></pre></td></tr></table></figure>
+<p>在使用framebuffer之前,需要把framebuffer 设置为当前 fbo.<br>The first time a framebuffer object name is bound by calling glBindFrame-buffer, the framebuffer object is allocated with appropriate default state, and if the allocation is successful, this allocated object is bound as the current framebuffer object for the rendering context.</p>
+<ol>
+<li>glDeleteFramebuffers</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">void glDeleteFramebuffers(GLsizei n, GLuint *framebuffers)</div><div class="line">n:number of framebuffer object names to delete</div><div class="line">framebuffers:pointer to an array of n framebuffer object names to be deleted</div></pre></td></tr></table></figure>
+<h1 id="2-RenderBuffer"><a href="#2-RenderBuffer" class="headerlink" title="2.RenderBuffer"></a>2.RenderBuffer</h1><h2 id="1-1-为什么需要RBO"><a href="#1-1-为什么需要RBO" class="headerlink" title="1.1 为什么需要RBO"></a>1.1 为什么需要RBO</h2><h2 id="1-2-什么是RBO"><a href="#1-2-什么是RBO" class="headerlink" title="1.2 什么是RBO"></a>1.2 什么是RBO</h2><p>A renderbuffer object is a 2D image buffer allocated by the application. The renderbuffer can be used to allocate and store color, depth, or stencil values and can be used as a color, depth, or stencil attachment in a framebuffer object. A renderbuffer is similar to an off-screen window system provided drawable surface, such as a pbuffer. A renderbuffer, however, cannot be directly used as a GL texture.</p>
+<h2 id="1-3-如何使用RBO"><a href="#1-3-如何使用RBO" class="headerlink" title="1.3 如何使用RBO"></a>1.3 如何使用RBO</h2>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenglES/">OpenglES</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="article-content">
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Opengles学习2-Vextex-attributes-Vextex-array-VBO" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1032,74 +1116,10 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2017/08/01/hello-world/" class="article-date">
-      <time datetime="2017-08-01T06:40:14.000Z" itemprop="datePublished">2017-08-01</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/01/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-      <div class="clearfix"></div>
-    </div>
-    
-    <div class="article-content">
-      
-    </div>
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </div>
       <footer id="footer">
