@@ -15,18 +15,18 @@
 
 
 
-<meta name="description" content="VTCompressionSession管理输入视频数据压缩的会话。压缩会话支持一系列视频frame的压缩。流程如下：  VTCompressionSessionCreate 创建session 使用VTSessionSetProperty VTSessionSetProperties 配置sessions属性。 使用VTCompressionSessionEncodeFrame编码视频frame">
-<meta name="keywords" content="video,FFmpeg">
+<meta name="description" content="这次我们参考xxx 实现的简单版本旋转立方体 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182- (void)prepare&amp;#123;">
+<meta name="keywords" content="OpenglES">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VideoToolBox 压缩">
-<meta property="og:url" content="http://githubdelegate.github.io/2017/09/25/VideoToolBox-压缩/index.html">
+<meta property="og:title" content="OpenglES学习4-立方体">
+<meta property="og:url" content="http://githubdelegate.github.io/2017/10/20/OpenglES学习4-立方体/index.html">
 <meta property="og:site_name" content="Nigo">
-<meta property="og:description" content="VTCompressionSession管理输入视频数据压缩的会话。压缩会话支持一系列视频frame的压缩。流程如下：  VTCompressionSessionCreate 创建session 使用VTSessionSetProperty VTSessionSetProperties 配置sessions属性。 使用VTCompressionSessionEncodeFrame编码视频frame">
+<meta property="og:description" content="这次我们参考xxx 实现的简单版本旋转立方体 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182- (void)prepare&amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-25T09:54:29.000Z">
+<meta property="og:updated_time" content="2017-10-20T11:31:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="VideoToolBox 压缩">
-<meta name="twitter:description" content="VTCompressionSession管理输入视频数据压缩的会话。压缩会话支持一系列视频frame的压缩。流程如下：  VTCompressionSessionCreate 创建session 使用VTSessionSetProperty VTSessionSetProperties 配置sessions属性。 使用VTCompressionSessionEncodeFrame编码视频frame">
+<meta name="twitter:title" content="OpenglES学习4-立方体">
+<meta name="twitter:description" content="这次我们参考xxx 实现的简单版本旋转立方体 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182- (void)prepare&amp;#123;">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -58,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>VideoToolBox 压缩 | Nigo</title>
+<title>OpenglES学习4-立方体 | Nigo</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -273,11 +273,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-VideoToolBox-压缩" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-OpenglES学习4-立方体" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/09/25/VideoToolBox-压缩/" class="article-date">
-      <time datetime="2017-09-25T09:52:41.000Z" itemprop="datePublished">2017-09-25</time>
+      <a href="/2017/10/20/OpenglES学习4-立方体/" class="article-date">
+      <time datetime="2017-10-20T11:30:50.000Z" itemprop="datePublished">2017-10-20</time>
 </a>
 
 
@@ -292,7 +292,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      VideoToolBox 压缩
+      OpenglES学习4-立方体
     </h1>
   
 
@@ -303,7 +303,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/video-FFmpeg/">video,FFmpeg</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenglES/">OpenglES</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -313,46 +313,15 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="VTCompressionSession"><a href="#VTCompressionSession" class="headerlink" title="VTCompressionSession"></a>VTCompressionSession</h2><p>管理输入视频数据压缩的会话。<br>压缩会话支持一系列视频frame的压缩。流程如下：</p>
-<ul>
-<li><code>VTCompressionSessionCreate</code> 创建session</li>
-<li>使用<code>VTSessionSetProperty</code> <code>VTSessionSetProperties</code> 配置sessions属性。</li>
-<li>使用<code>VTCompressionSessionEncodeFrame</code>编码视频frames,在<code>VTCompressionOutputCallback</code> 里接收压缩的视频frames.</li>
-<li><code>VTComressionSessionCompleteFrames</code> 表示没有视频数据输入了。</li>
-<li><code>VTCompressionSessionInvalidate</code> 结束session，释放内存。</li>
-</ul>
-<hr>
-<ul>
-<li><p>创建session</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionCreate</div></pre></td></tr></table></figure>
+        <p>这次我们参考<a href="http://www.jianshu.com/p/1c5eb6b7d809" target="_blank" rel="external">xxx</a> 实现的简单版本旋转立方体</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div></pre></td><td class="code"><pre><div class="line">- (void)prepare&#123;</div><div class="line">    // 1. 基本配置</div><div class="line">    EAGLContext *ctx =  [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];</div><div class="line">    [EAGLContext setCurrentContext:ctx];</div><div class="line">    self.ctx = ctx;</div><div class="line">    </div><div class="line">    glDeleteFramebuffers(1, &amp;fboId);</div><div class="line">    glDeleteBuffers(1, &amp;colorRboId);</div><div class="line">    glDeleteBuffers(1, &amp;depthRboId);</div><div class="line">    fboId = colorRboId = depthRboId = 0;</div><div class="line">    </div><div class="line">    glGenFramebuffers(1, &amp;fboId);</div><div class="line">    glBindFramebuffer(GL_FRAMEBUFFER, fboId);</div><div class="line">    </div><div class="line">    glGenRenderbuffers(1, &amp;colorRboId);</div><div class="line">    glBindRenderbuffer(GL_RENDERBUFFER, colorRboId);</div><div class="line">    [self.ctx renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];</div><div class="line">    GLint w,h;</div><div class="line">    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &amp;w);</div><div class="line">    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &amp;h);</div><div class="line">    self.renderSize = CGSizeMake(w, h);</div><div class="line">    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRboId);</div><div class="line">    [self chkFBOStatus];</div><div class="line">    </div><div class="line">    // --- depth render buffer</div><div class="line">    glGenRenderbuffers(1, &amp;depthRboId);</div><div class="line">    glBindRenderbuffer(GL_RENDERBUFFER, depthRboId);</div><div class="line">    //    Once a renderbuffer object is bound, we can specify the dimensions and format of the image stored in the renderbuffer.</div><div class="line">    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.renderSize.width, self.renderSize.height);</div><div class="line">    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRboId);</div><div class="line">    [self chkFBOStatus];</div><div class="line"></div><div class="line">    // 2.</div><div class="line">    glClearColor(0.423, 0.43, 0.87, 1);</div><div class="line">    </div><div class="line">    // 3. 设置顶点数据，下标数据</div><div class="line">    glGenBuffers(1, &amp;vboId);</div><div class="line">    glBindBuffer(GL_ARRAY_BUFFER, vboId);</div><div class="line">    //The vertex array data or element array data storage is created and initialized using the glBufferData command.</div><div class="line">    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);</div><div class="line">    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);</div><div class="line">    </div><div class="line">    // 3. shader配置</div><div class="line">    [self setShader];</div><div class="line">    </div><div class="line">    projUnif = glGetUniformLocation(programId, &quot;u_Projection&quot;);</div><div class="line">    modelUnif = glGetUniformLocation(programId, &quot;u_ModelView&quot;);</div><div class="line">    </div><div class="line">    // 5. 给shader 参数设置数据</div><div class="line">    glEnableVertexAttribArray(0);</div><div class="line">    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VFVertex), (const GLvoid *)offsetof(VFVertex, position));</div><div class="line">    glEnableVertexAttribArray(1);</div><div class="line">    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VFVertex), (const GLvoid *)offsetof(VFVertex, color));</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)drawAndRender&#123;</div><div class="line">    // 1. use program</div><div class="line">    glUseProgram(programId);</div><div class="line">    // 2. transform</div><div class="line">    //FIXME: 这个不懂参数什么意思，如何取到的？</div><div class="line">    self.modelPostion = GLKVector3Make(0, -0.5, -5);</div><div class="line">    [self tansform];</div><div class="line">    </div><div class="line">    glViewport(0, 0, self.renderSize.width, self.renderSize.height);</div><div class="line">    </div><div class="line">    //FIXME: 这个不懂为什么设置？</div><div class="line">    glDepthRangef(0, 1);</div><div class="line">    // 3. clear old cached</div><div class="line">    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);</div><div class="line"></div><div class="line">    // 4. open depth test</div><div class="line">    glEnable(GL_DEPTH_TEST);</div><div class="line">    glEnable(GL_CULL_FACE);</div><div class="line">    // 5. draw</div><div class="line">    glBindRenderbuffer(GL_RENDERBUFFER, colorRboId);</div><div class="line">    //The glBindBuffer command is used to make a buffer object the current array buffer object or the current element array buffer object.</div><div class="line">//    glBindBuffer(GL_ARRAY_BUFFER, vboId);</div><div class="line">    glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(indices[0]), GL_UNSIGNED_BYTE, indices);</div><div class="line">    </div><div class="line">    // 6. render</div><div class="line">    [self.ctx presentRenderbuffer:GL_RENDERBUFFER];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>** 遗留的几个问题</p>
+<ol>
+<li><p>坐标空间的转换？</p>
 </li>
-<li><p>配置session</p>
+<li><p>shader代码为何这么写？</p>
 </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Compression Properties</div><div class="line">Properties used to configure a VideoToolbox compression session.</div></pre></td></tr></table></figure>
-<ul>
-<li><p>编码frame</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionPrepareToEncodeFrames</div><div class="line">编码器在开始编码前进行资源分配，可选</div><div class="line"></div><div class="line">VTCompressionSessionEncodeFrame</div><div class="line">给session 提供frame</div><div class="line"></div><div class="line">VTCompressionSessionEncodeFrameWithOutputHandler</div><div class="line">给sesion 提供frame，压缩完成后调用callback。</div><div class="line"></div><div class="line">VTCompressionSessionCompleteFrames</div><div class="line">结束压缩session。</div></pre></td></tr></table></figure>
-</li>
-<li><p>检查session</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionGetPixelBufferPool</div><div class="line">返回一个为压缩session提供理想资源pixel buffer的容器池。</div><div class="line"></div><div class="line">VTCompressionSessionGetTypeID</div><div class="line">Retrieves the Core Foundation type identifier for the compression session.</div></pre></td></tr></table></figure>
-</li>
-<li><p>多通道压缩</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionBeginPass</div><div class="line">标记一个压缩通道的开始</div><div class="line"></div><div class="line">VTCompressionSessionEndPass</div><div class="line">Marks the end of a compression pass.</div><div class="line"></div><div class="line">VTCompressionSessionGetTimeRangesForNextPass</div><div class="line">获取下一个通道的时间范围。</div></pre></td></tr></table></figure>
-</li>
-<li><p>结束Session</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionInvalidate</div><div class="line">Tears down a compression session.</div></pre></td></tr></table></figure>
-<ul>
-<li>数据类型</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionRef</div><div class="line">A reference to a VideoToolbox compression session.</div><div class="line">VTCompressionOutputCallback</div><div class="line">Prototype for the callback invoked when frame compression is complete.</div><div class="line">VTCompressionOutputHandler</div><div class="line">Prototype for the block invoked when frame compression is complete.</div></pre></td></tr></table></figure>
-<ul>
-<li>枚举<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">VTCompressionSessionOptionFlags</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">VTEncodeInfoFlags</div><div class="line">kVTEncodeInfo_Asynchronous</div><div class="line">异步编码</div><div class="line">kVTEncodeInfo_FrameDropped</div><div class="line">编码的时候一个frame 被丢弃了。</div></pre></td></tr></table></figure>
+</ol>
 
       
     </div>
@@ -467,13 +436,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/09/25/VideoToolBox-压缩/">VideoToolBox 压缩</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/20/OpenglES学习4-立方体/">OpenglES学习4-立方体</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Nigo</a></p>
-        <p><span>发布时间:</span>2017-09-25, 17:52:41</p>
-        <p><span>最后更新:</span>2017-09-25, 17:54:29</p>
+        <p><span>发布时间:</span>2017-10-20, 19:30:50</p>
+        <p><span>最后更新:</span>2017-10-20, 19:31:47</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/09/25/VideoToolBox-压缩/" title="VideoToolBox 压缩">http://githubdelegate.github.io/2017/09/25/VideoToolBox-压缩/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://githubdelegate.github.io/2017/09/25/VideoToolBox-压缩/　　作者: Nigo" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/20/OpenglES学习4-立方体/" title="OpenglES学习4-立方体">http://githubdelegate.github.io/2017/10/20/OpenglES学习4-立方体/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://githubdelegate.github.io/2017/10/20/OpenglES学习4-立方体/　　作者: Nigo" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -485,16 +454,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/10/11/Opengl学习1-draw-line-on-ios/">
-                    Opengl学习1- draw line on ios
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/09/19/ffmpeg-transcoding/">
-                    ffmpeg transcoding
+                <a href="/2017/10/12/OpenglES学习3-FBO-RBO/">
+                    OpenglES学习3 FBO RBO
                 </a>
             </div>
         
@@ -506,7 +469,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#VTCompressionSession"><span class="toc-number">1.</span> <span class="toc-text">VTCompressionSession</span></a></li></ol>
+            
         
     </div>
     <style>
@@ -542,7 +505,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"VideoToolBox 压缩　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"OpenglES学习4-立方体　| Nigo　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -562,15 +525,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/10/11/Opengl学习1-draw-line-on-ios/" title="上一篇: Opengl学习1- draw line on ios">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/09/19/ffmpeg-transcoding/" title="下一篇: ffmpeg transcoding">
+            <a href="/2017/10/12/OpenglES学习3-FBO-RBO/" title="下一篇: OpenglES学习3 FBO RBO">
                 <i class="fa fa-angle-right"></i>
             </a>
         
