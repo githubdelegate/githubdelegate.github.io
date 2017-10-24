@@ -278,6 +278,111 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Java-Collections" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/01/Java-Collections/" class="article-date">
+      <time datetime="2017-08-01T07:52:55.000Z" itemprop="datePublished">2017-08-01</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/01/Java-Collections/">Java Collections</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Hash-Set"><a href="#Hash-Set" class="headerlink" title="Hash Set"></a>Hash Set</h2><ul>
+<li><p>Why<br>Linked lists and arrays let you specify the order in which you want to arrange the elements. However, if you are looking for a particular element and don’t remember its position, you need to visit all elements until you find a match. That can be time consuming if the collection contains many elements.If you don’t care about the ordering of the elements, there are data structures that let you find elements much faster. The drawback is that those data structures give you no control over the order in which the elements appear. These data structures organize the elements in an order that is convenient for their own purposes.</p>
+</li>
+<li><p>What<br>A well-known data structure for finding objects quickly is the hash table. A hash table computes an integer, called the hash code, for each object. A hash code is somehow derived from the instance fields of an object, preferably in such a way that objects with different data yield different codes.<br>If you define your own classes, you are responsible for implementing your own hashCode method—see Chapter 5 for more information. Your implementation needs to be compatible with the equals method: If a.equals(b), then a and b must have the same hash code.<br>What’s important for now is that hash codes can be computed quickly and that the computation depends only on the state of the object that needs to be hashed, not on the other objects in the hash table.<br>In Java, hash tables are implemented as arrays of linked lists. Each list is called a bucket (see Figure 9.10). To find the place of an object in the table, compute its hash code and reduce it modulo the total number of buckets. The resulting number is the index of the bucket that holds the element. For example, if an object has hash code 76268 and there are 128 buckets, then the object is placed in bucket 108 (because the remainder 76268 % 128 is 108). Perhaps you are lucky and there is no other element in that bucket. Then, you simply insert the element into that bucket. Of course, sometimes you will hit a bucket that is already filled. This is called a hash collision. Then, compare the new object with all objects in that bucket to see if it is already present. If the hash codes are reasonably randomly distributed<br>and the number of buckets is large enough, only a few comparisons should be necessary.<br>As of Java SE 8, the buckets change from linked lists into balanced binary trees when they get full. This improves performance if a hash function was poorly chosen and yields many collisions, or if malicious code tries to flood a hash table with many values that have identical hash codes.<br>If you want more control over the performance of the hash table, you can specify the initial bucket count.<br>If you know how many elements, approximately, will eventually be in the table, you can set the bucket count. Typically, you should set it to somewhere between 75% and 150% of the expected element count.The standard library uses bucket counts that are powers of 2, with a default of 16. (Any value you supply for the table size is automatically rounded to the next power of 2.)<br>If the hash table gets too full, it needs to be re-hashed. To rehash the table, a table with more buckets is created, all elements are inserted into the new table, and the original table is discarded. The load factor determines when a hash table is rehashed. For example, if the load factor is 0.75<br>Hash tables can be used to implement several important data structures. The simplest among them is the set type. A set is a collection of elements without duplicates. The add method of a set first tries to find the object to be added, and adds it only if it is not yet present.<br>The Java collections library supplies a HashSet class that implements a set based on a hash table. You add elements with the add method. The contains method is re-defined to make a fast lookup to see if an element is already present in the set. It checks only the elements in one bucket and not all elements in the collection.<br>The hash set iterator visits all buckets in turn. Since hashing scatters the elements around in the table, they are visited in a seemingly random order. Y<br>Be careful when you mutate set elements. If the hash code of an element were to change, the element would no longer be in the correct position in the data structure.</p>
+</li>
+<li><p>How</p>
+</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fi4adxl2yij316a0ksn0n.jpg" alt="xx"><br>[image:15183C4B-6677-4A24-9618-CDD8814713C3-99733-0000D4E2C7846050/71F6F54D-B229-435A-AA58-CD4BBF332F8F.png]<br>[image:F3CF5A14-CFFD-47ED-AD94-A911B628BEB9-99733-0000D4E602253D65/031D1D0B-FA2D-485D-8E9A-78D1F66EF359.png]</p>
+<h2 id="Tree-Sets"><a href="#Tree-Sets" class="headerlink" title="Tree Sets"></a>Tree Sets</h2><p>红黑树</p>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><p>A set is a collection that lets you quickly find an existing element. However, to look up an element, you need to have an exact copy of the element to find. That isn’t a very common lookup—usually, you have some key information, and you want to look up the associated element. The map data structure serves that purpose. A map stores key/value pairs. You can find a value if you provide the key.</p>
+<h2 id="Basic-Map-Operations"><a href="#Basic-Map-Operations" class="headerlink" title="Basic Map Operations"></a>Basic Map Operations</h2><p>The Java library supplies two general-purpose implementations for maps: HashMap and TreeMap. Both classes implement the Map interface.<br>A hash map hashes the keys, and a tree map uses an ordering on the keys to organize them in a search tree. The hash or comparison function is applied only to the keys. The values associated with the keys are not hashed or compared.</p>
+<p>[image:8857B90A-D770-4DAF-BC2B-2C9A27777A94-99733-0000E0AC95747AF4/242DE8D1-4249-4B78-84BB-BD4C2A603002.png]<br>[image:6C44D47A-E186-4C46-BB09-26D3DC2A972E-99733-0000E0AEC12ACFE1/2CA79C2D-7AE3-4331-BA70-95A3AEC9CB81.png]<br>[image:45244C03-80B8-4B68-8FF1-2C45967B4756-99733-0000E0B0984E142C/E7EA3A23-940A-427A-B931-7F28E87CC843.png]</p>
+<p>? As with sets, hashing is usually a bit faster, and it is the preferred choice if you don’t need to visit the keys in sorted order.</p>
+<p>Keys must be unique.</p>
+<p>The easiest way of iterating over the keys and values of a map is the forEach method.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scores.forEach((k, v) -&gt;</div><div class="line">System.out.println(&quot;key=&quot; + k + &quot;, value=&quot; + v));</div></pre></td></tr></table></figure>
+<h2 id="Updating-Map-Entries"><a href="#Updating-Map-Entries" class="headerlink" title="Updating Map Entries"></a>Updating Map Entries</h2><p>A tricky part of dealing with maps is updating an entry. Normally, you get the old value associated with a key, update it, and put back the updated value. But you have to worry about the special case of the first occurrence of a key. Consider using a map for counting how often a word occurs in a file.<br>[image:687826A7-BC31-481A-B489-76EB1D50F8F6-99733-0000E12308C23344/C455ADCD-2B70-4A88-B772-93F9003DB589.png]<br>[image:0EFAF124-779E-4C14-BD71-54CA250D84D3-99733-0000E126D82C4D50/59F0842A-0440-4A27-9FE3-2C28C50CE7E0.png]</p>
+<h2 id="Map-Views"><a href="#Map-Views" class="headerlink" title="Map Views"></a>Map Views</h2><p>The collections framework does not consider a map itself as a collection. (Other frameworks for data structures consider a map as a collection of key/value pairs, or as a collection of values indexed by the keys.) However, you can obtain views of the map—objects that implement the Collection interface or one of its subinterfaces.<br>There are three views: the set of keys, the collection of values (which is not a set), and the set of key/value pairs. The keys and key/value pairs form a set because there can be only one copy of a key in a map.</p>
+<p>[image:0844892A-BD7B-4135-93BC-EC48F46A8A38-99733-0000E1A5A229A21F/0E26612D-281A-4AA6-8B2F-DE548BEA6DCE.png]<br>[image:65B80FB8-5162-4B6D-8D20-DF0BCA325CD3-99733-0000E1A804646FE8/1FFB0EE4-C09D-4164-BB75-2AA4AD10FF13.png]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Set&lt;K&gt; keySet()</div><div class="line">Collection&lt;V&gt; values()</div><div class="line">Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet()</div></pre></td></tr></table></figure>
+<p>Note that the keySet is not a HashSet or TreeSet, but an object of some other class that implements the Set interface. The Set interface extends the Collection interface. Therefore, you can use a keySet as you would use any collection.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Set&lt;String&gt; keys = map.keySet();</div><div class="line">for (String key : keys) &#123;</div><div class="line">do something with key</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>If you want to look at both keys and values, you can avoid value lookups by enumerating the entries. Use the following code skeleton:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">for (Map.Entry&lt;String, Employee&gt; entry : staff.entrySet()) &#123;</div><div class="line">String k = entry.getKey();</div><div class="line">Employee v = entry.getValue();</div><div class="line">do something with k, v</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This used to be the most efficient way of visiting all map entries. Nowadays, simply use the forEach method:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">counts.forEach((k, v) -&gt;</div><div class="line">&#123;</div><div class="line">do something with k, v</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>If you invoke the remove method of the iterator on the key set view, you actually remove the key and its associated value from the map. However, you cannot add an element to the key set view.</p>
+<h2 id="Weak-Hash-Map"><a href="#Weak-Hash-Map" class="headerlink" title="Weak Hash Map"></a>Weak Hash Map</h2><p>The WeakHashMap class was designed to solve an interesting problem. What happens with a value whose key is no longer used anywhere in your program? Suppose the last reference to a key has gone away. Then, there is no longer any way to refer to the value object. But, as no part of the program has the key any more, the key/value pair cannot be removed from the map. Why can’t the garbage collector remove it? Isn’t it the job of the garbage collector to remove unused objects?</p>
+<p>The garbage collector traces live objects. As long as the map object is live, all buckets in it are live and won’t be reclaimed. Thus, your program should take care to remove unused values from long-lived maps. Or, you can use a WeakHashMap instead. This data structure cooperates with the garbage collector to remove key/value pairs when the only reference to the key is the one from the hash table entry.</p>
+<p>Here are the inner workings of this mechanism. The WeakHashMap uses weak references to hold keys. A WeakReference object holds a reference to another object—in our case, a hash table key. Objects of this type are treated in a special way by the garbage collector. Normally, if the garbage collector finds that a particular object has no references to it, it simply reclaims the object. However, if the object is reachable only by a WeakReference, the garbage collector still reclaims the object, but places the weak reference that led to it into a queue. The operations of the WeakHashMap periodically check that queue for newly arrived weak references. The arrival of a weak reference in the queue signifies that the key was no longer used by anyone and has been collected. The WeakHashMap then removes the associated entry.</p>
+<h2 id="Linked-Hash-Sets-and-Maps"><a href="#Linked-Hash-Sets-and-Maps" class="headerlink" title="Linked Hash Sets and Maps"></a>Linked Hash Sets and Maps</h2><p>The LinkedHashSet and LinkedHashMap classes remember in which order you inserted items. That way, you can avoid the seemingly random order of items in a hash table.</p>
+<p>A linked hash map can alternatively use access order, not insertion order, to iterate through the map entries. Every time you call get or put, the affected entry is removed from its current position and placed at the end of the linked list of entries. (Only the position in the linked list of entries is affected, not the hash table bucket. An entry always stays in the bucket that corresponds to the hash code of the key.) To construct such a hash map, call</p>
+<p><code>LinkedHashMap&lt;K, V&gt;(initialCapacity, loadFactor, true)</code></p>
+<p>Access order is useful for implementing a “least recently used” discipline for a cache. For example, you may want to keep frequently accessed entries in memory and read less frequently accessed objects from a database. When you don’t find an entry in the table, and the table is already pretty full, you can get an iterator into the table and remove the first few elements that it enumerates. Those entries were the least recently used ones.</p>
+<p>You can even automate that process. Form a subclass of LinkedHashMap and override the method</p>
+<p><code>protected boolean removeEldestEntry(Map.Entry&lt;K, V&gt; eldest)</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Map&lt;K, V&gt; cache = new</div><div class="line"></div><div class="line">LinkedHashMap&lt;&gt;(128, 0.75F, true) &#123;</div><div class="line">protected boolean removeEldestEntry(Map.Entry&lt;K, V&gt; eldest) &#123; return size() &gt; 100; &#125;</div><div class="line">&#125;();</div></pre></td></tr></table></figure>
+<h2 id="Enumeration-Sets-and-Maps"><a href="#Enumeration-Sets-and-Maps" class="headerlink" title="Enumeration Sets and Maps"></a>Enumeration Sets and Maps</h2><p>The EnumSet is an efficient set implementation with elements that belong to an enumerated type. Since an enumerated type has a finite number of instances, the EnumSet is internally implemented simply as a sequence of bits. A bit is turned on if the corresponding value is present in the set.</p>
+<h2 id="Identity-Hash-Maps"><a href="#Identity-Hash-Maps" class="headerlink" title="Identity Hash Maps"></a>Identity Hash Maps</h2><p>The IdentityHashMap has a quite specialized purpose. Here, the hash values for the keys should not be computed by the hashCode method but by the System.identityHashCode</p>
+<p>method. That’s the method that Object.hashCode uses to compute a hash code from the object’s memory address. Also, for comparison of objects, the IdentityHashMap uses ==, not equals.</p>
+<p>In other words, different key objects are considered distinct even if they have equal contents. This class is useful for implementing object traversal algorithms, such as object serialization, in which you want to keep track of which objects have already been traversed.<br>[image:F3E9D93E-8DEF-463F-B4ED-637D339F03DF-99733-0000E318719653C7/8E1B38F4-1AFB-448A-8A14-3910EDD18F53.png]</p>
+<p>[image:01642B6B-A95D-4052-A1DF-FE0B0637E6D3-99733-0000E31B3A6409A3/0E597DF5-4CDC-496D-A3D8-7ACF00ED1641.png]<br>[image:453961B5-2006-4BD5-A469-F7942A522F97-99733-0000E31D304EA9B2/6081FE95-0AB7-4A14-8594-BE19BCD9BD9B.png]<br>[image:E8220DA6-82C3-49CC-BFF4-CE0E64E3AC2C-99733-0000E31FA2E52569/E1C4B724-12DC-4BC2-8536-B8421E0021CD.png]<br>[image:D0C7E335-0E62-4280-986D-9F7B20008C18-99733-0000E322039A5E8E/B7204E99-4718-4D12-9D59-1FFFE109E0A1.png]</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="article-content">
+      
+    </div>
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-init-document" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
